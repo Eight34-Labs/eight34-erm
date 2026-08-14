@@ -41,8 +41,8 @@ export async function createLead(formData: LeadFormData): Promise<ActionResult<{
 
   const { user } = session
 
-  // Must have completed training
-  if (!user.training_completed) {
+  // Must have completed training — but only SALES reps are gated; admins bypass
+  if (user.role === 'SALES' && !user.training_completed) {
     return { success: false, error: 'Training must be completed before submitting leads' }
   }
 

@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   },
   description: 'Eight34 Labs internal Revenue & Sales Management platform.',
   robots: 'noindex, nofollow',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({

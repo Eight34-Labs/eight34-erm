@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { TrainingModuleData } from '@/lib/training/modules'
@@ -26,32 +26,65 @@ export default function ModuleViewer({
   const router = useRouter()
   const [completedIds, setCompletedIds] = useState<string[]>(initialCompletedIds)
   const [isPending, startTransition] = useTransition()
-  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null)
+  const [dwellPct, setDwellPct] = useState(0) // 0-100 progress toward auto-complete
+  const [autoCompleted, setAutoCompleted] = useState(false)
 
-  const isCompleted = completedIds.includes(String(currentModule.module_number)) || 
-    completedIds.includes(allModules.find(m => m.module_number === currentModule.module_number)?.id || '')
+  const DWELL_MS = 5000
+  const TICK_MS = 100
+  const dwellRef = useRef(0)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const targetModule = allModules.find(m => m.module_number === currentModule.module_number)
+  const moduleId = targetModule?.id || String(currentModule.module_number)
+
+  const isCompleted = completedIds.includes(String(currentModule.module_number)) ||
+    completedIds.includes(moduleId)
 
   const currentIndex = allModules.findIndex((m) => m.module_number === currentModule.module_number)
   const prevModule = currentIndex > 0 ? allModules[currentIndex - 1] : null
   const nextModule = currentIndex < allModules.length - 1 ? allModules[currentIndex + 1] : null
   const isLastModule = currentIndex === allModules.length - 1
 
-  const handleMarkComplete = () => {
-    const targetModule = allModules.find(m => m.module_number === currentModule.module_number)
-    const moduleId = targetModule?.id || String(currentModule.module_number)
-
+  const doMarkComplete = useCallback(() => {
+    if (isCompleted || autoCompleted) return
+    setAutoCompleted(true)
     startTransition(async () => {
       const res = await markModuleComplete(moduleId)
       if (res.success) {
         setCompletedIds((prev) => Array.from(new Set([...prev, moduleId, String(currentModule.module_number)])))
-        setFeedbackMessage('Module marked as completed.')
-        setTimeout(() => setFeedbackMessage(null), 3000)
         router.refresh()
-      } else {
-        setFeedbackMessage(res.error || 'Failed to update progress.')
       }
     })
-  }
+  }, [isCompleted, autoCompleted, moduleId, currentModule.module_number, router, startTransition])
+
+  // Auto-complete via dwell timer — starts fresh whenever the module changes
+  useEffect(() => {
+    // If already done, skip
+    if (isCompleted) {
+      setDwellPct(100)
+      return
+    }
+
+    dwellRef.current = 0
+    setDwellPct(0)
+    setAutoCompleted(false)
+
+    timerRef.current = setInterval(() => {
+      dwellRef.current += TICK_MS
+      const pct = Math.min((dwellRef.current / DWELL_MS) * 100, 100)
+      setDwellPct(pct)
+
+      if (dwellRef.current >= DWELL_MS) {
+        if (timerRef.current) clearInterval(timerRef.current)
+        doMarkComplete()
+      }
+    }, TICK_MS)
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentModule.module_number])
 
   const completedCount = completedIds.length
   const totalCount = allModules.length
@@ -128,12 +161,21 @@ export default function ModuleViewer({
             <p className="module-overview">{currentModule.content.overview}</p>
           </div>
 
-          {feedbackMessage && (
-            <div className="feedback-banner">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          {/* Dwell progress indicator — subtle bar showing auto-complete progress */}
+          {!isCompleted && (
+            <div className="dwell-progress-wrap">
+              <div
+                className="dwell-progress-fill"
+                style={{ width: `${dwellPct}%`, transition: dwellPct === 0 ? 'none' : `width ${TICK_MS}ms linear` }}
+              />
+            </div>
+          )}
+          {isCompleted && (
+            <div className="auto-complete-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
-              {feedbackMessage}
+              Module complete
             </div>
           )}
 
@@ -219,33 +261,19 @@ export default function ModuleViewer({
             </div>
 
             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-              <button
-                type="button"
-                onClick={handleMarkComplete}
-                disabled={isPending || isCompleted}
-                className={`btn btn-md ${isCompleted ? 'btn-outline' : 'btn-solid'}`}
-                style={{
-                  background: isCompleted ? 'var(--status-completed-bg)' : undefined,
-                  borderColor: isCompleted ? 'var(--status-completed-border)' : undefined,
-                  color: isCompleted ? 'var(--status-completed-text)' : undefined,
-                }}
-              >
-                {isCompleted ? (
-                  <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    Completed
-                  </>
-                ) : (
-                  <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    Mark as Complete
-                  </>
-                )}
-              </button>
+              {/* Status chip */}
+              {isCompleted ? (
+                <span className="module-done-chip">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  Completed
+                </span>
+              ) : (
+                <span className="module-reading-chip">
+                  {dwellPct < 100 ? 'Reading…' : 'Saving…'}
+                </span>
+              )}
 
               {nextModule ? (
                 <Link href={`/training/${nextModule.module_number}`} className="btn btn-solid btn-md">
@@ -427,6 +455,60 @@ export default function ModuleViewer({
           display: flex;
           flex-direction: column;
           gap: 32px;
+        }
+
+        .dwell-progress-wrap {
+          height: 2px;
+          background: var(--ink-100);
+          border-radius: 2px;
+          margin-top: 16px;
+          overflow: hidden;
+        }
+
+        .dwell-progress-fill {
+          height: 100%;
+          background: var(--e34-accent);
+          border-radius: 2px;
+          width: 0%;
+        }
+
+        .auto-complete-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          margin-top: 12px;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+          color: var(--status-completed-text);
+        }
+
+        .module-done-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 4px 10px;
+          border-radius: 20px;
+          background: var(--status-completed-bg);
+          border: 1px solid var(--status-completed-border);
+          color: var(--status-completed-text);
+          font-size: 12px;
+          font-weight: 600;
+        }
+
+        .module-reading-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 4px 10px;
+          border-radius: 20px;
+          background: var(--ink-50);
+          border: 1px solid var(--ink-150);
+          color: var(--ink-500);
+          font-size: 12px;
+          font-weight: 500;
+          font-style: italic;
         }
 
         .content-section {

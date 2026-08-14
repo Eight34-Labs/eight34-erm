@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 const ERROR_MESSAGES: Record<string, string> = {
   oauth_denied: 'Authorization was denied. Please try again.',
   token_exchange: 'Failed to authenticate with Slack. Please try again.',
@@ -222,30 +224,26 @@ export default function LoginPage({ error }: LoginPageProps) {
 
 function E34Logo() {
   return (
-    <svg width="120" height="32" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <text x="0" y="24" fontFamily="system-ui, -apple-system, sans-serif" fontSize="20" fontWeight="700" fill="white" letterSpacing="-1">Eight34</text>
-    </svg>
+    <Image
+      src="/Eight34_Full.png"
+      alt="Eight34 Labs"
+      width={160}
+      height={44}
+      style={{ objectFit: 'contain', objectPosition: 'left' }}
+      priority
+    />
   )
 }
 
 function E34Mark() {
   return (
-    <div style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 36,
-      height: 36,
-      background: 'var(--e34-accent)',
-      borderRadius: 'var(--radius)',
-      color: 'white',
-      fontWeight: 700,
-      fontSize: 13,
-      letterSpacing: '-0.02em',
-      fontFamily: 'var(--font-sans)',
-    }}>
-      E34
-    </div>
+    <Image
+      src="/E34_Short.png"
+      alt="E34"
+      width={36}
+      height={36}
+      style={{ objectFit: 'contain' }}
+    />
   )
 }
 

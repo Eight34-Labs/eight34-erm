@@ -12,8 +12,11 @@ export default async function NewLeadPage() {
 
   const { user } = session
 
-  // Strict Gating: Lead submission requires training certification
-  if (!user.training_completed) {
+  // Strict Gating: only SALES reps need training certification to submit leads.
+  // ADMIN and SUPER_ADMIN bypass this requirement.
+  const needsTraining = user.role === 'SALES' && !user.training_completed
+
+  if (needsTraining) {
     return (
       <div style={{ maxWidth: 600, margin: '60px auto', padding: '0 24px' }}>
         <div style={{

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn, getInitials, ROLE_LABELS } from '@/lib/utils'
 import type { User } from '@/types'
@@ -59,7 +60,13 @@ export default function Sidebar({ user }: SidebarProps) {
       {/* Logo */}
       <div className="sidebar-logo">
         <Link href="/dashboard" className="sidebar-logo-link">
-          <div className="sidebar-e34-mark">E34</div>
+          <Image
+            src="/E34_Short.png"
+            alt="E34"
+            width={26}
+            height={26}
+            className="sidebar-e34-img"
+          />
           <span className="sidebar-brand-name">Eight34</span>
         </Link>
       </div>
@@ -131,18 +138,10 @@ export default function Sidebar({ user }: SidebarProps) {
           text-decoration: none;
         }
 
-        .sidebar-e34-mark {
+        .sidebar-e34-img {
           width: 26px;
           height: 26px;
-          background: var(--e34-accent);
-          color: white;
-          border-radius: var(--radius-sm);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 10px;
-          font-weight: 800;
-          letter-spacing: -0.02em;
+          object-fit: contain;
           flex-shrink: 0;
         }
 
