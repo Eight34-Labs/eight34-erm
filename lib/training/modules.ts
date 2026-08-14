@@ -595,10 +595,11 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
         }
       ],
       key_takeaways: [
-        "Personal websites generally range from $800 - $2,500.",
-        "Business Landing and Booking Pages generally range from $1,500 - $5,000+.",
-        "SaaS Marketing Websites generally range from $3,000 - $8,000+.",
-        "Final pricing depends on scope, complexity, integrations, and requirements."
+        "Personal Portfolio / CV: $50 - $150.",
+        "Business Landing Page: $100 - $400.",
+        "Business Booking & Appointments: $500 - $900.",
+        "SaaS Marketing & Product: $500 - $1,500.",
+        "Use the official range for the website type and adjust within that range based on scope."
       ]
     }
   },
