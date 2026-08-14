@@ -561,82 +561,89 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
   {
     module_number: 14,
     title: "US / Europe Pricing",
-    description: "Eight34's pricing model for US/European clients: pricing ranges by website type, how to quote, justifying the price.",
+    description: "Eight34's pricing model for US and Western European clients: pricing ranges by website type, how to quote, and how to justify the investment.",
     content: {
-      overview: "Pricing for clients in the US and Europe reflects the high standard of living, premium market rates, and the bespoke quality of Eight34's work. These clients expect a premium service and are willing to pay for it, provided you can justify the ROI. Understanding these tiers ensures we remain profitable while delivering exceptional value to Western markets.",
+      overview: "Eight34 uses premium-market pricing for clients in the United States and Western Europe. Pricing reflects the custom design, engineering, integrations, performance, and strategic value delivered rather than simply the number of hours spent building the site. Salespeople should understand the standard ranges while recognizing that final quotes depend on scope, complexity, and client requirements.",
       sections: [
         {
-          heading: "Pricing Ranges by Type",
-          body: "For US and European clients, our pricing is structured to reflect the complexity of the build. Personal sites (portfolios, simple event pages) typically range from $800 to $2,500. Standard Business sites (informational, local services) range from $1,500 to $5,000, depending on the number of pages and custom features. High-end SaaS or complex business sites (custom integrations, advanced CMS) start at $3,000 and can exceed $10,000+.",
+          heading: "Standard Pricing by Website Type",
+          body: "For US and Western European clients, Personal websites typically range from $800 to $2,500. Custom Business Landing Pages and Booking Pages generally range from $1,500 to $5,000+, depending on page count, booking functionality, payments, integrations, and content requirements. SaaS Marketing Websites with multiple product pages, pricing tables, custom visuals, and conversion-focused functionality typically range from $3,000 to $8,000+.",
           bullets: [
-            "Personal sites: $800 - $2,500.",
-            "Business sites: $1,500 - $5,000.",
-            "SaaS / Complex sites: $3,000 - $10,000+."
+            "Personal Portfolio / CV: $50 - $150.",
+            "Business Landing Page: $100 - $400.",
+            "Business Booking & Appointments: $500 - $900.",
+            "SaaS Marketing & Product: $500 - $1,500."
           ]
         },
         {
           heading: "How to Quote",
-          body: "Never provide a final quote on the first call. Use the initial conversation to gather scope, then present a proposed range. Quote based on value, not just hours. Consider the client's size; a massive law firm expects to pay more than a local plumber for a similar site. Present pricing in a formal proposal, breaking down the costs into phases (Design, Development, QA) to show exactly what they are paying for.",
+          body: "Do not provide a final quote before understanding the project scope. First establish the website type, required pages, functionality, integrations, content requirements, timeline, and business objectives. Then provide a quote or range appropriate to the complexity of the project. The standard ranges are guidelines, not automatic prices.",
           callout: {
             type: "tip",
-            text: "Always present a 'Good, Better, Best' tiered pricing model in proposals to give the client psychological control."
+            text: "Use the standard range as your starting point, then adjust based on scope and complexity rather than negotiating from an arbitrary number."
           }
         },
         {
-          heading: "Justifying the Price",
-          body: "When clients push back on price, do not immediately discount. Justify the cost by highlighting Eight34's expertise, custom design (no templates), SEO foundations, and post-launch support. Shift the conversation to ROI. If a $5,000 website brings in just two new $3,000 clients for them, the site has paid for itself. You are selling a business asset, not just code.",
+          heading: "Justifying the Investment",
+          body: "When a client questions the price, do not immediately discount. Explain what the investment covers: custom design, professional engineering, responsive implementation, performance optimization, SEO foundations, integrations, and a polished user experience. Connect the website to measurable business outcomes such as more bookings, stronger lead generation, improved credibility, and higher conversion rates.",
           bullets: [
-            "Highlight custom design and lack of templates.",
-            "Emphasize built-in SEO and performance optimization.",
-            "Shift focus from the upfront cost to the long-term ROI."
+            "Emphasize custom design and engineering rather than templates.",
+            "Connect website improvements to measurable business outcomes.",
+            "Explain how scope and complexity determine the final price.",
+            "Do not discount automatically when a client raises a price objection."
           ]
         }
       ],
       key_takeaways: [
-        "Memorize the standard pricing ranges for Personal, Business, and SaaS.",
-        "Quote based on value and present options, never a final number on the first call.",
-        "Justify high prices by emphasizing ROI and the quality of the asset being built."
+        "Personal websites generally range from $800 - $2,500.",
+        "Business Landing and Booking Pages generally range from $1,500 - $5,000+.",
+        "SaaS Marketing Websites generally range from $3,000 - $8,000+.",
+        "Final pricing depends on scope, complexity, integrations, and requirements."
       ]
     }
   },
   {
     module_number: 15,
     title: "Outside US / Europe Pricing",
-    description: "Eight34's pricing model for global clients, adjusted pricing tiers, considerations.",
+    description: "Eight34's pricing model for clients outside the US and Europe, including official global pricing ranges and qualification considerations.",
     content: {
-      overview: "Selling to clients outside the US and Europe (e.g., Latin America, parts of Asia, Africa) requires a different pricing strategy. Purchasing power parity means that US rates are often unfeasible for these markets. Eight34 adjusts pricing for global clients to remain competitive internationally while still ensuring the projects are profitable and worthwhile for the agency.",
+      overview: "Eight34 serves clients globally with pricing adjusted for international purchasing power. Global pricing is intentionally lower than US / European pricing while maintaining the same professional design and engineering standards. Salespeople should use the official global ranges below when qualifying and discussing project scope.",
       sections: [
         {
-          heading: "Adjusted Pricing Tiers",
-          body: "As a general rule, pricing for global clients outside the US and EU is adjusted 30-50% lower than standard rates. Personal sites may range from $400 to $1,500. Standard Business sites typically fall between $1,000 and $3,000. Complex SaaS or enterprise projects start around $2,000 to $6,000. These adjusted rates allow us to win international business while maintaining fair compensation.",
+          heading: "Official Global Pricing",
+          body: "For clients outside the US and Europe, Personal Portfolio / CV Websites range from $10 to $100. Business Landing Pages range from $50 to $150. Business Booking & Appointments Pages range from $100 to $300. SaaS Marketing & Product Websites range from $200 to $700.",
           bullets: [
-            "Rates are generally 30-50% lower than US/EU.",
-            "Personal: $400 - $1,500 | Business: $1,000 - $3,000.",
-            "SaaS / Complex: $2,000 - $6,000."
+            "Personal Portfolio / CV: $10 - $100.",
+            "Business Landing Page: $50 - $150.",
+            "Business Booking & Appointments: $100 - $300.",
+            "SaaS Marketing & Product: $200 - $700."
           ]
         },
         {
-          heading: "Market Considerations",
-          body: "When quoting globally, you must consider currency fluctuations and payment methods. Always quote and contract in USD to protect Eight34 from exchange rate volatility. Be aware that international clients may require different payment gateways (like Wise or Payoneer) instead of standard US processors. Ensure these logistical details are ironed out before finalizing the contract.",
+          heading: "Choosing the Correct Price",
+          body: "Use the official global range for the client's website type and adjust the final quote according to scope and complexity. Simpler projects should fall toward the lower end of the range, while projects requiring additional pages, integrations, custom functionality, or more extensive design work should fall toward the upper end.",
           callout: {
-            type: "warning",
-            text: "Always quote and require payment in USD to avoid losing revenue to sudden currency devaluation."
+            type: "tip",
+            text: "Always identify the website type first, then quote within its official global pricing range."
           }
         },
         {
           heading: "Maintaining Quality and Scope",
-          body: "Even with adjusted pricing, Eight34 does not compromise on the quality of work. However, to maintain profitability at lower price points, you must be extremely strict with project scope. Limit the number of revisions, constrain custom feature requests, and rely more on efficient internal frameworks. Ensure the client understands that the adjusted price comes with a tightly managed scope.",
+          body: "Lower global pricing does not mean lower-quality work. Eight34 maintains professional design, engineering, responsiveness, and performance standards for international clients. Because these projects operate at lower price points, salespeople must be especially careful about scope and avoid promising functionality that falls outside the quoted project.",
           bullets: [
-            "Never compromise on final quality or code standards.",
-            "Strictly control project scope and limit revision rounds.",
-            "Quote and invoice exclusively in USD."
+            "Maintain the same professional quality standards.",
+            "Keep the project scope clearly defined.",
+            "Quote additional functionality separately when appropriate.",
+            "Do not accept extreme scope-to-budget mismatches."
           ]
         }
       ],
       key_takeaways: [
-        "Global pricing is typically 30-50% lower than US/EU rates.",
-        "Always quote and collect payments in USD.",
-        "Maintain profitability by strictly managing the project scope and revisions."
+        "Personal Portfolio / CV: $10 - $100.",
+        "Business Landing Page: $50 - $150.",
+        "Business Booking & Appointments: $100 - $300.",
+        "SaaS Marketing & Product: $200 - $700.",
+        "Use the official range for the website type and adjust within that range based on scope."
       ]
     }
   },

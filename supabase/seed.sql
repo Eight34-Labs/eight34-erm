@@ -31,200 +31,248 @@ VALUES
   (
     'A prospect contacts Eight34 saying: ''I want an Amazon clone built for $500 in 3 days.'' How should a qualified salesperson evaluate this lead?',
     'multiple_choice',
-    '["Submit the lead immediately since it is an active inquiry with an explicit budget.", "Reject or disqualify the lead: the scope, timeline, and budget are fundamentally incompatible with Eight34''s agency model.", "Accept the inquiry and ask the engineering team to build a minimal version.", "Submit as a Business Booking Page lead to keep the pipeline value high."]'::jsonb,
-    'Reject or disqualify the lead: the scope, timeline, and budget are fundamentally incompatible with Eight34''s agency model.',
-    'High-quality leads must have realistic expectations, compatible budgets ($800+ for personal, $1,500+ for business), and genuine alignment with Eight34''s website design and development scope.',
-    'easy', 1, true
+    '["Submit the lead because the prospect has provided a specific budget.", "Reject or disqualify the lead because the requested scope, timeline, and budget are fundamentally incompatible with Eight34''s service model.", "Submit it as a SaaS Marketing Website and let engineering determine the scope.", "Accept the project and reduce the functionality until it fits the budget."]'::jsonb,
+    'Reject or disqualify the lead because the requested scope, timeline, and budget are fundamentally incompatible with Eight34''s service model.',
+    'A qualified lead needs realistic expectations and a project scope that fits Eight34''s pricing structure. A large marketplace clone is far outside the scope of the $500-$1,500+ website tiers.',
+    'easy', 2, true
   ),
   (
-    'An executive coach wants a personal website highlighting testimonials, speaking engagements, a downloadable CV, and a Calendly scheduling link. What is the correct client and website type classification?',
+    'An executive coach wants a personal website highlighting testimonials, speaking engagements, a downloadable CV, and a Calendly scheduling link. What is the most appropriate website classification?',
     'multiple_choice',
-    '["SaaS / SaaS Landing Page", "Personal / Portfolio or Personal Landing Page", "Business / IT", "Personal / Resume / CV Website"]'::jsonb,
-    'Personal / Portfolio or Personal Landing Page',
-    'For an individual professional showcasing thought leadership, speaking, and services, ''Personal'' client type with ''Portfolio'' or ''Personal Landing Page'' website type is the most precise classification.',
-    'medium', 1, true
+    '["Personal Portfolio / CV Website", "Business Landing Page", "Business Booking & Appointments Page", "SaaS Marketing & Product Website"]'::jsonb,
+    'Personal Portfolio / CV Website',
+    'The primary purpose is to present an individual professional''s identity, experience, work, and credibility. A scheduling link does not by itself make the project a full booking website.',
+    'medium', 2, true
   ),
   (
-    'A high-end barber shop with 4 locations wants clients to select a barber, choose a service, pick a time slot, and pre-pay online. What website type best fits this requirement?',
+    'A high-end barber shop with 4 locations wants customers to choose a barber, select a service, pick an available time, and pre-pay online. Which Eight34 website category best matches the project?',
     'multiple_choice',
-    '["Business Landing Page", "Business Booking Page", "SaaS Product Website", "Personal Event Website"]'::jsonb,
-    'Business Booking Page',
-    'A service business requiring appointment scheduling, staff selection, and reservation payments is categorized as a Business Booking Page.',
-    'easy', 1, true
+    '["Business Landing Page", "Business Booking & Appointments Page", "SaaS Marketing & Product Website", "Personal Portfolio / CV Website"]'::jsonb,
+    'Business Booking & Appointments Page',
+    'Customer scheduling, staff allocation, availability, and payment turn this from a primarily informational business site into a booking and appointments project.',
+    'easy', 2, true
   ),
   (
-    'An early-stage B2B AI analytics startup needs a modern website with feature breakdowns, an interactive interactive calculator, pricing tiers, and waitlist collection. What category does this lead fall into?',
+    'An early-stage B2B AI startup needs pages explaining its product, feature comparisons, pricing tiers, an interactive demo, and a waitlist. Which category should the salesperson select?',
     'multiple_choice',
-    '["Business / Store", "Personal / Personal Landing Page", "SaaS / SaaS Marketing Website", "Business / Education"]'::jsonb,
-    'SaaS / SaaS Marketing Website',
-    'A software product requiring feature showcases, tiered pricing grids, and conversion funnels is a SaaS Marketing Website.',
-    'easy', 1, true
+    '["Personal Portfolio / CV Website", "Business Landing Page", "Business Booking & Appointments Page", "SaaS Marketing & Product Website"]'::jsonb,
+    'SaaS Marketing & Product Website',
+    'The website is primarily marketing a software product and requires product-focused content, pricing, interactive elements, and conversion flows.',
+    'easy', 2, true
   ),
   (
     'A local restaurant has an existing Wix site created in 2017 that is slow, non-responsive on mobile, and contains PDF menus. What reason should be selected in the intake form?',
     'multiple_choice',
     '["NEW_WEBSITE", "REDO_WEBSITE (and the previous Wix URL must be provided)", "REJECTED", "STILL_INQUIRING"]'::jsonb,
     'REDO_WEBSITE (and the previous Wix URL must be provided)',
-    'When a business has an active or previous domain that is being redesigned or replaced, select ''REDO_WEBSITE'' and include the existing URL for design review.',
-    'easy', 1, true
+    'An existing website that needs to be substantially redesigned or replaced should be treated as a redesign. The current URL is useful for evaluating the existing experience and scope.',
+    'easy', 2, true
   ),
   (
-    'Which of the following target audience descriptions is considered high-quality for an Eight34 lead submission?',
+    'Which target-audience description gives the Eight34 team the most actionable information?',
     'multiple_choice',
-    '["Everyone who likes food and wants to eat lunch.", "Urban working professionals aged 26-45 in downtown Austin seeking fast, healthy, chef-prepared lunch bowls under $18 via mobile order.", "People on the internet with smartphones.", "Men and women in the United States."]'::jsonb,
+    '["Local customers who want good food.", "Urban working professionals aged 26-45 in downtown Austin seeking fast, healthy, chef-prepared lunch bowls under $18 via mobile order.", "Adults who use smartphones and visit restaurants.", "People in the United States who might be interested in the business."]'::jsonb,
     'Urban working professionals aged 26-45 in downtown Austin seeking fast, healthy, chef-prepared lunch bowls under $18 via mobile order.',
-    'A good target audience description specifies demographics, psychographics, geographic location, primary problem/need, and purchasing behavior.',
-    'medium', 1, true
+    'A useful audience description identifies who the users are, where they are, what they need, and how they are likely to interact with or purchase from the business.',
+    'medium', 2, true
   ),
   (
-    'A boutique law firm specializing in venture capital financing requests a website that looks trustworthy, sharp, restrained, with crisp typography and deep navy/charcoal tones. Which design styles should be selected?',
+    'A boutique law firm specializing in venture capital financing wants a website that feels trustworthy, restrained, sophisticated, and typography-driven. Which style combination is the strongest fit?',
     'multiple_choice',
-    '["Playful and Colorful", "Corporate, Clean, and Editorial", "Futuristic and Neon", "Other only"]'::jsonb,
+    '["Playful and Colorful", "Corporate, Clean, and Editorial", "Futuristic and Neon", "Hand-drawn and Whimsical"]'::jsonb,
     'Corporate, Clean, and Editorial',
-    'Venture capital law firms need a restrained, authoritative, and sophisticated aesthetic best represented by Corporate, Clean, and Editorial styles.',
-    'medium', 1, true
+    'The requested visual language emphasizes authority, restraint, typography, and sophistication, which aligns with Corporate, Clean, and Editorial styles.',
+    'medium', 2, true
   ),
   (
-    'What is the standard Eight34 pricing range for a custom Business Landing Page or Booking Page for a client in the United States or Western Europe?',
+    'A US-based solo consultant wants a polished one-page site containing a bio, selected work, testimonials, and contact information. Which pricing range should the salesperson use as the starting range?',
     'multiple_choice',
-    '["$100 - $300", "$1,500 - $5,000+", "$50,000 - $100,000", "Free with monthly hosting fee"]'::jsonb,
-    '$1,500 - $5,000+',
-    'For US/European business clients, bespoke agency-grade landing and booking websites are quoted between $1,500 and $5,000+ depending on custom booking integrations, copy, and asset creation.',
-    'easy', 1, true
+    '["$10 - $100", "$50 - $150", "$100 - $400", "$500 - $1,500"]'::jsonb,
+    '$50 - $150',
+    'A Personal Portfolio / CV Website for US and European clients is priced at $50-$150. The project remains within this tier because its primary purpose is personal brand presentation rather than complex business functionality.',
+    'easy', 2, true
   ),
   (
-    'When quoting a client operating in Latin America, Southeast Asia, or Eastern Europe, how does Eight34''s pricing structure adapt?',
+    'A US-based dental practice needs a polished website with service pages, testimonials, a location map, lead forms, and analytics, but patients will continue booking through a separate system. Which range best matches the project?',
     'multiple_choice',
-    '["We do not accept clients outside the US or Western Europe.", "We quote identical US rates with no flexibility.", "We apply adjusted global regional pricing (typically 30-50% lower baseline) to match local purchasing power while maintaining quality standards.", "We charge hourly rates starting at $15/hr."]'::jsonb,
-    'We apply adjusted global regional pricing (typically 30-50% lower baseline) to match local purchasing power while maintaining quality standards.',
-    'Eight34 supports global pricing adjustments calibrated to local market dynamics without compromising development and design excellence.',
-    'medium', 1, true
+    '["$50 - $150", "$100 - $400", "$500 - $900", "$500 - $1,500"]'::jsonb,
+    '$100 - $400',
+    'This is a Business Landing Page: the site supports a commercial service business with lead capture, reviews, location information, and analytics without requiring a custom appointment system.',
+    'medium', 2, true
   ),
   (
-    'While scouting on Google Maps, you discover a dental clinic with 280 5-star reviews, an outdated HTTP website from 2012, no online booking, and active Instagram posts. Is this a qualified prospect?',
+    'A US-based salon wants customers to select a stylist, choose a service, see live availability, reserve an appointment, and pay a deposit through Stripe. Which pricing range should be considered?',
     'multiple_choice',
-    '["No, because they already have 280 reviews and do not need any more customers.", "No, having an old website means they will never invest in digital technology.", "Yes, high revenue indicators (review volume, active business) paired with a deficient web presence and missing booking make them a prime redesign prospect.", "Only if they have a dedicated in-house web designer."]'::jsonb,
-    'Yes, high revenue indicators (review volume, active business) paired with a deficient web presence and missing booking make them a prime redesign prospect.',
-    'Thriving businesses with active operations but outdated digital touchpoints represent the highest-converting web agency redesign prospects.',
-    'medium', 1, true
+    '["$100 - $400", "$500 - $900", "$500 - $1,500", "$50 - $150"]'::jsonb,
+    '$500 - $900',
+    'Real-time scheduling, staff allocation, and deposit payments place the project in the Business Booking & Appointments tier, priced at $500-$900 for US and European clients.',
+    'medium', 2, true
   ),
   (
-    'Which cold outreach email opener follows Eight34''s editorial, high-trust sales philosophy?',
+    'A US-based startup wants a multi-page website explaining its software, comparing feature tiers, displaying interactive pricing, demonstrating the product, collecting a waitlist, and establishing a strong SEO structure. Which range is appropriate?',
     'multiple_choice',
-    '["HEY DEAR SIR!! We can make your website #1 on Google for $50 guaranteed click here now!", "I was reviewing your restaurant''s mobile experience and noticed the lunch menu requires downloading a 12MB PDF. We recently designed a streamlined mobile order experience for [Similar Brand] that increased reservations by 34%.", "Do you want a website? We make websites fast.", "Hello, I am an automated bot reaching out about web design."]'::jsonb,
-    'I was reviewing your restaurant''s mobile experience and noticed the lunch menu requires downloading a 12MB PDF. We recently designed a streamlined mobile order experience for [Similar Brand] that increased reservations by 34%.',
-    'Effective outreach identifies a specific, verifiable point of friction in the prospect''s current experience and demonstrates relevant expertise concisely.',
-    'medium', 1, true
+    '["$100 - $400", "$500 - $900", "$500 - $1,500", "$50 - $150"]'::jsonb,
+    '$500 - $1,500',
+    'The combination of product marketing, multiple pages, interactive pricing, demo flows, waitlist collection, and SEO architecture fits the SaaS Marketing & Product Website tier.',
+    'medium', 2, true
   ),
   (
-    'A business owner replies: ''We would love a new site, but $3,500 is more than we paid our nephew 5 years ago.'' How should the salesperson handle this objection?',
+    'A client in Southeast Asia needs a personal portfolio with a bio, selected projects, testimonials, and a contact form. Which pricing range applies under Eight34''s global structure?',
     'multiple_choice',
-    '["Immediately discount the project to $400.", "Argue with the owner and insult their current website.", "Reframe the website from an expense to an revenue-generating asset, highlighting customer conversion, automated bookings, and brand credibility, while reviewing scope options if needed.", "Close the lead as REJECTED immediately."]'::jsonb,
-    'Reframe the website from an expense to an revenue-generating asset, highlighting customer conversion, automated bookings, and brand credibility, while reviewing scope options if needed.',
-    'Price objections are resolved by clarifying business ROI, quantifying lost revenue from poor UX, and demonstrating the measurable difference between amateur and commercial-grade engineering.',
-    'hard', 1, true
+    '["$10 - $100", "$50 - $150", "$100 - $300", "$200 - $700"]'::jsonb,
+    '$10 - $100',
+    'The project is a Personal Portfolio / CV Website for a global client, which has a $10-$100 pricing range under the global structure.',
+    'easy', 2, true
   ),
   (
-    'An independent film festival needs a dedicated site to display screening schedules, trailer embeds, ticket tier links, and venue directions for a 3-day event. Which website type is appropriate?',
+    'A small business in Eastern Europe needs a commercial website with service information, testimonials, a map, lead capture, and analytics. Which range should be used?',
     'multiple_choice',
-    '["SaaS Product Website", "Personal / Event Website or Business / Business Event Website", "Resume / CV Website", "IT"]'::jsonb,
-    'Personal / Event Website or Business / Business Event Website',
-    'Event websites are specifically tailored for time-bounded gatherings, conferences, festivals, and exhibitions with schedules and ticketing integrations.',
-    'easy', 1, true
+    '["$10 - $100", "$50 - $150", "$100 - $300", "$200 - $700"]'::jsonb,
+    '$50 - $150',
+    'The project is a Global Business Landing Page, whose current pricing range is $50-$150.',
+    'medium', 2, true
   ),
   (
-    'When prospecting B2B SaaS companies on LinkedIn and Product Hunt, which indicator signals the strongest need for an Eight34 redesign?',
+    'A business in Latin America needs live appointment scheduling, staff availability, automated confirmations, and online deposits. Which global pricing tier fits the project?',
     'multiple_choice',
-    '["The company raised a Seed/Series A funding round but still has their initial developer-built template landing page.", "The company has 5,000 employees and an in-house design team of 50 people.", "The company went out of business 6 months ago.", "The founders explicitly state they do not want any marketing."]'::jsonb,
-    'The company raised a Seed/Series A funding round but still has their initial developer-built template landing page.',
-    'Recently funded startups with fresh capital and growth targets need professional positioning to attract enterprise customers and talent.',
-    'medium', 1, true
+    '["$50 - $150", "$100 - $300", "$200 - $700", "$500 - $900"]'::jsonb,
+    '$100 - $300',
+    'The required functionality makes this a Global Business Booking & Appointments project, priced at $100-$300.',
+    'medium', 2, true
   ),
   (
-    'Why is submitting accurate ''Inspiration URLs'' in the lead submission form critical for the Eight34 design and engineering team?',
+    'A software startup outside the US and Europe wants a product website with feature pages, pricing, conversion-focused sections, and interactive product demonstrations. Which range applies?',
     'multiple_choice',
-    '["So our team can copy their source code directly.", "They establish visual and structural benchmarks, clarify client aesthetic taste, and minimize revision cycles during wireframing.", "They are required by Stripe for payment processing.", "They are not important and should always be left blank."]'::jsonb,
-    'They establish visual and structural benchmarks, clarify client aesthetic taste, and minimize revision cycles during wireframing.',
-    'Inspiration references anchor the client''s subjective vocabulary (''modern'', ''clean'') to concrete design examples and UI mechanics.',
-    'easy', 1, true
+    '["$50 - $150", "$100 - $300", "$200 - $700", "$500 - $1,500"]'::jsonb,
+    '$200 - $700',
+    'A Global SaaS Marketing & Product Website is priced at $200-$700. The global tier adjusts the baseline while retaining the same project category.',
+    'medium', 2, true
   ),
   (
-    'What happens if a salesperson enters a quoted website price as ''around 2k to 3k maybe'' in the budget field?',
+    'While scouting on Google Maps, you discover a dental clinic with 280 5-star reviews, an outdated website, poor mobile usability, and no online booking. How should this prospect be evaluated?',
     'multiple_choice',
-    '["The database automatically parses the text into an average number.", "The form will fail validation because the budget field requires a clean, numeric dollar value for accurate financial accounting and pipeline reporting.", "The system converts it to Bitcoin.", "The lead is sent directly to the client."]'::jsonb,
-    'The form will fail validation because the budget field requires a clean, numeric dollar value for accurate financial accounting and pipeline reporting.',
-    'Eight34 ERM enforces strict financial data integrity: budget inputs must be valid numeric quantities to compute pipeline metrics accurately.',
-    'easy', 1, true
+    '["Disqualify it because the business already has strong reviews.", "Disqualify it because an outdated website indicates low digital interest.", "Treat it as a strong prospect because the business appears established while its website has clear opportunities for improvement.", "Submit it only if the clinic already employs a web designer."]'::jsonb,
+    'Treat it as a strong prospect because the business appears established while its website has clear opportunities for improvement.',
+    'Strong customer activity combined with an outdated or ineffective web presence can indicate a business with both demand and a clear reason to invest in a better website.',
+    'medium', 2, true
   ),
   (
-    'When using Google Maps for local commercial prospecting, what is the best search workflow to find high-probability leads?',
+    'Which cold outreach opener best demonstrates that the salesperson actually researched the prospect?',
     'multiple_choice',
-    '["Search for Fortune 500 headquarters in New York.", "Filter for service categories (e.g. boutique medical, specialty dining, architecture, law) in dense metropolitan areas, sort by review rating, and check each site''s mobile responsiveness.", "Message random personal Facebook profiles.", "Search for domains that are expired only."]'::jsonb,
-    'Filter for service categories (e.g. boutique medical, specialty dining, architecture, law) in dense metropolitan areas, sort by review rating, and check each site''s mobile responsiveness.',
-    'Systematic local prospecting focuses on thriving service verticals where digital customer acquisition and booking directly impact bottom-line revenues.',
-    'medium', 1, true
+    '["We build premium websites for businesses like yours. Are you interested?", "I was reviewing your restaurant''s mobile experience and noticed the lunch menu requires downloading a large PDF. That adds friction for customers who are trying to decide where to eat.", "Your website needs work. We can redesign it quickly.", "Hi, we are Eight34 and would love to work with you on a website."]'::jsonb,
+    'I was reviewing your restaurant''s mobile experience and noticed the lunch menu requires downloading a large PDF. That adds friction for customers who are trying to decide where to eat.',
+    'Strong outreach identifies a specific, observable problem rather than relying on generic claims. The prospect should immediately understand why they were contacted.',
+    'medium', 2, true
   ),
   (
-    'Which of the following is an immediate red flag that suggests a prospective client should NOT be submitted into Eight34 ERM?',
+    'A business owner says: ''We would love a new site, but $3,500 is more than we paid our nephew five years ago.'' What is the strongest response strategy?',
     'multiple_choice',
-    '["The client asks detailed questions about our delivery timeline.", "The client insists on paying $150 for a full custom e-commerce system with 1,000 products and demands daily in-person meetings.", "The client wants custom animations on their landing page.", "The client currently uses an old WordPress website."]'::jsonb,
-    'The client insists on paying $150 for a full custom e-commerce system with 1,000 products and demands daily in-person meetings.',
-    'Clients with extreme scope-to-budget asymmetry and toxic micromanagement demands consume agency resources and result in unprofitable churn.',
-    'hard', 1, true
+    '["Immediately reduce the quote to $400 regardless of scope.", "Explain the difference in scope and value, then determine whether a smaller project can solve the most important business problems.", "Tell the owner that inexpensive websites are always bad.", "End the conversation immediately because any price objection means the lead is unqualified."]'::jsonb,
+    'Explain the difference in scope and value, then determine whether a smaller project can solve the most important business problems.',
+    'A price objection should lead to qualification and scope discussion rather than an automatic discount or confrontation. If appropriate, the salesperson can identify a smaller tier that better matches the client''s needs.',
+    'hard', 2, true
   ),
   (
-    'A client states: ''We want something like Apple or Teenage Engineering — very minimal typography, huge product photography, monochromatic grays, and precise layout.'' Which style tags should be selected?',
+    'An independent film festival needs a dedicated site displaying screening schedules, trailer embeds, ticket links, and venue directions for a three-day event. Which classification is most appropriate?',
     'multiple_choice',
-    '["Playful and Colorful", "Minimal, Modern, and Editorial", "Corporate and Traditional", "Other"]'::jsonb,
+    '["Personal Portfolio / CV Website", "Business Landing Page", "Business Booking & Appointments Page", "SaaS Marketing & Product Website"]'::jsonb,
+    'Business Landing Page',
+    'The listed requirements describe an informational promotional website rather than a personal portfolio, appointment system, or SaaS product. If the festival organization is treated as the client, the closest available commercial category is Business Landing Page.',
+    'medium', 2, true
+  ),
+  (
+    'When prospecting B2B SaaS companies, which situation most strongly suggests that the company may need a new marketing website?',
+    'multiple_choice',
+    '["The company recently raised funding but still presents its product through a generic template that does not clearly communicate its value proposition.", "The company has a large internal design team that already owns the website.", "The company has permanently stopped operating.", "The founders have explicitly said they do not want marketing or customer acquisition."]'::jsonb,
+    'The company recently raised funding but still presents its product through a generic template that does not clearly communicate its value proposition.',
+    'Recent growth or funding can create a stronger need for professional positioning. A weak marketing site can become a bottleneck when the company is trying to attract customers, partners, or talent.',
+    'medium', 2, true
+  ),
+  (
+    'Why should a salesperson collect accurate Inspiration URLs when submitting a website lead?',
+    'multiple_choice',
+    '["They allow the engineering team to copy the referenced website directly.", "They give the design team concrete references for the client''s visual preferences and reduce ambiguity during the design process.", "They determine which payment processor the project must use.", "They are optional because visual preferences cannot be communicated through examples."]'::jsonb,
+    'They give the design team concrete references for the client''s visual preferences and reduce ambiguity during the design process.',
+    'References turn subjective descriptions such as ''clean'' or ''premium'' into concrete visual benchmarks for typography, layout, interaction, spacing, and overall aesthetic direction.',
+    'easy', 2, true
+  ),
+  (
+    'What should happen if a salesperson enters ''around 2k to 3k maybe'' into a budget field that expects a numeric value?',
+    'multiple_choice',
+    '["The system averages the numbers automatically.", "The form should reject the value because the budget field requires a clean numeric amount.", "The system converts the amount to Bitcoin.", "The lead is automatically approved using the highest number."]'::jsonb,
+    'The form should reject the value because the budget field requires a clean numeric amount.',
+    'Numeric budget fields need standardized values so that financial reporting, filtering, qualification, and pipeline calculations remain reliable.',
+    'easy', 2, true
+  ),
+  (
+    'When using Google Maps to find local commercial prospects, which workflow is most useful for Eight34?',
+    'multiple_choice',
+    '["Search every business in a city without checking its website.", "Focus on established service businesses, inspect their web presence for meaningful problems, and prioritize prospects where the website could directly improve customer acquisition or conversion.", "Only contact businesses with perfect websites.", "Search exclusively for businesses with expired domains."]'::jsonb,
+    'Focus on established service businesses, inspect their web presence for meaningful problems, and prioritize prospects where the website could directly improve customer acquisition or conversion.',
+    'Effective prospecting combines business health with identifiable digital problems. The strongest prospects have a reason to invest and a website problem Eight34 can realistically solve.',
+    'medium', 2, true
+  ),
+  (
+    'Which situation should immediately make a salesperson question whether a project is a viable Eight34 lead?',
+    'multiple_choice',
+    '["The prospect asks for a specific delivery timeline.", "The prospect wants a custom e-commerce system with 1,000 products but has a $150 budget and expects extensive ongoing involvement.", "The prospect asks for custom animations on a landing page.", "The prospect has an older WordPress website and wants to replace it."]'::jsonb,
+    'The prospect wants a custom e-commerce system with 1,000 products but has a $150 budget and expects extensive ongoing involvement.',
+    'The problem is the severe mismatch between scope, budget, and expectations. The current Eight34 pricing structure does not support a project of that scale at $150.',
+    'hard', 2, true
+  ),
+  (
+    'A client says: ''We want something like Apple or Teenage Engineering — minimal typography, large product imagery, monochromatic colors, and precise spacing.'' Which style tags best match the brief?',
+    'multiple_choice',
+    '["Playful and Colorful", "Minimal, Modern, and Editorial", "Corporate and Traditional", "Hand-drawn and Whimsical"]'::jsonb,
     'Minimal, Modern, and Editorial',
-    'Monochromatic palettes, generous whitespace, and restrained typography align with Minimal, Modern, and Editorial design styles.',
-    'medium', 1, true
+    'Minimal layouts, restrained color palettes, strong typography, generous spacing, and highly controlled composition align with Minimal, Modern, and Editorial styles.',
+    'medium', 2, true
   ),
   (
-    'What is the standard quoted baseline for a custom Eight34 SaaS Marketing Website with multiple product pages and pricing tables for a US client?',
+    'A US client needs a SaaS marketing website with several product pages, interactive pricing, a product demo flow, a waitlist, and a strong SEO structure. What is the correct standard pricing range?',
     'multiple_choice',
-    '["$500", "$1,000", "$3,000 - $8,000+", "$250,000"]'::jsonb,
-    '$3,000 - $8,000+',
-    'Multi-page SaaS marketing and product websites with custom illustrations, responsive layouts, and conversion optimization are quoted between $3,000 and $8,000+.',
-    'medium', 1, true
+    '["$100 - $400", "$500 - $900", "$500 - $1,500", "$50 - $150"]'::jsonb,
+    '$500 - $1,500',
+    'This scope falls directly into the US/EU SaaS Marketing & Product Website tier, which is priced at $500-$1,500.',
+    'medium', 2, true
   ),
   (
-    'A prospect''s existing website has broken SSL certificates, 8-second load times, unreadable mobile navigation, and outdated 2019 staff listings. What is the sales angle?',
+    'A prospect''s existing website has broken SSL, very slow load times, poor mobile navigation, and outdated staff information. What should the salesperson focus on during the conversation?',
     'multiple_choice',
-    '["Suggest they keep their website as is to avoid disruption.", "Quantify lost customer conversions, demonstrate how modern SEO & speed improve Google rank, and propose a complete redesign focused on mobile engagement.", "Offer to fix only one typo in their HTML for free.", "Report their site to Google."]'::jsonb,
-    'Quantify lost customer conversions, demonstrate how modern SEO & speed improve Google rank, and propose a complete redesign focused on mobile engagement.',
-    'Highlighting tangible friction (slow speed, broken mobile UX) allows salespeople to pitch a comprehensive redesign as a high-ROI business investment.',
-    'medium', 1, true
+    '["Tell them the issues are cosmetic and can be ignored.", "Connect the specific problems to customer trust, usability, and conversion, then determine whether a redesign is justified by the business impact.", "Offer to fix only the staff names for free.", "Recommend that they remove the website entirely."]'::jsonb,
+    'Connect the specific problems to customer trust, usability, and conversion, then determine whether a redesign is justified by the business impact.',
+    'Sales conversations should connect observable website problems to business outcomes. The goal is to establish whether a redesign can create meaningful value rather than simply listing technical defects.',
+    'medium', 2, true
   ),
   (
-    'Before submitting a lead into Eight34 ERM, what pre-submission verification must the salesperson always perform?',
+    'Before submitting a lead into Eight34 ERM, which verification should the salesperson complete?',
     'multiple_choice',
-    '["Ensure the client has signed a 10-year exclusivity agreement.", "Confirm the decision maker''s identity, verify the budget aligns with Eight34 pricing guidelines, validate existing/inspiration URLs, and check that target audience notes are actionable.", "Transfer money to the client''s bank account.", "Send the final source code to the prospect."]'::jsonb,
-    'Confirm the decision maker''s identity, verify the budget aligns with Eight34 pricing guidelines, validate existing/inspiration URLs, and check that target audience notes are actionable.',
-    'Thorough pre-submission qualification prevents unqualified inquiries from cluttering the production pipeline and accelerates deal closing.',
-    'medium', 1, true
+    '["Confirm the decision maker, verify that the requested scope fits an Eight34 pricing tier, validate relevant URLs, and make sure the audience and project requirements are specific enough to act on.", "Require the client to sign a long-term exclusivity agreement.", "Send the prospect production source code before submission.", "Collect payment before the lead can enter the pipeline."]'::jsonb,
+    'Confirm the decision maker, verify that the requested scope fits an Eight34 pricing tier, validate relevant URLs, and make sure the audience and project requirements are specific enough to act on.',
+    'Pre-submission qualification protects the pipeline from incomplete or commercially unrealistic opportunities and gives the production team enough context to evaluate the project.',
+    'medium', 2, true
   ),
   (
     'What is the consequence of failing the 20-question certification assessment with a score below 16/20 (80%)?',
     'multiple_choice',
-    '["The salesperson can instantly retake the quiz with the same questions.", "Training progress is reset server-side, lead submission remains locked, and the salesperson must review the curriculum before re-attempting.", "The salesperson''s account is permanently deleted.", "A penalty fee is charged to the salesperson."]'::jsonb,
-    'Training progress is reset server-side, lead submission remains locked, and the salesperson must review the curriculum before re-attempting.',
-    'Eight34 ERM enforces rigorous sales quality standards: failing the quiz resets progress to ensure reps master lead qualification principles.',
-    'easy', 1, true
+    '["The salesperson can immediately retake it with no review.", "Training progress is reset server-side, lead submission remains locked, and the salesperson must review the curriculum before attempting the assessment again.", "The salesperson''s account is permanently deleted.", "The salesperson is charged a penalty fee."]'::jsonb,
+    'Training progress is reset server-side, lead submission remains locked, and the salesperson must review the curriculum before attempting the assessment again.',
+    'The certification gate ensures salespeople understand Eight34''s qualification standards before they can submit leads into the production pipeline.',
+    'easy', 2, true
   ),
   (
-    'Why is a target audience description like ''Men and Women aged 18 to 80'' unacceptable in an Eight34 lead submission?',
+    'Why is a target audience description such as ''Men and Women aged 18 to 80'' insufficient for an Eight34 lead submission?',
     'multiple_choice',
-    '["Eight34 only designs websites for teenagers.", "It provides zero actionable insight into user motivations, aesthetic taste, pricing sensitivity, or key conversion triggers necessary for designing the user experience.", "It contains too many numbers.", "The form automatically rejects words starting with ''M''."]'::jsonb,
-    'It provides zero actionable insight into user motivations, aesthetic taste, pricing sensitivity, or key conversion triggers necessary for designing the user experience.',
-    'Vague audience definitions prevent designers and copywriters from tailoring typography, visual language, and calls-to-action to the target demographic.',
-    'easy', 1, true
+    '["Eight34 only works with younger audiences.", "It identifies a broad demographic but gives little actionable information about users'' needs, motivations, behavior, or reasons for choosing the business.", "The age range contains too many numbers.", "The ERM cannot store demographic information."]'::jsonb,
+    'It identifies a broad demographic but gives little actionable information about users'' needs, motivations, behavior, or reasons for choosing the business.',
+    'A useful audience description should help the design and copy teams understand who the site is trying to persuade and what matters to those users.',
+    'easy', 2, true
   ),
   (
-    'A qualified prospect asks: ''Can Eight34 integrate a Stripe checkout and automated email confirmations upon order placement?'' What is the accurate response?',
+    'A qualified prospect asks: ''Can Eight34 integrate Stripe checkout and automated email confirmations after an order?'' What is the most accurate response?',
     'multiple_choice',
-    '["No, Eight34 only builds static text pages with no functionality.", "Yes, custom payments, automated email webhooks, database collections, and booking flows are standard capabilities within Eight34''s engineering scope.", "Yes, but the client must code the Stripe API themselves.", "No, Stripe is illegal for websites."]'::jsonb,
-    'Yes, custom payments, automated email webhooks, database collections, and booking flows are standard capabilities within Eight34''s engineering scope.',
-    'Eight34 specializes in full-stack web solutions including checkout flows, database architectures, authentication, and custom third-party integrations.',
-    'easy', 1, true
+    '["No. Eight34 only builds static informational websites.", "Yes. These integrations can be included when the project scope and selected website tier support the required functionality.", "Yes, but the client must implement the Stripe integration themselves.", "No. Payment integrations are not compatible with custom websites."]'::jsonb,
+    'Yes. These integrations can be included when the project scope and selected website tier support the required functionality.',
+    'Eight34 can support custom functionality and third-party integrations, but the salesperson should qualify the exact requirements and ensure the project is priced in an appropriate tier rather than treating every integration as automatically included.',
+    'medium', 2, true
   );
