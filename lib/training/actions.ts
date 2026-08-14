@@ -29,32 +29,9 @@ async function ensureModulesSeeded(supabase: ReturnType<typeof createServiceClie
   }
 }
 
-async function ensureQuizSeeded(supabase: ReturnType<typeof createServiceClient>) {
-  const { count } = await supabase
-    .from('quiz_questions')
-    .select('*', { count: 'exact', head: true })
-
-  if (!count || count < 20) {
-    for (const q of QUIZ_QUESTION_BANK) {
-      await supabase.from('quiz_questions').upsert(
-        {
-          id: q.id.length === 36 ? q.id : undefined,
-          question: q.question,
-          question_type: 'multiple_choice',
-          options: q.options,
-          correct_answer: q.correct_answer,
-          explanation: q.explanation,
-          difficulty: q.difficulty,
-          version: 1,
-          is_active: true,
-        }
-      )
-    }
-  }
-}
-
 export async function getTrainingProgress(): Promise<ActionResult<{
   completedModuleIds: string[]
+  completedModuleNumbers: number[]
   totalModules: number
   completionPercent: number
 }>> {
@@ -64,14 +41,21 @@ export async function getTrainingProgress(): Promise<ActionResult<{
   const supabase = createServiceClient()
   await ensureModulesSeeded(supabase)
 
-  // Get all published modules
+  // Get all published modules with their IDs and module_numbers
   const { data: modules } = await supabase
     .from('training_modules')
-    .select('id')
+    .select('id, module_number')
     .eq('is_published', true)
     .order('module_number', { ascending: true })
 
-  const totalModules = modules?.length || TRAINING_MODULES.length
+  const totalModules = modules && modules.length > 0 ? modules.length : TRAINING_MODULES.length
+
+  const idToNumber = new Map<string, number>()
+  if (modules) {
+    for (const m of modules) {
+      idToNumber.set(m.id, m.module_number)
+    }
+  }
 
   // Get user progress
   const { data: progress } = await supabase
@@ -80,34 +64,88 @@ export async function getTrainingProgress(): Promise<ActionResult<{
     .eq('user_id', session.user.id)
     .eq('completed', true)
 
-  const completedModuleIds: string[] = progress?.map((p: { module_id: string }) => p.module_id) || []
+  const completedModuleIds: string[] = []
+  const completedModuleNumbers: number[] = []
+
+  if (progress) {
+    for (const p of progress) {
+      completedModuleIds.push(p.module_id)
+      const num = idToNumber.get(p.module_id)
+      if (num !== undefined) {
+        completedModuleNumbers.push(num)
+        completedModuleIds.push(String(num))
+      }
+    }
+  }
+
+  const uniqueCompletedCount = new Set(completedModuleNumbers).size
   const completionPercent =
-    totalModules > 0 ? Math.round((completedModuleIds.length / totalModules) * 100) : 0
+    totalModules > 0 ? Math.round((uniqueCompletedCount / totalModules) * 100) : 0
 
   return {
     success: true,
-    data: { completedModuleIds, totalModules, completionPercent },
+    data: {
+      completedModuleIds: Array.from(new Set(completedModuleIds)),
+      completedModuleNumbers: Array.from(new Set(completedModuleNumbers)),
+      totalModules,
+      completionPercent,
+    },
   }
 }
 
-export async function markModuleComplete(moduleId: string): Promise<ActionResult> {
+export async function markModuleComplete(moduleIdentifier: string | number): Promise<ActionResult> {
   const session = await getSession()
   if (!session) return { success: false, error: 'Not authenticated' }
 
   const supabase = createServiceClient()
   await ensureModulesSeeded(supabase)
 
-  // Verify module exists or match by ID / module_number
-  let targetId = moduleId
-  const { data: module } = await supabase
-    .from('training_modules')
-    .select('id')
-    .or(`id.eq.${moduleId},module_number.eq.${isNaN(parseInt(moduleId)) ? 0 : parseInt(moduleId)}`)
-    .eq('is_published', true)
-    .single()
+  // Find target module UUID
+  let targetModuleId: string | null = null
+  const modNum = typeof moduleIdentifier === 'number' ? moduleIdentifier : parseInt(String(moduleIdentifier), 10)
 
-  if (module) {
-    targetId = module.id
+  if (!isNaN(modNum) && modNum > 0) {
+    const { data: modByNum } = await supabase
+      .from('training_modules')
+      .select('id')
+      .eq('module_number', modNum)
+      .maybeSingle()
+
+    if (modByNum) {
+      targetModuleId = modByNum.id
+    }
+  }
+
+  if (!targetModuleId && typeof moduleIdentifier === 'string' && moduleIdentifier.length === 36) {
+    const { data: modById } = await supabase
+      .from('training_modules')
+      .select('id')
+      .eq('id', moduleIdentifier)
+      .maybeSingle()
+
+    if (modById) {
+      targetModuleId = modById.id
+    }
+  }
+
+  if (!targetModuleId) {
+    // Fallback: seed and query again
+    const { data: allMods } = await supabase
+      .from('training_modules')
+      .select('id, module_number')
+      .order('module_number', { ascending: true })
+
+    const found = allMods?.find((m: { id: string; module_number: number }) =>
+      m.module_number === modNum || m.id === String(moduleIdentifier)
+    )
+
+    if (found) {
+      targetModuleId = found.id
+    }
+  }
+
+  if (!targetModuleId) {
+    return { success: false, error: `Module ${moduleIdentifier} not found` }
   }
 
   const { error } = await supabase
@@ -115,7 +153,7 @@ export async function markModuleComplete(moduleId: string): Promise<ActionResult
     .upsert(
       {
         user_id: session.user.id,
-        module_id: targetId,
+        module_id: targetModuleId,
         completed: true,
         completed_at: new Date().toISOString(),
       },
@@ -128,6 +166,8 @@ export async function markModuleComplete(moduleId: string): Promise<ActionResult
   }
 
   revalidatePath('/training')
+  revalidatePath(`/training/${modNum}`)
+  revalidatePath('/dashboard')
   return { success: true }
 }
 
@@ -179,7 +219,6 @@ export async function submitQuiz(answers: Record<string, string>): Promise<Actio
   let score = 0
   const incorrectAnswers: Array<{ questionId: string; correct: string; explanation: string }> = []
 
-  // Score against db questions or fallback bank
   for (const qId of questionIds) {
     const userAnswer = answers[qId]
     const dbQ = dbQuestions?.find((q: { id: string }) => q.id === qId)
@@ -202,7 +241,6 @@ export async function submitQuiz(answers: Record<string, string>): Promise<Actio
   const total = questionIds.length
   const passed = score >= Math.ceil(total * 0.8) // 16/20 (80%)
 
-  // Record attempt
   try {
     await supabase.from('quiz_attempts').insert({
       user_id: user.id,
@@ -288,7 +326,6 @@ export async function getQuizQuestions(): Promise<ActionResult<Array<{
     return { success: false, error: 'Complete all training modules first' }
   }
 
-  // Get active questions from DB or bank
   const { data: dbQuestions } = await supabase
     .from('quiz_questions')
     .select('id, question, options')
@@ -299,7 +336,6 @@ export async function getQuizQuestions(): Promise<ActionResult<Array<{
     return { success: true, data: shuffled }
   }
 
-  // Fallback to randomized bank of 20 questions
   const shuffledBank = [...QUIZ_QUESTION_BANK]
     .sort(() => Math.random() - 0.5)
     .slice(0, 20)

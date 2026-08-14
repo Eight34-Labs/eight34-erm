@@ -26,69 +26,95 @@ export default function ModuleViewer({
   const router = useRouter()
   const [completedIds, setCompletedIds] = useState<string[]>(initialCompletedIds)
   const [isPending, startTransition] = useTransition()
-  const [dwellPct, setDwellPct] = useState(0) // 0-100 progress toward auto-complete
-  const [autoCompleted, setAutoCompleted] = useState(false)
+  const hasTriggeredRef = useRef(false)
+  const bottomSentinelRef = useRef<HTMLDivElement>(null)
 
-  const DWELL_MS = 5000
-  const TICK_MS = 100
-  const dwellRef = useRef(0)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const modNumStr = String(currentModule.module_number)
+  const targetModule = allModules.find((m) => m.module_number === currentModule.module_number)
+  const moduleId = targetModule?.id || modNumStr
 
-  const targetModule = allModules.find(m => m.module_number === currentModule.module_number)
-  const moduleId = targetModule?.id || String(currentModule.module_number)
-
-  const isCompleted = completedIds.includes(String(currentModule.module_number)) ||
-    completedIds.includes(moduleId)
+  const isCompleted =
+    completedIds.includes(modNumStr) ||
+    completedIds.includes(moduleId) ||
+    completedIds.includes(String(currentModule.module_number))
 
   const currentIndex = allModules.findIndex((m) => m.module_number === currentModule.module_number)
   const prevModule = currentIndex > 0 ? allModules[currentIndex - 1] : null
   const nextModule = currentIndex < allModules.length - 1 ? allModules[currentIndex + 1] : null
-  const isLastModule = currentIndex === allModules.length - 1
 
-  const doMarkComplete = useCallback(() => {
-    if (isCompleted || autoCompleted) return
-    setAutoCompleted(true)
+  const triggerCompletion = useCallback(() => {
+    if (hasTriggeredRef.current || isCompleted) return
+    hasTriggeredRef.current = true
+
+    // Optimistically update local state
+    setCompletedIds((prev) => Array.from(new Set([...prev, modNumStr, moduleId])))
+
     startTransition(async () => {
-      const res = await markModuleComplete(moduleId)
+      const res = await markModuleComplete(currentModule.module_number)
       if (res.success) {
-        setCompletedIds((prev) => Array.from(new Set([...prev, moduleId, String(currentModule.module_number)])))
         router.refresh()
       }
     })
-  }, [isCompleted, autoCompleted, moduleId, currentModule.module_number, router, startTransition])
+  }, [isCompleted, modNumStr, moduleId, currentModule.module_number, router, startTransition])
 
-  // Auto-complete via dwell timer — starts fresh whenever the module changes
+  // Scroll to bottom detection
   useEffect(() => {
-    // If already done, skip
-    if (isCompleted) {
-      setDwellPct(100)
-      return
+    hasTriggeredRef.current = isCompleted
+    if (isCompleted) return
+
+    // 1. Check if content fits in viewport without scrolling
+    const checkViewportFit = () => {
+      if (typeof window === 'undefined') return
+      const scrollHeight = document.documentElement.scrollHeight
+      const clientHeight = window.innerHeight
+      if (scrollHeight <= clientHeight + 60) {
+        triggerCompletion()
+      }
     }
 
-    dwellRef.current = 0
-    setDwellPct(0)
-    setAutoCompleted(false)
+    checkViewportFit()
 
-    timerRef.current = setInterval(() => {
-      dwellRef.current += TICK_MS
-      const pct = Math.min((dwellRef.current / DWELL_MS) * 100, 100)
-      setDwellPct(pct)
+    // 2. IntersectionObserver on bottom sentinel
+    const sentinel = bottomSentinelRef.current
+    let observer: IntersectionObserver | null = null
 
-      if (dwellRef.current >= DWELL_MS) {
-        if (timerRef.current) clearInterval(timerRef.current)
-        doMarkComplete()
+    if (sentinel && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              triggerCompletion()
+            }
+          }
+        },
+        { threshold: 0.1, rootMargin: '0px 0px 100px 0px' }
+      )
+      observer.observe(sentinel)
+    }
+
+    // 3. Fallback window scroll listener
+    const handleScroll = () => {
+      if (typeof window === 'undefined') return
+      const scrollPosition = window.innerHeight + window.scrollY
+      const threshold = document.documentElement.scrollHeight - 120
+      if (scrollPosition >= threshold) {
+        triggerCompletion()
       }
-    }, TICK_MS)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
+      if (observer && sentinel) observer.unobserve(sentinel)
+      window.removeEventListener('scroll', handleScroll)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentModule.module_number])
+  }, [currentModule.module_number, isCompleted, triggerCompletion])
 
-  const completedCount = completedIds.length
+  const completedCount = allModules.filter(
+    (m) => completedIds.includes(String(m.module_number)) || completedIds.includes(m.id)
+  ).length
   const totalCount = allModules.length
-  const progressPct = Math.round((completedCount / totalCount) * 100)
+  const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
   return (
     <div className="training-layout">
@@ -154,30 +180,22 @@ export default function ModuleViewer({
         <div className="module-container">
           {/* Header */}
           <div className="module-header-block">
-            <div className="module-meta-tag">
-              Module {String(currentModule.module_number).padStart(2, '0')} of {totalCount}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <div className="module-meta-tag">
+                Module {String(currentModule.module_number).padStart(2, '0')} of {totalCount}
+              </div>
+              {isCompleted && (
+                <div className="auto-complete-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  Completed
+                </div>
+              )}
             </div>
             <h1 className="module-title">{currentModule.title}</h1>
             <p className="module-overview">{currentModule.content.overview}</p>
           </div>
-
-          {/* Dwell progress indicator — subtle bar showing auto-complete progress */}
-          {!isCompleted && (
-            <div className="dwell-progress-wrap">
-              <div
-                className="dwell-progress-fill"
-                style={{ width: `${dwellPct}%`, transition: dwellPct === 0 ? 'none' : `width ${TICK_MS}ms linear` }}
-              />
-            </div>
-          )}
-          {isCompleted && (
-            <div className="auto-complete-badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              Module complete
-            </div>
-          )}
 
           {/* Sections */}
           <div className="module-sections">
@@ -245,6 +263,9 @@ export default function ModuleViewer({
             </div>
           )}
 
+          {/* Bottom Sentinel for Scroll-to-Bottom Trigger */}
+          <div ref={bottomSentinelRef} style={{ height: 4, width: '100%', pointerEvents: 'none' }} />
+
           {/* Navigation Controls */}
           <div className="module-footer-nav">
             <div>
@@ -261,7 +282,7 @@ export default function ModuleViewer({
             </div>
 
             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-              {/* Status chip */}
+              {/* Status Indicator */}
               {isCompleted ? (
                 <span className="module-done-chip">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -271,7 +292,7 @@ export default function ModuleViewer({
                 </span>
               ) : (
                 <span className="module-reading-chip">
-                  {dwellPct < 100 ? 'Reading…' : 'Saving…'}
+                  Scroll to bottom to complete
                 </span>
               )}
 
@@ -298,7 +319,7 @@ export default function ModuleViewer({
       <style jsx>{`
         .training-layout {
           display: flex;
-          min-height: calc(100vh - 0px);
+          min-height: 100vh;
         }
 
         .training-sidebar {
@@ -418,7 +439,6 @@ export default function ModuleViewer({
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: var(--ink-400);
-          margin-bottom: 8px;
         }
 
         .module-title {
@@ -437,50 +457,16 @@ export default function ModuleViewer({
           margin: 0;
         }
 
-        .feedback-banner {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 14px;
-          background: var(--status-completed-bg);
-          border: 1px solid var(--status-completed-border);
-          border-radius: var(--radius);
-          color: var(--status-completed-text);
-          font-size: 13px;
-          font-weight: 500;
-          margin-bottom: 24px;
-        }
-
-        .module-sections {
-          display: flex;
-          flex-direction: column;
-          gap: 32px;
-        }
-
-        .dwell-progress-wrap {
-          height: 2px;
-          background: var(--ink-100);
-          border-radius: 2px;
-          margin-top: 16px;
-          overflow: hidden;
-        }
-
-        .dwell-progress-fill {
-          height: 100%;
-          background: var(--e34-accent);
-          border-radius: 2px;
-          width: 0%;
-        }
-
         .auto-complete-badge {
           display: inline-flex;
           align-items: center;
           gap: 5px;
-          margin-top: 12px;
-          font-size: 11px;
+          padding: 4px 10px;
+          border-radius: 20px;
+          background: var(--status-completed-bg);
+          border: 1px solid var(--status-completed-border);
+          font-size: 11.5px;
           font-weight: 600;
-          letter-spacing: 0.03em;
-          text-transform: uppercase;
           color: var(--status-completed-text);
         }
 
@@ -488,12 +474,12 @@ export default function ModuleViewer({
           display: inline-flex;
           align-items: center;
           gap: 5px;
-          padding: 4px 10px;
+          padding: 5px 12px;
           border-radius: 20px;
           background: var(--status-completed-bg);
           border: 1px solid var(--status-completed-border);
           color: var(--status-completed-text);
-          font-size: 12px;
+          font-size: 12.5px;
           font-weight: 600;
         }
 
@@ -501,14 +487,19 @@ export default function ModuleViewer({
           display: inline-flex;
           align-items: center;
           gap: 5px;
-          padding: 4px 10px;
+          padding: 5px 12px;
           border-radius: 20px;
           background: var(--ink-50);
           border: 1px solid var(--ink-150);
           color: var(--ink-500);
           font-size: 12px;
           font-weight: 500;
-          font-style: italic;
+        }
+
+        .module-sections {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
         }
 
         .content-section {

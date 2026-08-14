@@ -18,12 +18,11 @@ export default async function TrainingPage() {
   const progress = progressResult.data
   const completedIds = new Set(progress?.completedModuleIds || [])
 
-  const allComplete = modules.every((m) =>
-    completedIds.has(String(m.module_number)) || completedIds.has(String(m.module_number))
-  )
-
-  const completedCount = completedIds.size
+  const completedCount = modules.filter((m) =>
+    completedIds.has(String(m.module_number))
+  ).length
   const totalCount = modules.length
+  const allComplete = totalCount > 0 && completedCount === totalCount
 
   return (
     <div>
