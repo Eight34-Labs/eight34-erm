@@ -22,6 +22,7 @@ export interface User {
   email: string | null
   avatar_url: string | null
   role: UserRole
+  commission_rate?: number
   is_active: boolean
   is_approved: boolean
   training_completed: boolean
@@ -112,11 +113,28 @@ export interface Lead {
   special_features: string | null
   additional_information: string | null
   status: LeadStatus
+  is_draft?: boolean
+  is_trashed?: boolean
+  cost_amount?: number | null
+  commission_paid?: boolean
+  company_paid?: boolean
+  costs_paid?: boolean
   created_at: string
   updated_at: string
   completed_at: string | null
   // joined
   creator?: User
+}
+
+export interface ErmSettings {
+  id: string
+  default_commission_rate: number
+  auto_approve_salespeople: boolean
+  slack_workspace_id: string
+  aesthetic_tag_options: string[]
+  created_at: string
+  updated_at: string
+  updated_by: string | null
 }
 
 export interface LeadStatusHistory {

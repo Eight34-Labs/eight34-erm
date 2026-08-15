@@ -28,6 +28,22 @@ export function canAccessAdminDashboard(role: UserRole): boolean {
   return role === 'SUPER_ADMIN' || role === 'ADMIN'
 }
 
+export function canAccessAnalytics(role: UserRole): boolean {
+  return role === 'SUPER_ADMIN' || role === 'ADMIN'
+}
+
+export function canAccessErmSettings(role: UserRole): boolean {
+  return role === 'SUPER_ADMIN'
+}
+
+export function canEditLead(role: UserRole): boolean {
+  return role === 'SUPER_ADMIN' || role === 'ADMIN'
+}
+
+export function canTrashLead(role: UserRole): boolean {
+  return role === 'SUPER_ADMIN' || role === 'ADMIN'
+}
+
 export function isAtLeast(role: UserRole, minimum: UserRole): boolean {
   const hierarchy: Record<UserRole, number> = {
     SUPER_ADMIN: 3,

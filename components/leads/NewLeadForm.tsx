@@ -1,11 +1,13 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import type { ClientType, LeadFormData } from '@/types'
+import { HelpCircle, Bookmark, Check, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react'
+import type { ClientType, LeadFormData, Lead, PricingConfig } from '@/types'
 import { BUSINESS_TYPES, DESIGN_STYLES, WEBSITE_TYPES, formatCurrency, isValidUrl } from '@/lib/utils'
-import { createLead } from '@/lib/leads/actions'
+import { createLead, saveLeadDraft } from '@/lib/leads/actions'
+import PricingGuideModal from '@/components/leads/PricingGuideModal'
 
 const TOTAL_STEPS = 8
 
@@ -20,35 +22,49 @@ const STEP_LABELS = [
   'Review & Submission',
 ]
 
-export default function NewLeadForm() {
+interface NewLeadFormProps {
+  pricingConfigs?: PricingConfig[]
+  initialDraft?: Lead
+  draftId?: string
+}
+
+export default function NewLeadForm({
+  pricingConfigs = [],
+  initialDraft,
+  draftId: initialDraftId,
+}: NewLeadFormProps) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [isPending, startTransition] = useTransition()
+  const [isSavingDraft, setIsSavingDraft] = useState(false)
+  const [draftId, setDraftId] = useState<string | undefined>(initialDraftId)
+  const [draftSavedToast, setDraftSavedToast] = useState(false)
+  const [isPricingGuideOpen, setIsPricingGuideOpen] = useState(false)
+
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const [formData, setFormData] = useState<LeadFormData>({
-    client_name: '',
-    client_type: '',
-    business_type: '',
-    business_type_other: '',
-    website_type: '',
-    website_type_other: '',
-    reason: '',
-    previous_website_url: '',
-    target_audience: '',
-    design_style: [],
-    design_style_other: '',
-    inspiration_urls: [''],
-    budget: '',
-    special_features: '',
-    additional_information: '',
+    client_name: initialDraft?.client_name || '',
+    client_type: (initialDraft?.client_type as ClientType) || '',
+    business_type: initialDraft?.business_type || '',
+    business_type_other: initialDraft?.business_type_other || '',
+    website_type: initialDraft?.website_type || '',
+    website_type_other: initialDraft?.website_type_other || '',
+    reason: (initialDraft?.reason as 'NEW_WEBSITE' | 'REDO_WEBSITE') || '',
+    previous_website_url: initialDraft?.previous_website_url || '',
+    target_audience: initialDraft?.target_audience || '',
+    design_style: initialDraft?.design_style || [],
+    design_style_other: initialDraft?.design_style_other || '',
+    inspiration_urls: initialDraft?.inspiration_urls && initialDraft.inspiration_urls.length > 0 ? initialDraft.inspiration_urls : [''],
+    budget: initialDraft?.budget ? String(initialDraft.budget) : '',
+    special_features: initialDraft?.special_features || '',
+    additional_information: initialDraft?.additional_information || '',
   })
 
   // Handle field change
   const updateField = (field: keyof LeadFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
-    // Clear specific field error
     if (errors[field]) {
       setErrors((prev) => {
         const next = { ...prev }
@@ -94,6 +110,23 @@ export default function NewLeadForm() {
     updateField('inspiration_urls', urls.length > 0 ? urls : [''])
   }
 
+  // Save partial lead draft
+  const handleSaveDraft = async () => {
+    setIsSavingDraft(true)
+    try {
+      const res = await saveLeadDraft(formData, draftId)
+      if (res.success && res.data) {
+        setDraftId(res.data.draft_id)
+        setDraftSavedToast(true)
+        setTimeout(() => setDraftSavedToast(false), 3500)
+      }
+    } catch (err) {
+      console.error('Draft save failed:', err)
+    } finally {
+      setIsSavingDraft(false)
+    }
+  }
+
   // Validation per step
   const validateStep = (step: number): boolean => {
     const stepErrors: Record<string, string> = {}
@@ -125,7 +158,7 @@ export default function NewLeadForm() {
     } else if (step === 5) {
       if (!formData.target_audience.trim()) {
         stepErrors.target_audience = 'Target audience definition is required.'
-      } else if (formData.target_audience.trim().length < 25) {
+      } else if (formData.target_audience.trim().length < 20) {
         stepErrors.target_audience = 'Please provide more specific details about the target demographic, geography, and primary problem.'
       }
     } else if (step === 6) {
@@ -142,7 +175,6 @@ export default function NewLeadForm() {
           stepErrors.budget = 'Quoted price must be a valid positive number.'
         }
       }
-      // Check inspiration urls
       for (const u of formData.inspiration_urls) {
         if (u.trim() && !isValidUrl(u)) {
           stepErrors.inspiration_urls = `Invalid URL: "${u}". Please enter full web addresses with https://.`
@@ -157,7 +189,6 @@ export default function NewLeadForm() {
 
   const handleNext = () => {
     if (validateStep(currentStep)) {
-      // If client_type is not BUSINESS and we are at step 1, skip step 2
       if (currentStep === 1 && formData.client_type !== 'BUSINESS') {
         setCurrentStep(3)
       } else {
@@ -177,9 +208,9 @@ export default function NewLeadForm() {
   const handleSubmitLead = () => {
     setSubmitError(null)
     startTransition(async () => {
-      const res = await createLead(formData)
+      const res = await createLead(formData, draftId)
       if (res.success && res.data) {
-        router.push(`/leads`)
+        router.push('/leads')
         router.refresh()
       } else {
         setSubmitError(res.error || 'Failed to submit lead. Please check all fields.')
@@ -195,27 +226,66 @@ export default function NewLeadForm() {
   }
 
   return (
-    <div className="lead-intake-wrapper">
+    <div className="lead-intake-wrapper" style={{ maxWidth: '820px', margin: '0 auto', paddingBottom: '60px' }}>
       {/* Top Header */}
-      <div className="lead-intake-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <Link href="/leads" className="text-meta" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Leads
-          </Link>
-          <span className="text-meta">/</span>
-          <span className="text-meta" style={{ color: 'var(--ink-800)', fontWeight: 500 }}>New Lead Intake</span>
+      <div className="lead-intake-header" style={{ marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+              <Link href="/leads" className="text-meta" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <ArrowLeft style={{ width: '12px', height: '12px' }} />
+                Leads
+              </Link>
+              <span className="text-meta">/</span>
+              <span className="text-meta" style={{ color: 'var(--ink-800)', fontWeight: 500 }}>
+                {draftId ? 'Resume Draft Intake' : 'New Lead Intake'}
+              </span>
+            </div>
+            <h1 className="text-heading-lg" style={{ margin: 0 }}>
+              {draftId ? `Edit Draft: ${formData.client_name || 'Untitled'}` : 'Submit Qualified Lead'}
+            </h1>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline"
+              onClick={handleSaveDraft}
+              disabled={isSavingDraft || isPending}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Bookmark style={{ width: '13px', height: '13px' }} />
+              {isSavingDraft ? 'Saving Draft...' : 'Save as Draft'}
+            </button>
+          </div>
         </div>
-        <h1 className="text-heading-lg" style={{ margin: 0 }}>Submit Qualified Lead</h1>
+
+        {/* Draft Saved Feedback Toast */}
+        {draftSavedToast && (
+          <div
+            style={{
+              marginTop: '12px',
+              padding: '10px 14px',
+              backgroundColor: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              borderRadius: 'var(--radius)',
+              color: '#166534',
+              fontSize: '0.8125rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <Check style={{ width: '15px', height: '15px' }} />
+            Progress saved to drafts! You can return to this lead at any time in the <strong>Lead Drafts</strong> tab.
+          </div>
+        )}
       </div>
 
       {/* Step Indicator */}
-      <div className="steps-bar">
+      <div className="steps-bar" style={{ marginBottom: '24px' }}>
         {STEP_LABELS.map((label, idx) => {
           const stepNum = idx + 1
-          // If step 2 is skipped for personal/saas
           const isSkipped = stepNum === 2 && formData.client_type && formData.client_type !== 'BUSINESS'
           if (isSkipped) return null
 
@@ -226,9 +296,7 @@ export default function NewLeadForm() {
             <div key={stepNum} className={`step-node ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}>
               <div className="step-node-circle">
                 {isDone ? (
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
+                  <Check style={{ width: '10px', height: '10px' }} />
                 ) : (
                   stepNum
                 )}
@@ -240,21 +308,22 @@ export default function NewLeadForm() {
       </div>
 
       {/* Main Intake Form Box */}
-      <div className="form-card">
+      <div className="form-card card" style={{ padding: '24px 28px', backgroundColor: 'var(--surface)', border: '1px solid var(--ink-200)' }}>
         {/* Step 1: Client Entity */}
         {currentStep === 1 && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 1 of 8</div>
-              <h2 className="pane-title">Client Information</h2>
-              <p className="pane-desc">Identify the prospective client entity and organization type.</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Client Information</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Identify the prospective client entity and organization type.</p>
             </div>
 
-            <div className="field-group">
-              <label className="label label-required">Client or Organization Name</label>
+            <div className="field-group" style={{ marginBottom: '20px' }}>
+              <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Client or Organization Name</label>
               <input
                 type="text"
                 className={`input ${errors.client_name ? 'input-error' : ''}`}
+                style={{ width: '100%' }}
                 placeholder="e.g. Bluefin Kitchen, Marcus Vance, or Nexus Systems"
                 value={formData.client_name}
                 onChange={(e) => updateField('client_name', e.target.value)}
@@ -263,8 +332,8 @@ export default function NewLeadForm() {
             </div>
 
             <div className="field-group">
-              <label className="label label-required">Client Classification</label>
-              <div className="radio-card-grid">
+              <label className="label label-required" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.8125rem' }}>Client Classification</label>
+              <div className="radio-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                 {[
                   {
                     type: 'PERSONAL' as ClientType,
@@ -287,12 +356,17 @@ export default function NewLeadForm() {
                     type="button"
                     onClick={() => updateField('client_type', item.type)}
                     className={`radio-card ${formData.client_type === item.type ? 'selected' : ''}`}
+                    style={{
+                      textAlign: 'left',
+                      padding: '16px',
+                      borderRadius: 'var(--radius-md)',
+                      border: formData.client_type === item.type ? '2px solid var(--e34-accent)' : '1px solid var(--ink-200)',
+                      backgroundColor: formData.client_type === item.type ? 'var(--ink-50)' : 'var(--surface)',
+                      cursor: 'pointer',
+                    }}
                   >
-                    <div className="radio-dot">{formData.client_type === item.type && <span className="dot-inner" />}</div>
-                    <div>
-                      <div className="radio-title">{item.title}</div>
-                      <div className="radio-desc">{item.desc}</div>
-                    </div>
+                    <div style={{ fontWeight: 650, fontSize: '0.9375rem', marginBottom: '4px', color: 'var(--ink-900)' }}>{item.title}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--ink-500)', lineHeight: 1.4 }}>{item.desc}</div>
                   </button>
                 ))}
               </div>
@@ -301,26 +375,27 @@ export default function NewLeadForm() {
           </div>
         )}
 
-        {/* Step 2: Business Category (Only for BUSINESS) */}
+        {/* Step 2: Business Category */}
         {currentStep === 2 && formData.client_type === 'BUSINESS' && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 2 of 8</div>
-              <h2 className="pane-title">Business Category</h2>
-              <p className="pane-desc">Select the primary commercial vertical for this enterprise.</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Business Category</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Select the enterprise vertical matching this business.</p>
             </div>
 
-            <div className="field-group">
-              <label className="label label-required">Business Vertical</label>
+            <div className="field-group" style={{ marginBottom: '16px' }}>
+              <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Select Business Category</label>
               <select
-                className={`input select ${errors.business_type ? 'input-error' : ''}`}
+                className={`select ${errors.business_type ? 'input-error' : ''}`}
+                style={{ width: '100%' }}
                 value={formData.business_type}
                 onChange={(e) => updateField('business_type', e.target.value)}
               >
-                <option value="">Select vertical...</option>
-                {BUSINESS_TYPES.map((b) => (
-                  <option key={b.value} value={b.value}>
-                    {b.label}
+                <option value="">-- Choose a category --</option>
+                {BUSINESS_TYPES.map((bt) => (
+                  <option key={bt.value} value={bt.value}>
+                    {bt.label}
                   </option>
                 ))}
               </select>
@@ -329,11 +404,12 @@ export default function NewLeadForm() {
 
             {formData.business_type === 'OTHER' && (
               <div className="field-group">
-                <label className="label label-required">Specify Business Category</label>
+                <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Specify Business Type</label>
                 <input
                   type="text"
                   className={`input ${errors.business_type_other ? 'input-error' : ''}`}
-                  placeholder="e.g. Architecture Studio, Dental Surgery, Real Estate Syndicate"
+                  style={{ width: '100%' }}
+                  placeholder="e.g. Legal Consulting, Real Estate Brokerage"
                   value={formData.business_type_other}
                   onChange={(e) => updateField('business_type_other', e.target.value)}
                 />
@@ -346,36 +422,39 @@ export default function NewLeadForm() {
         {/* Step 3: Website Classification */}
         {currentStep === 3 && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 3 of 8</div>
-              <h2 className="pane-title">Website Classification</h2>
-              <p className="pane-desc">Specify the structural format required for this build.</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Website Classification</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Select the functional structure of the website.</p>
             </div>
 
-            <div className="field-group">
-              <label className="label label-required">Website Type</label>
+            <div className="field-group" style={{ marginBottom: '16px' }}>
+              <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Website Type</label>
               <select
-                className={`input select ${errors.website_type ? 'input-error' : ''}`}
+                className={`select ${errors.website_type ? 'input-error' : ''}`}
+                style={{ width: '100%' }}
                 value={formData.website_type}
                 onChange={(e) => updateField('website_type', e.target.value)}
               >
-                <option value="">Select website type...</option>
-                {getWebsiteTypeOptions().map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
+                <option value="">-- Choose a website type --</option>
+                {getWebsiteTypeOptions().map((wt) => (
+                  <option key={wt.value} value={wt.label}>
+                    {wt.label}
                   </option>
                 ))}
+                <option value="OTHER">Other Custom Website</option>
               </select>
               {errors.website_type && <div className="field-error">{errors.website_type}</div>}
             </div>
 
             {formData.website_type === 'OTHER' && (
               <div className="field-group">
-                <label className="label label-required">Specify Custom Website Type</label>
+                <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Specify Custom Website Type</label>
                 <input
                   type="text"
                   className={`input ${errors.website_type_other ? 'input-error' : ''}`}
-                  placeholder="e.g. Interactive Documentation, Multi-tier Membership Portal"
+                  style={{ width: '100%' }}
+                  placeholder="e.g. Directory Platform, Private Portal"
                   value={formData.website_type_other}
                   onChange={(e) => updateField('website_type_other', e.target.value)}
                 />
@@ -385,58 +464,64 @@ export default function NewLeadForm() {
           </div>
         )}
 
-        {/* Step 4: Reason & Previous Website */}
+        {/* Step 4: Project Reason */}
         {currentStep === 4 && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 4 of 8</div>
-              <h2 className="pane-title">Project Context</h2>
-              <p className="pane-desc">Is this a greenfield digital launch or a commercial redesign?</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Project Reason</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Is this a brand-new website build or a redesign of an existing site?</p>
             </div>
 
-            <div className="field-group">
-              <label className="label label-required">Project Reason</label>
-              <div className="radio-card-grid">
+            <div className="field-group" style={{ marginBottom: '20px' }}>
+              <label className="label label-required" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.8125rem' }}>Project Scope</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <button
                   type="button"
                   onClick={() => updateField('reason', 'NEW_WEBSITE')}
-                  className={`radio-card ${formData.reason === 'NEW_WEBSITE' ? 'selected' : ''}`}
+                  style={{
+                    textAlign: 'left',
+                    padding: '16px',
+                    borderRadius: 'var(--radius-md)',
+                    border: formData.reason === 'NEW_WEBSITE' ? '2px solid var(--e34-accent)' : '1px solid var(--ink-200)',
+                    backgroundColor: formData.reason === 'NEW_WEBSITE' ? 'var(--ink-50)' : 'var(--surface)',
+                    cursor: 'pointer',
+                  }}
                 >
-                  <div className="radio-dot">{formData.reason === 'NEW_WEBSITE' && <span className="dot-inner" />}</div>
-                  <div>
-                    <div className="radio-title">New Website</div>
-                    <div className="radio-desc">Initial brand launch, no existing web presence to migrate.</div>
-                  </div>
+                  <div style={{ fontWeight: 650, fontSize: '0.9375rem', marginBottom: '4px', color: 'var(--ink-900)' }}>New Website Build</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--ink-500)' }}>Client currently does not have an active website.</div>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => updateField('reason', 'REDO_WEBSITE')}
-                  className={`radio-card ${formData.reason === 'REDO_WEBSITE' ? 'selected' : ''}`}
+                  style={{
+                    textAlign: 'left',
+                    padding: '16px',
+                    borderRadius: 'var(--radius-md)',
+                    border: formData.reason === 'REDO_WEBSITE' ? '2px solid var(--e34-accent)' : '1px solid var(--ink-200)',
+                    backgroundColor: formData.reason === 'REDO_WEBSITE' ? 'var(--ink-50)' : 'var(--surface)',
+                    cursor: 'pointer',
+                  }}
                 >
-                  <div className="radio-dot">{formData.reason === 'REDO_WEBSITE' && <span className="dot-inner" />}</div>
-                  <div>
-                    <div className="radio-title">Redo / Redesign Existing Website</div>
-                    <div className="radio-desc">Replacing an outdated, slow, or low-converting digital presence.</div>
-                  </div>
+                  <div style={{ fontWeight: 650, fontSize: '0.9375rem', marginBottom: '4px', color: 'var(--ink-900)' }}>Redesign Existing Website</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--ink-500)' }}>Replacing or upgrading an existing website URL.</div>
                 </button>
               </div>
               {errors.reason && <div className="field-error">{errors.reason}</div>}
             </div>
 
             {formData.reason === 'REDO_WEBSITE' && (
-              <div className="field-group" style={{ marginTop: 20 }}>
-                <label className="label label-required">Previous / Existing Website URL</label>
+              <div className="field-group">
+                <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Current Website URL</label>
                 <input
                   type="url"
                   className={`input ${errors.previous_website_url ? 'input-error' : ''}`}
+                  style={{ width: '100%' }}
                   placeholder="https://example.com"
                   value={formData.previous_website_url}
                   onChange={(e) => updateField('previous_website_url', e.target.value)}
                 />
-                <div className="field-hint">
-                  The design team will review this site to assess current bottlenecks, asset needs, and technical flaws.
-                </div>
                 {errors.previous_website_url && <div className="field-error">{errors.previous_website_url}</div>}
               </div>
             )}
@@ -446,23 +531,24 @@ export default function NewLeadForm() {
         {/* Step 5: Target Audience */}
         {currentStep === 5 && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 5 of 8</div>
-              <h2 className="pane-title">Target Audience</h2>
-              <p className="pane-desc">Detail who will visit and convert on this website.</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Target Audience</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Detail who will visit, engage, and convert on this website.</p>
             </div>
 
             <div className="field-group">
-              <label className="label label-required">Target Audience Profile</label>
+              <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Target Audience Profile</label>
               <textarea
                 className={`input textarea ${errors.target_audience ? 'input-error' : ''}`}
                 rows={4}
+                style={{ width: '100%', resize: 'vertical' }}
                 placeholder="Specify: Demographics, geographic location, primary problem, aesthetic expectations, purchasing triggers..."
                 value={formData.target_audience}
                 onChange={(e) => updateField('target_audience', e.target.value)}
               />
-              <div className="field-hint" style={{ background: 'var(--ink-50)', padding: '8px 12px', borderRadius: 'var(--radius-sm)', marginTop: 8 }}>
-                <strong>Quality Standard:</strong> Avoid generic entries like &quot;everyone&quot; or &quot;people on internet&quot;. High-quality entries specify user psychology and geographic scope (e.g. &quot;High-net-worth homeowners in Northern California seeking custom architectural remodeling&quot;).
+              <div className="field-hint" style={{ background: 'var(--ink-50)', padding: '10px 14px', borderRadius: 'var(--radius-sm)', marginTop: 8, fontSize: '0.75rem', color: 'var(--ink-600)' }}>
+                <strong>Quality Standard:</strong> Avoid generic entries like &quot;everyone&quot; or &quot;people on internet&quot;. High-quality entries specify user psychology and geography (e.g. &quot;Urban working professionals aged 26-45 in Austin seeking mobile lunch orders&quot;).
               </div>
               {errors.target_audience && <div className="field-error">{errors.target_audience}</div>}
             </div>
@@ -472,15 +558,15 @@ export default function NewLeadForm() {
         {/* Step 6: Design Aesthetics */}
         {currentStep === 6 && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 6 of 8</div>
-              <h2 className="pane-title">Design Aesthetic Tags</h2>
-              <p className="pane-desc">Select all aesthetic directions that match the client&apos;s brand vision.</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Design Aesthetic Tags</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Select all aesthetic directions that match the client&apos;s brand vision.</p>
             </div>
 
             <div className="field-group">
-              <label className="label label-required">Aesthetic Styles (Select Multiple)</label>
-              <div className="style-chips-grid">
+              <label className="label label-required" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: '0.8125rem' }}>Aesthetic Styles (Select Multiple)</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {DESIGN_STYLES.map((style) => {
                   const isSelected = formData.design_style.includes(style)
                   return (
@@ -488,13 +574,10 @@ export default function NewLeadForm() {
                       key={style}
                       type="button"
                       onClick={() => toggleDesignStyle(style)}
-                      className={`style-chip ${isSelected ? 'selected' : ''}`}
+                      className={`badge ${isSelected ? 'badge-status-completed' : 'badge-outline'}`}
+                      style={{ cursor: 'pointer', fontSize: '0.8125rem', padding: '6px 12px' }}
                     >
-                      {isSelected && (
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      )}
+                      {isSelected && <Check style={{ width: '12px', height: '12px', marginRight: '4px' }} />}
                       {style}
                     </button>
                   )
@@ -505,10 +588,11 @@ export default function NewLeadForm() {
 
             {formData.design_style.includes('Other') && (
               <div className="field-group" style={{ marginTop: 20 }}>
-                <label className="label label-required">Specify Custom Design Style</label>
+                <label className="label label-required" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Specify Custom Design Style</label>
                 <input
                   type="text"
                   className={`input ${errors.design_style_other ? 'input-error' : ''}`}
+                  style={{ width: '100%' }}
                   placeholder="e.g. Brutalist, Swiss Typography, Warm Retro"
                   value={formData.design_style_other}
                   onChange={(e) => updateField('design_style_other', e.target.value)}
@@ -519,39 +603,55 @@ export default function NewLeadForm() {
           </div>
         )}
 
-        {/* Step 7: Commercials & Scope */}
+        {/* Step 7: Commercials & Scope with PRICING GUIDE MODAL */}
         {currentStep === 7 && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 7 of 8</div>
-              <h2 className="pane-title">Commercials &amp; Technical Scope</h2>
-              <p className="pane-desc">Quoted price, visual references, and special engineering features.</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Commercials &amp; Technical Scope</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Quoted price, visual references, and special engineering features.</p>
             </div>
 
             <div className="field-group">
-              <label className="label">Quoted Website Price ($ USD)</label>
-              <div style={{ position: 'relative' }}>
-                <span style={{ position: 'absolute', left: 12, top: 9, color: 'var(--ink-400)', fontWeight: 600 }}>$</span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', flexWrap: 'wrap', gap: '8px' }}>
+                <label className="label" style={{ fontWeight: 600, fontSize: '0.8125rem', margin: 0 }}>
+                  Quoted Website Price ($ USD)
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsPricingGuideOpen(true)}
+                  className="btn btn-sm btn-outline"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', color: 'var(--e34-accent)' }}
+                >
+                  <Sparkles style={{ width: '12px', height: '12px' }} />
+                  View Pricing Guide
+                </button>
+              </div>
+
+              <div style={{ position: 'relative', maxWidth: '320px' }}>
+                <span style={{ position: 'absolute', left: 12, top: 8, color: 'var(--ink-400)', fontWeight: 600 }}>$</span>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
                   className={`input ${errors.budget ? 'input-error' : ''}`}
-                  style={{ paddingLeft: 26 }}
-                  placeholder="e.g. 2500"
+                  style={{ paddingLeft: 26, width: '100%' }}
+                  placeholder="e.g. 500"
                   value={formData.budget}
                   onChange={(e) => updateField('budget', e.target.value)}
                 />
               </div>
-              <div className="field-hint">Enter clean numeric value. Standard ranges: Personal ($800–$2,500), Business ($1,500–$5,000), SaaS ($3,000–$10,000+).</div>
+              <span className="text-meta" style={{ display: 'block', fontSize: '0.75rem', marginTop: '4px' }}>
+                Click &quot;View Pricing Guide&quot; above to inspect standard regional pricing tiers and benchmarks.
+              </span>
               {errors.budget && <div className="field-error">{errors.budget}</div>}
             </div>
 
             <div className="field-group" style={{ marginTop: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                <label className="label" style={{ margin: 0 }}>Inspiration Reference Websites (Optional, Max 5)</label>
+                <label className="label" style={{ fontWeight: 600, fontSize: '0.8125rem', margin: 0 }}>Inspiration Reference Websites (Optional, Max 5)</label>
                 {formData.inspiration_urls.length < 5 && (
-                  <button type="button" onClick={addInspirationUrl} className="btn btn-sm btn-ghost" style={{ fontSize: 12 }}>
+                  <button type="button" onClick={addInspirationUrl} className="btn btn-sm btn-outline" style={{ fontSize: 12, padding: '2px 8px' }}>
                     + Add URL
                   </button>
                 )}
@@ -562,6 +662,7 @@ export default function NewLeadForm() {
                     <input
                       type="url"
                       className="input"
+                      style={{ flex: 1 }}
                       placeholder="https://example-inspiration.com"
                       value={url}
                       onChange={(e) => updateInspirationUrl(idx, e.target.value)}
@@ -570,8 +671,8 @@ export default function NewLeadForm() {
                       <button
                         type="button"
                         onClick={() => removeInspirationUrl(idx)}
-                        className="btn btn-sm btn-ghost"
-                        style={{ color: 'var(--ink-400)' }}
+                        className="btn btn-sm btn-outline"
+                        style={{ color: 'var(--ink-400)', padding: '4px 8px' }}
                       >
                         ✕
                       </button>
@@ -583,10 +684,11 @@ export default function NewLeadForm() {
             </div>
 
             <div className="field-group" style={{ marginTop: 20 }}>
-              <label className="label">Special Technical Features &amp; Integrations</label>
+              <label className="label" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Special Technical Features &amp; Integrations</label>
               <textarea
                 className="input textarea"
                 rows={3}
+                style={{ width: '100%', resize: 'vertical' }}
                 placeholder="e.g. Stripe checkout, Calendly booking widget, Custom CRM webhook, Multi-language support, Algolia search..."
                 value={formData.special_features}
                 onChange={(e) => updateField('special_features', e.target.value)}
@@ -595,386 +697,136 @@ export default function NewLeadForm() {
           </div>
         )}
 
-        {/* Step 8: Additional Info & Review */}
+        {/* Step 8: Review & Submission */}
         {currentStep === 8 && (
           <div className="step-pane">
-            <div className="pane-header">
+            <div className="pane-header" style={{ marginBottom: '20px' }}>
               <div className="step-badge">Step 8 of 8</div>
-              <h2 className="pane-title">Review &amp; Submit Lead</h2>
-              <p className="pane-desc">Confirm all qualification parameters before registering in the pipeline.</p>
+              <h2 className="pane-title" style={{ fontSize: '1.25rem', margin: '4px 0 2px' }}>Review &amp; Submit Lead</h2>
+              <p className="pane-desc" style={{ color: 'var(--ink-500)', fontSize: '0.875rem', margin: 0 }}>Review all captured details before registering this lead into the pipeline.</p>
             </div>
 
-            <div className="field-group">
-              <label className="label">Additional Notes &amp; Sales Context</label>
+            {submitError && (
+              <div
+                style={{
+                  padding: '12px 16px',
+                  backgroundColor: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  borderRadius: 'var(--radius)',
+                  color: '#991b1b',
+                  fontSize: '0.875rem',
+                  marginBottom: '16px',
+                }}
+              >
+                {submitError}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', backgroundColor: 'var(--paper)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--ink-200)', fontSize: '0.875rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--ink-150)', paddingBottom: '8px' }}>
+                <span className="text-meta">Client:</span>
+                <span style={{ fontWeight: 600 }}>{formData.client_name} ({formData.client_type})</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--ink-150)', paddingBottom: '8px' }}>
+                <span className="text-meta">Website Type:</span>
+                <span style={{ fontWeight: 500 }}>{formData.website_type === 'OTHER' ? formData.website_type_other : formData.website_type}</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--ink-150)', paddingBottom: '8px' }}>
+                <span className="text-meta">Project Reason:</span>
+                <span style={{ fontWeight: 500 }}>{formData.reason === 'NEW_WEBSITE' ? 'New Build' : `Redesign (${formData.previous_website_url})`}</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--ink-150)', paddingBottom: '8px' }}>
+                <span className="text-meta">Quoted Budget:</span>
+                <span style={{ fontWeight: 650, color: 'var(--e34-accent)' }}>{formData.budget ? formatCurrency(parseFloat(formData.budget)) : 'Not quoted'}</span>
+              </div>
+
+              <div>
+                <span className="text-meta" style={{ display: 'block', marginBottom: '4px' }}>Target Audience:</span>
+                <p style={{ margin: 0, color: 'var(--ink-800)', whiteSpace: 'pre-wrap' }}>{formData.target_audience}</p>
+              </div>
+
+              <div>
+                <span className="text-meta" style={{ display: 'block', marginBottom: '4px' }}>Aesthetic Tags:</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {formData.design_style.map((tag) => (
+                    <span key={tag} className="badge badge-outline">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="field-group" style={{ marginTop: '18px' }}>
+              <label className="label" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.8125rem' }}>Additional Internal Notes (Optional)</label>
               <textarea
                 className="input textarea"
                 rows={2}
-                placeholder="Any client quirks, expected kick-off dates, stakeholder names, or specific sales conversations..."
+                style={{ width: '100%', resize: 'vertical' }}
+                placeholder="Any special handling, stakeholder contacts, or internal comments..."
                 value={formData.additional_information}
                 onChange={(e) => updateField('additional_information', e.target.value)}
               />
             </div>
-
-            {/* Review Summary Grid */}
-            <div className="review-summary-box">
-              <h3 className="summary-box-title">Lead Intake Summary</h3>
-              <div className="summary-grid">
-                <div className="summary-cell">
-                  <span className="cell-label">Client Name</span>
-                  <span className="cell-value">{formData.client_name || '—'}</span>
-                </div>
-                <div className="summary-cell">
-                  <span className="cell-label">Client Type</span>
-                  <span className="cell-value">{formData.client_type || '—'}</span>
-                </div>
-                {formData.client_type === 'BUSINESS' && (
-                  <div className="summary-cell">
-                    <span className="cell-label">Business Category</span>
-                    <span className="cell-value">{formData.business_type === 'OTHER' ? formData.business_type_other : formData.business_type || '—'}</span>
-                  </div>
-                )}
-                <div className="summary-cell">
-                  <span className="cell-label">Website Type</span>
-                  <span className="cell-value">{formData.website_type === 'OTHER' ? formData.website_type_other : formData.website_type || '—'}</span>
-                </div>
-                <div className="summary-cell">
-                  <span className="cell-label">Reason</span>
-                  <span className="cell-value">{formData.reason === 'NEW_WEBSITE' ? 'New Website' : 'Redo Website'}</span>
-                </div>
-                {formData.previous_website_url && (
-                  <div className="summary-cell" style={{ gridColumn: 'span 2' }}>
-                    <span className="cell-label">Existing Site</span>
-                    <span className="cell-value" style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>{formData.previous_website_url}</span>
-                  </div>
-                )}
-                <div className="summary-cell" style={{ gridColumn: 'span 2' }}>
-                  <span className="cell-label">Target Audience</span>
-                  <span className="cell-value" style={{ fontSize: 13, lineHeight: 1.4 }}>{formData.target_audience || '—'}</span>
-                </div>
-                <div className="summary-cell" style={{ gridColumn: 'span 2' }}>
-                  <span className="cell-label">Design Aesthetics</span>
-                  <span className="cell-value">
-                    {formData.design_style.join(', ')} {formData.design_style_other ? `(${formData.design_style_other})` : ''}
-                  </span>
-                </div>
-                <div className="summary-cell">
-                  <span className="cell-label">Quoted Price</span>
-                  <span className="cell-value tabular-nums" style={{ fontWeight: 700, color: 'var(--ink-900)' }}>
-                    {formData.budget ? formatCurrency(parseFloat(formData.budget)) : 'Unquoted'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {submitError && (
-              <div className="quiz-error-callout" style={{ marginTop: 20 }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-                {submitError}
-              </div>
-            )}
           </div>
         )}
 
-        {/* Footer Navigation */}
-        <div className="form-footer">
-          <button
-            type="button"
-            onClick={handlePrev}
-            disabled={currentStep === 1 || isPending}
-            className="btn btn-outline btn-md"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Back
-          </button>
+        {/* Navigation Buttons */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '28px', paddingTop: '16px', borderTop: '1px solid var(--ink-150)' }}>
+          {currentStep > 1 ? (
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={handlePrev}
+              disabled={isPending}
+            >
+              &larr; Back
+            </button>
+          ) : (
+            <div />
+          )}
 
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={handleSaveDraft}
+              disabled={isSavingDraft || isPending}
+            >
+              {isSavingDraft ? 'Saving Draft...' : 'Save Draft'}
+            </button>
+
             {currentStep < TOTAL_STEPS ? (
-              <button type="button" onClick={handleNext} className="btn btn-solid btn-md">
-                Continue
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+              <button
+                type="button"
+                className="btn btn-solid"
+                onClick={handleNext}
+                disabled={isPending}
+              >
+                Continue &rarr;
               </button>
             ) : (
               <button
                 type="button"
+                className="btn btn-solid"
                 onClick={handleSubmitLead}
                 disabled={isPending}
-                className="btn btn-solid btn-md"
-                style={{ background: '#166534' }}
               >
-                {isPending ? 'Submitting to ERM...' : 'Submit Lead'}
+                {isPending ? 'Registering Lead...' : 'Submit Lead to Pipeline'}
               </button>
             )}
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        .lead-intake-wrapper {
-          max-width: 780px;
-          margin: 0 auto;
-          padding: 32px 24px 80px;
-        }
-
-        .lead-intake-header {
-          margin-bottom: 24px;
-        }
-
-        .steps-bar {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          margin-bottom: 24px;
-          overflow-x: auto;
-          padding-bottom: 4px;
-        }
-
-        .step-node {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12px;
-          color: var(--ink-400);
-          white-space: nowrap;
-        }
-
-        .step-node.active {
-          color: var(--ink-900);
-          font-weight: 600;
-        }
-
-        .step-node.done {
-          color: #166534;
-        }
-
-        .step-node-circle {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: var(--ink-100);
-          color: var(--ink-500);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 10px;
-          font-weight: 700;
-        }
-
-        .step-node.active .step-node-circle {
-          background: var(--e34-accent);
-          color: white;
-        }
-
-        .step-node.done .step-node-circle {
-          background: var(--status-completed-bg);
-          border: 1px solid var(--status-completed-border);
-          color: var(--status-completed-text);
-        }
-
-        .step-node-text {
-          font-size: 12px;
-        }
-
-        .form-card {
-          background: var(--surface);
-          border: 1px solid var(--ink-150);
-          border-radius: var(--radius-md);
-          padding: 24px;
-          box-shadow: var(--shadow-xs);
-        }
-
-        .pane-header {
-          margin-bottom: 24px;
-          padding-bottom: 16px;
-          border-bottom: 1px solid var(--ink-100);
-        }
-
-        .step-badge {
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--ink-400);
-          margin-bottom: 6px;
-        }
-
-        .pane-title {
-          font-size: 20px;
-          font-weight: 700;
-          letter-spacing: -0.025em;
-          color: var(--ink-900);
-          margin: 0 0 6px;
-        }
-
-        .pane-desc {
-          font-size: 13.5px;
-          color: var(--ink-500);
-          margin: 0;
-        }
-
-        .field-group {
-          margin-bottom: 20px;
-        }
-
-        .radio-card-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 10px;
-        }
-
-        .radio-card {
-          display: flex;
-          align-items: flex-start;
-          gap: 14px;
-          padding: 14px 18px;
-          background: var(--surface);
-          border: 1px solid var(--ink-200);
-          border-radius: var(--radius);
-          cursor: pointer;
-          text-align: left;
-          font-family: inherit;
-          transition: all var(--transition);
-        }
-
-        .radio-card:hover {
-          background: var(--ink-50);
-          border-color: var(--ink-300);
-        }
-
-        .radio-card.selected {
-          background: #f4f6fb;
-          border-color: var(--e34-accent);
-          box-shadow: 0 0 0 2px rgb(26 39 68 / 0.12);
-        }
-
-        .radio-dot {
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          border: 2px solid var(--ink-300);
-          margin-top: 2px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-
-        .radio-card.selected .radio-dot {
-          border-color: var(--e34-accent);
-        }
-
-        .dot-inner {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: var(--e34-accent);
-        }
-
-        .radio-title {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--ink-900);
-          margin-bottom: 2px;
-        }
-
-        .radio-desc {
-          font-size: 12.5px;
-          color: var(--ink-500);
-          line-height: 1.4;
-        }
-
-        .style-chips-grid {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-
-        .style-chip {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 7px 14px;
-          border-radius: 99px;
-          border: 1px solid var(--ink-200);
-          background: var(--surface);
-          color: var(--ink-700);
-          font-size: 13px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all var(--transition);
-          font-family: inherit;
-        }
-
-        .style-chip:hover {
-          background: var(--ink-50);
-          border-color: var(--ink-300);
-        }
-
-        .style-chip.selected {
-          background: var(--e34-accent);
-          border-color: var(--e34-accent);
-          color: white;
-        }
-
-        .review-summary-box {
-          margin-top: 24px;
-          padding: 20px 24px;
-          background: var(--ink-50);
-          border: 1px solid var(--ink-150);
-          border-radius: var(--radius-md);
-        }
-
-        .summary-box-title {
-          font-size: 13px;
-          font-weight: 700;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-          color: var(--ink-600);
-          margin: 0 0 16px;
-        }
-
-        .summary-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 14px;
-        }
-
-        .summary-cell {
-          display: flex;
-          flex-direction: column;
-          gap: 3px;
-        }
-
-        .cell-label {
-          font-size: 11px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: var(--ink-400);
-        }
-
-        .cell-value {
-          font-size: 13.5px;
-          color: var(--ink-800);
-          font-weight: 500;
-        }
-
-        .form-footer {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-top: 24px;
-          border-top: 1px solid var(--ink-100);
-          margin-top: 32px;
-        }
-      `}</style>
+      {/* Pricing Guide Modal */}
+      <PricingGuideModal
+        isOpen={isPricingGuideOpen}
+        onClose={() => setIsPricingGuideOpen(false)}
+        pricingConfigs={pricingConfigs}
+        onSelectPrice={(price) => updateField('budget', String(price))}
+      />
     </div>
   )
 }

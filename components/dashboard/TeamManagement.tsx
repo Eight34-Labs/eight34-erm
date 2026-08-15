@@ -4,7 +4,8 @@ import React, { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { User, UserRole } from '@/types'
 import { formatDate, ROLE_LABELS } from '@/lib/utils'
-import { approveUser, toggleUserActive, updateUserRole, removeUser } from '@/lib/users/actions'
+import { approveUser, toggleUserActive, updateUserRole, removeUser, updateUserCommissionRate } from '@/lib/users/actions'
+import ConfirmModal from '@/components/ui/ConfirmModal'
 
 interface TeamManagementProps {
   team: User[]
@@ -17,7 +18,28 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 
+  // Commission editing
+  const [editingCommissionId, setEditingCommissionId] = useState<string | null>(null)
+  const [commissionVal, setCommissionVal] = useState<string>('50')
+
+  // Modals
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean
+    title: string
+    message: string
+    confirmText: string
+    isDestructive?: boolean
+    onConfirm: () => void
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    onConfirm: () => {},
+  })
+
   const isSuperAdmin = currentUser.role === 'SUPER_ADMIN'
+  const isAdmin = currentUser.role === 'ADMIN' || isSuperAdmin
 
   const handleApprove = (userId: string) => {
     setActionError(null)
@@ -34,45 +56,91 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
   }
 
   const handleToggleActive = (userId: string, currentStatus: boolean) => {
-    if (!window.confirm(`Are you sure you want to ${currentStatus ? 'disable' : 'enable'} this user account?`)) return
-    setActionError(null)
-    setLoadingId(userId)
-    startTransition(async () => {
-      const res = await toggleUserActive(userId, !currentStatus)
-      if (!res.success) {
-        setActionError(res.error || 'Failed to update user status')
-      } else {
-        router.refresh()
-      }
-      setLoadingId(null)
+    setConfirmModal({
+      isOpen: true,
+      title: `${currentStatus ? 'Disable' : 'Enable'} User Account`,
+      message: `Are you sure you want to ${currentStatus ? 'disable' : 'enable'} this user's account?`,
+      confirmText: currentStatus ? 'Disable Account' : 'Enable Account',
+      isDestructive: currentStatus,
+      onConfirm: () => {
+        setConfirmModal((prev) => ({ ...prev, isOpen: false }))
+        setActionError(null)
+        setLoadingId(userId)
+        startTransition(async () => {
+          const res = await toggleUserActive(userId, !currentStatus)
+          if (!res.success) {
+            setActionError(res.error || 'Failed to update user status')
+          } else {
+            router.refresh()
+          }
+          setLoadingId(null)
+        })
+      },
     })
   }
 
   const handleChangeRole = (userId: string, newRole: UserRole) => {
     if (!isSuperAdmin) return
-    if (!window.confirm(`Change role to ${ROLE_LABELS[newRole]}?`)) return
-    setActionError(null)
-    setLoadingId(userId)
-    startTransition(async () => {
-      const res = await updateUserRole(userId, newRole)
-      if (!res.success) {
-        setActionError(res.error || 'Failed to update role')
-      } else {
-        router.refresh()
-      }
-      setLoadingId(null)
+    setConfirmModal({
+      isOpen: true,
+      title: 'Change User Role',
+      message: `Are you sure you want to change this member's role to ${ROLE_LABELS[newRole]}?`,
+      confirmText: 'Update Role',
+      onConfirm: () => {
+        setConfirmModal((prev) => ({ ...prev, isOpen: false }))
+        setActionError(null)
+        setLoadingId(userId)
+        startTransition(async () => {
+          const res = await updateUserRole(userId, newRole)
+          if (!res.success) {
+            setActionError(res.error || 'Failed to update role')
+          } else {
+            router.refresh()
+          }
+          setLoadingId(null)
+        })
+      },
     })
   }
 
   const handleRemove = (userId: string) => {
     if (!isSuperAdmin) return
-    if (!window.confirm('Are you sure you want to remove this user from the workspace?')) return
-    setActionError(null)
+    setConfirmModal({
+      isOpen: true,
+      title: 'Remove Member',
+      message: 'Are you sure you want to remove this user from the workspace?',
+      confirmText: 'Remove User',
+      isDestructive: true,
+      onConfirm: () => {
+        setConfirmModal((prev) => ({ ...prev, isOpen: false }))
+        setActionError(null)
+        setLoadingId(userId)
+        startTransition(async () => {
+          const res = await removeUser(userId)
+          if (!res.success) {
+            setActionError(res.error || 'Failed to remove user')
+          } else {
+            router.refresh()
+          }
+          setLoadingId(null)
+        })
+      },
+    })
+  }
+
+  const handleSaveCommission = (userId: string) => {
+    const rate = parseFloat(commissionVal)
+    if (isNaN(rate) || rate < 0 || rate > 100) {
+      setActionError('Commission rate must be between 0% and 100%')
+      return
+    }
+
+    setEditingCommissionId(null)
     setLoadingId(userId)
     startTransition(async () => {
-      const res = await removeUser(userId)
+      const res = await updateUserCommissionRate(userId, rate)
       if (!res.success) {
-        setActionError(res.error || 'Failed to remove user')
+        setActionError(res.error || 'Failed to update commission rate')
       } else {
         router.refresh()
       }
@@ -99,6 +167,7 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
           <tr>
             <th>Member</th>
             <th>Role</th>
+            <th>Commission Rate</th>
             <th>Certification</th>
             <th>Account Status</th>
             <th>Joined</th>
@@ -109,6 +178,7 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
           {team.map((member) => {
             const isSelf = member.id === currentUser.id
             const isLoading = loadingId === member.id || isPending
+            const currentRate = member.commission_rate !== undefined ? Number(member.commission_rate) : 50
 
             return (
               <tr key={member.id}>
@@ -127,6 +197,62 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
                   }`}>
                     {ROLE_LABELS[member.role] || member.role}
                   </span>
+                </td>
+
+                <td>
+                  {isAdmin ? (
+                    editingCommissionId === member.id ? (
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <input
+                          type="number"
+                          step="1"
+                          min="0"
+                          max="100"
+                          className="input"
+                          style={{ width: '60px', padding: '2px 6px', fontSize: '12px' }}
+                          value={commissionVal}
+                          onChange={(e) => setCommissionVal(e.target.value)}
+                          autoFocus
+                        />
+                        <span style={{ fontSize: '12px' }}>%</span>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-solid"
+                          style={{ padding: '2px 6px', fontSize: '11px' }}
+                          onClick={() => handleSaveCommission(member.id)}
+                          disabled={isLoading}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-outline"
+                          style={{ padding: '2px 6px', fontSize: '11px' }}
+                          onClick={() => setEditingCommissionId(null)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ) : (
+                      <div
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                        onClick={() => {
+                          setCommissionVal(String(currentRate))
+                          setEditingCommissionId(member.id)
+                        }}
+                        title="Click to edit commission rate"
+                      >
+                        <span style={{ fontWeight: 650, color: 'var(--e34-accent)', fontSize: '13px' }}>
+                          {currentRate}%
+                        </span>
+                        <span className="text-meta" style={{ fontSize: '11px', textDecoration: 'underline' }}>
+                          Edit
+                        </span>
+                      </div>
+                    )
+                  ) : (
+                    <span style={{ fontWeight: 600, fontSize: '13px' }}>{currentRate}%</span>
+                  )}
                 </td>
 
                 <td>
@@ -218,6 +344,18 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
           })}
         </tbody>
       </table>
+
+      {/* Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        isDestructive={confirmModal.isDestructive}
+        isLoading={isPending}
+      />
     </div>
   )
 }

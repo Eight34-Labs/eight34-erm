@@ -2,11 +2,17 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getSession } from '@/lib/auth/session'
+import { getPricingConfigs } from '@/lib/pricing/actions'
+import { getLeadById } from '@/lib/leads/actions'
 import NewLeadForm from '@/components/leads/NewLeadForm'
 
 export const metadata: Metadata = { title: 'New Lead Intake' }
 
-export default async function NewLeadPage() {
+export default async function NewLeadPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const session = await getSession()
   if (!session) redirect('/login')
 
@@ -59,5 +65,22 @@ export default async function NewLeadPage() {
     )
   }
 
-  return <NewLeadForm />
+  const resolvedParams = await searchParams
+  const draftId = typeof resolvedParams.draftId === 'string' ? resolvedParams.draftId : undefined
+
+  const [pricingRes, draftRes] = await Promise.all([
+    getPricingConfigs(),
+    draftId ? getLeadById(draftId) : Promise.resolve({ success: false, data: undefined }),
+  ])
+
+  const pricingConfigs = pricingRes.success && pricingRes.data ? pricingRes.data : []
+  const initialDraft = draftRes.success && draftRes.data ? draftRes.data : undefined
+
+  return (
+    <NewLeadForm
+      pricingConfigs={pricingConfigs}
+      initialDraft={initialDraft}
+      draftId={draftId}
+    />
+  )
 }

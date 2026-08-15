@@ -6,6 +6,14 @@
 TRUNCATE TABLE pricing_config CASCADE;
 TRUNCATE TABLE quiz_questions CASCADE;
 TRUNCATE TABLE training_modules CASCADE;
+TRUNCATE TABLE erm_settings CASCADE;
+
+-- ============================================================
+-- SEED ERM SETTINGS
+-- ============================================================
+
+INSERT INTO erm_settings (default_commission_rate, auto_approve_salespeople, slack_workspace_id)
+VALUES (50.00, false, 'T_EIGHT34_MAIN');
 
 -- ============================================================
 -- SEED PRICING CONFIG

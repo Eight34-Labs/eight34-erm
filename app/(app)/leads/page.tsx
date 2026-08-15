@@ -1,4 +1,4 @@
-import { getLeads } from '@/lib/leads/actions'
+import { getLeads, getTrashedLeads } from '@/lib/leads/actions'
 import { getSession } from '@/lib/auth/session'
 import Link from 'next/link'
 import LeadsTable from '@/components/leads/LeadsTable'
@@ -28,18 +28,22 @@ export default async function LeadsPage({
   const sort = typeof resolvedParams.sort === 'string' ? (resolvedParams.sort as 'created_at' | 'budget') : undefined
   const order = typeof resolvedParams.order === 'string' ? (resolvedParams.order as 'asc' | 'desc') : undefined
 
-  const result = await getLeads({
-    page,
-    search,
-    status,
-    client_type,
-    sort,
-    order,
-    per_page: 20,
-  })
+  const [result, trashedResult] = await Promise.all([
+    getLeads({
+      page,
+      search,
+      status,
+      client_type,
+      sort,
+      order,
+      per_page: 20,
+    }),
+    isAdmin ? getTrashedLeads() : Promise.resolve({ success: true, data: [] }),
+  ])
 
   const leads = result.success && result.data ? result.data.leads : []
   const total = result.success && result.data ? result.data.total : 0
+  const trashedLeads = trashedResult.success && trashedResult.data ? trashedResult.data : []
 
   return (
     <div>
@@ -51,16 +55,27 @@ export default async function LeadsPage({
               {total} registered {total === 1 ? 'lead' : 'leads'}
             </p>
           </div>
-          {user.training_completed && (
-            <Link href="/leads/new" className="btn btn-solid btn-md">
-              + Submit Lead
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <Link href="/leads/drafts" className="btn btn-outline btn-md">
+              Lead Drafts
             </Link>
-          )}
+            {user.training_completed && (
+              <Link href="/leads/new" className="btn btn-solid btn-md">
+                + Submit Lead
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="page-content">
-        <LeadsTable leads={leads} total={total} isAdmin={isAdmin} currentUserId={user.id} />
+        <LeadsTable
+          leads={leads}
+          total={total}
+          isAdmin={isAdmin}
+          currentUserId={user.id}
+          trashedLeads={trashedLeads}
+        />
       </div>
     </div>
   )

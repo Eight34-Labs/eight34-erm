@@ -6,32 +6,32 @@ import { getSession } from '@/lib/auth/session'
 import { canManagePricing } from '@/lib/auth/permissions'
 import type { PricingConfig, ActionResult } from '@/types'
 
-export const DEFAULT_PRICING_CONFIGS: Omit<PricingConfig, 'id' | 'created_at' | 'updated_at' | 'updated_by'>[] = [
+const DEFAULT_PRICING_CONFIGS: Omit<PricingConfig, 'id' | 'created_at' | 'updated_at' | 'updated_by'>[] = [
   // US & Europe
   {
     region: 'US_EUROPE',
     website_type: 'PERSONAL_PORTFOLIO',
     label: 'Personal Portfolio / CV Website',
-    min_price: 800,
-    max_price: 2500,
-    notes: 'Single page or multi-section personal brand showcases with custom typography, contact integration, and mobile optimization.',
+    min_price: 50,
+    max_price: 150,
+    notes: 'Single-page or multi-section personal brand showcase with bespoke typography, bio, works, and contact form.',
     is_active: true,
   },
   {
     region: 'US_EUROPE',
     website_type: 'BUSINESS_LANDING',
     label: 'Business Landing Page',
-    min_price: 1500,
-    max_price: 3500,
-    notes: 'Commercial service showcase, reviews, location maps, lead capture forms, and analytics integration.',
+    min_price: 100,
+    max_price: 400,
+    notes: 'Commercial service showcase, client reviews, location maps, lead capture forms, and analytics integration.',
     is_active: true,
   },
   {
     region: 'US_EUROPE',
     website_type: 'BUSINESS_BOOKING',
     label: 'Business Booking & Appointments Page',
-    min_price: 2500,
-    max_price: 5000,
+    min_price: 500,
+    max_price: 900,
     notes: 'Real-time calendar scheduling, staff allocation, deposit payments (Stripe), and automated confirmation webhooks.',
     is_active: true,
   },
@@ -39,8 +39,8 @@ export const DEFAULT_PRICING_CONFIGS: Omit<PricingConfig, 'id' | 'created_at' | 
     region: 'US_EUROPE',
     website_type: 'SAAS_MARKETING',
     label: 'SaaS Marketing & Product Website',
-    min_price: 3000,
-    max_price: 10000,
+    min_price: 500,
+    max_price: 1500,
     notes: 'Multi-page feature breakdowns, interactive pricing tables, product demo flows, waitlist forms, and SEO architecture.',
     is_active: true,
   },
@@ -49,17 +49,17 @@ export const DEFAULT_PRICING_CONFIGS: Omit<PricingConfig, 'id' | 'created_at' | 
     region: 'GLOBAL',
     website_type: 'PERSONAL_PORTFOLIO',
     label: 'Personal Portfolio / CV Website (Global)',
-    min_price: 500,
-    max_price: 1500,
-    notes: 'Calibrated to local purchasing power (30-50% baseline adjustment).',
+    min_price: 10,
+    max_price: 100,
+    notes: 'Adjusted for international purchasing power (30-50% baseline adjustment).',
     is_active: true,
   },
   {
     region: 'GLOBAL',
     website_type: 'BUSINESS_LANDING',
     label: 'Business Landing Page (Global)',
-    min_price: 950,
-    max_price: 2200,
+    min_price: 50,
+    max_price: 150,
     notes: 'Full commercial landing page for global clients.',
     is_active: true,
   },
@@ -67,8 +67,8 @@ export const DEFAULT_PRICING_CONFIGS: Omit<PricingConfig, 'id' | 'created_at' | 
     region: 'GLOBAL',
     website_type: 'BUSINESS_BOOKING',
     label: 'Business Booking & Appointments (Global)',
-    min_price: 1500,
-    max_price: 3200,
+    min_price: 100,
+    max_price: 300,
     notes: 'Automated booking and scheduling for international businesses.',
     is_active: true,
   },
@@ -76,8 +76,8 @@ export const DEFAULT_PRICING_CONFIGS: Omit<PricingConfig, 'id' | 'created_at' | 
     region: 'GLOBAL',
     website_type: 'SAAS_MARKETING',
     label: 'SaaS Marketing & Product (Global)',
-    min_price: 2000,
-    max_price: 6000,
+    min_price: 200,
+    max_price: 700,
     notes: 'Global SaaS marketing website with conversion optimization.',
     is_active: true,
   },
@@ -89,7 +89,7 @@ export async function getPricingConfigs(): Promise<ActionResult<PricingConfig[]>
 
   const supabase = createServiceClient()
 
-  // Ensure default configs seeded
+  // Ensure default configs seeded if empty
   const { count } = await supabase
     .from('pricing_config')
     .select('*', { count: 'exact', head: true })
@@ -112,15 +112,31 @@ export async function getPricingConfigs(): Promise<ActionResult<PricingConfig[]>
   return { success: true, data: (configs || []) as PricingConfig[] }
 }
 
+export async function getAllPricingConfigs(): Promise<ActionResult<PricingConfig[]>> {
+  const session = await getSession()
+  if (!session) return { success: false, error: 'Not authenticated' }
+
+  const supabase = createServiceClient()
+  const { data: configs, error } = await supabase
+    .from('pricing_config')
+    .select('*')
+    .order('region', { ascending: false })
+    .order('min_price', { ascending: true })
+
+  if (error) return { success: false, error: 'Failed to fetch pricing configurations' }
+
+  return { success: true, data: (configs || []) as PricingConfig[] }
+}
+
 export async function updatePricingConfig(
   id: string,
-  updates: { min_price?: number; max_price?: number | null; notes?: string }
+  updates: { min_price?: number; max_price?: number | null; label?: string; notes?: string; is_active?: boolean }
 ): Promise<ActionResult> {
   const session = await getSession()
   if (!session) return { success: false, error: 'Not authenticated' }
 
   if (!canManagePricing(session.user.role)) {
-    return { success: false, error: 'Only Admins can update pricing configurations' }
+    return { success: false, error: 'Only Admins and Super Admins can update pricing configurations' }
   }
 
   const supabase = createServiceClient()
@@ -136,5 +152,7 @@ export async function updatePricingConfig(
   if (error) return { success: false, error: 'Failed to update pricing configuration' }
 
   revalidatePath('/dashboard')
+  revalidatePath('/settings')
+  revalidatePath('/leads/new')
   return { success: true }
 }

@@ -100,6 +100,34 @@ export async function approveUser(targetUserId: string): Promise<ActionResult> {
   return { success: true }
 }
 
+export async function updateUserCommissionRate(
+  targetUserId: string,
+  rate: number
+): Promise<ActionResult> {
+  const session = await getSession()
+  if (!session) return { success: false, error: 'Not authenticated' }
+
+  if (!canManageUsers(session.user.role)) {
+    return { success: false, error: 'Insufficient permissions to update commission rate' }
+  }
+
+  if (isNaN(rate) || rate < 0 || rate > 100) {
+    return { success: false, error: 'Commission rate must be between 0% and 100%' }
+  }
+
+  const supabase = createServiceClient()
+  const { error } = await supabase
+    .from('users')
+    .update({ commission_rate: rate, updated_at: new Date().toISOString() })
+    .eq('id', targetUserId)
+
+  if (error) return { success: false, error: 'Failed to update commission rate' }
+
+  revalidatePath('/dashboard')
+  revalidatePath('/settings')
+  return { success: true }
+}
+
 export async function toggleUserActive(
   targetUserId: string,
   isActive: boolean

@@ -22,15 +22,15 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
     title: "What Makes a Good Lead?",
     description: "Fundamentals of lead quality, qualification criteria, what Eight34 looks for.",
     content: {
-      overview: "A lead is more than just a name and an email address; it is a potential partnership. At Eight34, a good lead is a client who genuinely needs our web design and development expertise, values high-quality work, and has the budget to invest in their digital presence. Understanding the fundamentals of lead quality ensures we focus our time and resources on prospects that are most likely to convert and become successful projects.",
+      overview: "A lead is more than just a name and an email address; it is a potential partnership. At Eight34, a good lead is a client who genuinely needs our web design and development expertise, values high-quality bespoke work, and has the budget to invest in their digital presence. Understanding the fundamentals of lead quality ensures we focus our time and resources on prospects that are most likely to convert and become successful projects.",
       sections: [
         {
           heading: "Defining Lead Quality",
           body: "Lead quality refers to how closely a prospect aligns with our ideal customer profile. It is a measure of their readiness, willingness, and ability to purchase our services. High-quality leads have a clear problem that a new website or redesign can solve, recognize the value of professional web development, and have decision-making authority.",
           bullets: [
             "Clear and articulated need for a website.",
-            "Understanding of the value of professional design.",
-            "Authority to make purchasing decisions."
+            "Understanding of the value of professional design over cheap template builders.",
+            "Direct authority to make purchasing and scope decisions."
           ]
         },
         {
@@ -38,7 +38,7 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           body: "To qualify a lead effectively, we evaluate several key criteria before moving them forward in the sales pipeline. These include the client's budget, project timeline, industry, and the specific type of website they require. We must ascertain whether their expectations align with what Eight34 can realistically deliver within their constraints.",
           callout: {
             type: "tip",
-            text: "Always ask open-ended questions about their business goals to better understand their true needs."
+            text: "Always ask open-ended questions about their business goals to better understand their true needs and purchasing timeline."
           }
         },
         {
@@ -46,12 +46,12 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           body: "Eight34 specializes in crafting bespoke digital experiences. Therefore, we look for clients who are not just seeking a cheap, cookie-cutter template, but a strategic partner to elevate their brand. We prefer leads who are communicative, transparent about their budget, and open to expert recommendations. Red flags include clients who demand unreasonable turnarounds or micromanage the creative process.",
           bullets: [
             "Clients seeking strategic partnerships, not just vendors.",
-            "Transparency regarding budget and timelines.",
-            "Willingness to collaborate and trust expert advice."
+            "Transparency regarding budget and realistic timelines.",
+            "Willingness to collaborate and trust expert design and engineering advice."
           ],
           callout: {
             type: "warning",
-            text: "Beware of leads who prioritize price over everything else; they often lead to difficult projects."
+            text: "Beware of leads who prioritize lowest price over everything else; they frequently experience severe scope mismatch."
           }
         }
       ],
@@ -73,9 +73,9 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           heading: "Identifying Personal Clients",
           body: "Finding personal clients involves looking for individuals at transition points in their lives or careers. Recent graduates, freelance creatives, independent consultants, and couples planning major events are prime candidates. LinkedIn is an excellent platform for spotting professionals looking for work or announcing freelance services, while social media can help identify those planning significant life events.",
           bullets: [
-            "Recent graduates and job seekers.",
-            "Freelance creatives (artists, photographers, writers).",
-            "Couples planning weddings or other major events."
+            "Recent graduates, executive job seekers, and career changers.",
+            "Freelance creatives (artists, photographers, writers, architects).",
+            "Couples and organizers planning weddings or major milestone events."
           ]
         },
         {
@@ -83,16 +83,16 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           body: "When reaching out to individuals, the approach should be conversational and highly personalized. Emphasize how a professional website can elevate their personal brand, increase their employability, or make their event seamless. Avoid overly corporate jargon; instead, focus on the emotional and practical benefits of having a bespoke digital presence tailored specifically to them.",
           callout: {
             type: "tip",
-            text: "Reference their specific field or event in your outreach to show you have done your research."
+            text: "Reference their specific field or portfolio work in your outreach to show you have done your research."
           }
         },
         {
           heading: "Qualifying Personal Clients",
           body: "Qualifying personal clients can be tricky, as their budgets are often tighter than corporate clients. It is critical to establish budget expectations early in the conversation. Determine if they understand the difference between a custom Eight34 site and a DIY builder like Wix or Squarespace. Ensure they have all necessary content (like photos and copy) ready, as personal clients often struggle to provide these promptly.",
           bullets: [
-            "Confirm they have a budget suitable for custom work.",
-            "Educate them on the value of custom vs. DIY.",
-            "Check their readiness to provide necessary content."
+            "Confirm they have a budget suitable for custom work ($50-$150 standard tier).",
+            "Educate them on the value of bespoke engineering vs. DIY template limits.",
+            "Check their readiness to provide necessary assets (photos, bio, resume items)."
           ]
         }
       ],
@@ -115,8 +115,8 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           body: "Start by looking in your own community. Use local directories, Chamber of Commerce listings, and Google Maps to find businesses with outdated, slow, or non-mobile-responsive websites. Pay special attention to businesses that are expanding, opening new locations, or running active social media campaigns but linking back to a poor website. These are strong indicators of available budget and a need for an upgrade.",
           bullets: [
             "Local directories and Chamber of Commerce lists.",
-            "Businesses with outdated or non-responsive sites.",
-            "Companies showing signs of growth or expansion."
+            "Businesses with outdated, non-responsive, or broken mobile sites.",
+            "Companies showing signs of growth, expansion, or strong review counts."
           ]
         },
         {
@@ -131,9 +131,9 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           heading: "Qualifying Business Clients",
           body: "To qualify a business client, evaluate their revenue signals and growth indicators. Do they have multiple locations? Are they actively hiring? These suggest a healthy budget. During the initial call, ascertain who the final decision-maker is (often the owner or marketing director). A key qualification step is confirming they view a website as a vital marketing asset, rather than an unnecessary expense.",
           bullets: [
-            "Assess revenue signals (multiple locations, hiring).",
-            "Identify the actual decision-maker.",
-            "Ensure they view a website as an investment, not a cost."
+            "Assess revenue signals (multiple locations, hiring, premium offerings).",
+            "Identify the actual decision-maker before negotiating.",
+            "Ensure they view a website as an investment that yields paying clients."
           ],
           callout: {
             type: "warning",
@@ -191,10 +191,10 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
   },
   {
     module_number: 5,
-    title: "Website Types",
+    title: "Website Types & Classifications",
     description: "Complete taxonomy: Personal, Business, and SaaS website types.",
     content: {
-      overview: "Not all websites serve the same purpose. Understanding the taxonomy of website types allows you to accurately categorize a prospect's needs, quote the project appropriately, and set the right expectations. Eight34 categorizes projects into three main buckets: Personal, Business, and SaaS. Each category has distinct sub-types with specific features, pages, and complexity levels.",
+      overview: "Not all websites serve the same purpose. Understanding the taxonomy of website types allows you to accurately categorize a prospect's needs, quote the project appropriately using our dynamic pricing guides, and set the right expectations. Eight34 categorizes projects into three main buckets: Personal, Business, and SaaS. Each category has distinct sub-types with specific features, pages, and complexity levels.",
       sections: [
         {
           heading: "Personal Website Types",
@@ -209,9 +209,9 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           heading: "Business Website Types",
           body: "Business websites drive commercial activity. A 'Business Landing' site is a multi-page brochure detailing services, about us, and contact info. 'Event' sites for businesses handle ticketing and schedules. 'Booking' sites are critical for salons, medical offices, or consultants, requiring integration with scheduling software and sometimes payment gateways, increasing the technical complexity.",
           bullets: [
-            "Business Landing: Standard informational brochure site.",
+            "Business Landing: Standard informational brochure site with contact capture.",
             "Business Event: Ticketing, schedules, and speaker info.",
-            "Booking: Integrated scheduling and payment features."
+            "Booking: Integrated scheduling and payment features (Stripe, Calendly)."
           ]
         },
         {
@@ -248,326 +248,254 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
         },
         {
           heading: "When to Recommend a Redesign",
-          body: "A redesign is suitable when an established business has a site that looks dated, suffers from poor user experience, or fails to convert visitors, but the core content and domain authority are valuable. The goal here is usually modernization, improving mobile responsiveness, rebranding, or migrating to a more robust CMS while carefully preserving their existing SEO equity.",
+          body: "A redesign is ideal for established businesses that already have brand recognition and website traffic, but whose current site is failing to convert visitors, looks dated, or is difficult for internal teams to update. When recommending a redesign, you must plan for preserving their existing SEO rankings, migrating valuable content, and setting up proper 301 redirects.",
           callout: {
             type: "warning",
-            text: "Always ask about their current SEO traffic; a botched redesign can destroy a company's search rankings."
+            text: "Always collect the client's current website URL during the intake process for a redesign."
           }
-        },
-        {
-          heading: "Opportunity Signals and Red Flags",
-          body: "A major opportunity signal for a redesign is a company undergoing a rebrand or leadership change, as new executives often want a fresh digital look. A red flag is a client who wants a redesign but insists on keeping their clunky, outdated backend systems integrated. Another red flag is a prospect who constantly redesigns their site every few months; they are likely indecisive and difficult to please.",
-          bullets: [
-            "Opportunity: Leadership change or company rebrand.",
-            "Red Flag: Insistence on keeping outdated, incompatible backend tech.",
-            "Red Flag: History of chronic, frequent redesigns."
-          ]
         }
       ],
       key_takeaways: [
-        "New websites are for blank slates or when legacy tech is unsalvageable.",
-        "Redesigns focus on modernization, UX improvement, and preserving SEO.",
-        "Beware of clients who want modern designs but refuse to update backend systems."
+        "New builds are for new entities or unsalvageable platforms.",
+        "Redesigns require preserving existing SEO and content.",
+        "Always record the existing website URL for redesigns in the ERM intake form."
       ]
     }
   },
   {
     module_number: 7,
-    title: "Target Audience",
-    description: "How to gather useful target audience information; what makes a good vs. vague answer.",
+    title: "Target Audience Definition",
+    description: "Why target audience matters, what makes a specific description, examples.",
     content: {
-      overview: "A beautiful website is useless if it doesn't resonate with the intended users. Understanding a client's target audience is fundamental to the design and development process. As a salesperson, your job is to extract detailed, actionable audience data from the prospect. This information directly influences the site's layout, messaging, color palette, and user experience.",
+      overview: "A website cannot be effective if it tries to speak to everyone. A critical part of qualifying an Eight34 lead is defining the target audience. The design, copy, typography, and user experience of the site must be tailored to the specific people the client is trying to reach.",
       sections: [
         {
-          heading: "Gathering Audience Information",
-          body: "To gather useful information, avoid asking 'Who is your audience?' Instead, ask behavioral and demographic questions. 'Who are your most profitable customers?' 'What are the main pain points your product solves for them?' 'Where do they typically consume information online?' Encourage the client to describe specific buyer personas rather than broad demographic categories.",
+          heading: "Why Target Audience Matters",
+          body: "The target audience dictates every creative and technical decision. A website for a luxury fashion brand requires a radically different aesthetic and tone than a website for a B2B cybersecurity firm. Understanding the audience ensures our design team builds a site that resonates with the right people and drives conversions.",
           bullets: [
-            "Ask about their most profitable or ideal customers.",
-            "Identify the specific pain points the audience faces.",
-            "Inquire about the audience's digital habits and tech-savviness."
+            "Informs typography, color palette, and layout decisions.",
+            "Guides the tone of voice and copywriting strategy.",
+            "Ensures the user experience matches audience expectations."
           ]
         },
         {
-          heading: "Vague vs. Good Answers",
-          body: "A vague answer is 'Everyone' or 'Small businesses.' These provide no direction for a design team. A good answer is specific: 'Marketing managers at B2B tech companies with 50-200 employees who are frustrated with slow reporting tools.' The more specific the audience, the more tailored and effective the website design can be. If a client gives a vague answer, politely push them for specifics.",
+          heading: "Quality Criteria for Audience Descriptions",
+          body: "In the Eight34 intake form, generic descriptions like 'everyone' or 'people who need plumbing' are unacceptable. High-quality audience descriptions include demographics (age, income), psychographics (values, pain points), and geographic context.",
           callout: {
             type: "tip",
-            text: "If a client says 'everyone is our customer,' remind them that designing for everyone usually means appealing to no one."
+            text: "A good audience profile answers: Who are they? Where are they located? What pain point brings them to this website?"
           }
-        },
-        {
-          heading: "Using Audience Data in Sales",
-          body: "Once you have a clear picture of the target audience, use it to frame your pitch. Explain to the prospect how Eight34 will design specifically for that persona. For example, if the audience is elderly, emphasize that Eight34 focuses on accessibility, high contrast, and clear navigation. Showing that you understand their audience builds immense trust.",
-          bullets: [
-            "Frame your pitch around solving the audience's problems.",
-            "Explain how design choices will cater to specific demographic needs.",
-            "Use audience understanding to build trust and authority."
-          ]
         }
       ],
       key_takeaways: [
-        "Ask behavioral and specific demographic questions to define the audience.",
-        "Push back on vague answers like 'everyone'; demand specific buyer personas.",
-        "Use the audience data to tailor your sales pitch and demonstrate understanding."
+        "The target audience dictates design, copy, and UX choices.",
+        "Avoid generic audience descriptions in your lead submissions.",
+        "Include demographics, pain points, and geographic scope."
       ]
     }
   },
   {
     module_number: 8,
-    title: "Design Styles",
-    description: "Explaining all style options and how to help clients articulate what they want.",
+    title: "Design Styles & Aesthetics",
+    description: "Overview of design aesthetics, matching styles to client types, multi-select guidance.",
     content: {
-      overview: "Clients often struggle to articulate their visual preferences, using vague terms like 'make it pop.' As a salesperson, you must guide them through specific design styles to establish a clear visual direction before the project begins. Understanding Eight34's design vocabulary allows you to translate a client's business goals into actionable aesthetic guidelines for the design team.",
+      overview: "Visual design is often what clients care about most initially. Helping a client articulate their aesthetic preferences bridges the gap between their vision and our design team's execution. Eight34 utilizes standard aesthetic tags to standardize design requirements.",
       sections: [
         {
-          heading: "Core Professional Styles",
-          body: "These styles are standard for most businesses. 'Minimal' focuses on whitespace, simple typography, and only essential elements. 'Modern' incorporates contemporary UI trends, subtle animations, and sleek layouts. 'Corporate' is trustworthy, structured, and conservative, often used for finance or legal firms. 'Clean' is similar to minimal but slightly more flexible, focusing on legibility and straightforward navigation.",
+          heading: "Common Aesthetic Styles",
+          body: "Familiarize yourself with common design aesthetics: 'Minimal' (generous whitespace, clean layout), 'Bold' (high contrast, strong typography), 'Luxury' (refined palettes, serif typography), 'Playful' (colorful, organic shapes), and 'Corporate' (trustworthy, structured, professional).",
           bullets: [
-            "Minimal: High whitespace, focus on essentials.",
-            "Modern: Contemporary trends, sleek UI.",
-            "Corporate: Trustworthy, structured, conservative."
+            "Minimal & Clean: Focus on typography and content.",
+            "Bold & Futuristic: High visual impact for tech and modern brands.",
+            "Luxury & Editorial: Sophisticated styling for high-end services."
           ]
         },
         {
-          heading: "Expressive and Niche Styles",
-          body: "For brands wanting to stand out, explore more expressive styles. 'Bold' uses high contrast, large typography, and striking imagery. 'Playful' incorporates organic shapes, illustrations, and interactive elements, great for creative agencies or consumer apps. 'Luxury' utilizes elegant typography, muted or dark palettes, and high-end imagery. 'Editorial' mimics print magazines with complex, grid-breaking layouts.",
-          bullets: [
-            "Bold: High contrast, large typography.",
-            "Playful: Illustrations, organic shapes, interactive.",
-            "Luxury: Elegant, high-end imagery, dark or muted tones."
-          ]
-        },
-        {
-          heading: "Helping Clients Articulate Preferences",
-          body: "Do not rely on adjectives alone. The best way to help a client articulate their desired style is through visual examples. Ask them to provide 3-5 links to websites they admire and, crucially, ask them *what* they like about them. Is it the color scheme? The ease of use? The photography? This prevents misinterpretations and sets clear expectations.",
+          heading: "Selecting Multiple Styles & Reference URLs",
+          body: "Clients often want a blend of styles, such as 'Minimal' combined with 'Editorial'. In the intake form, select all relevant tags. Furthermore, always ask the client for 2-3 inspiration URLs that represent what they like.",
           callout: {
-            type: "tip",
-            text: "Create a mood board or share a portfolio of different styles during the sales call to gauge their immediate reactions."
+            type: "info",
+            text: "Reference URLs are the best way to eliminate ambiguity in visual taste."
           }
         }
       ],
       key_takeaways: [
-        "Understand the difference between Core Professional and Expressive styles.",
-        "Use specific design vocabulary (Minimal, Bold, Luxury) to categorize their needs.",
-        "Always use visual examples and ask clients exactly what they like about reference sites."
+        "Use aesthetic tags to categorize client design preferences.",
+        "Clients can combine multiple styles (e.g., Minimal + Corporate).",
+        "Always collect 2-3 reference URLs to provide concrete visual benchmarks."
       ]
     }
   },
   {
     module_number: 9,
-    title: "Finding Businesses",
-    description: "Research strategies: Google Maps, social media, LinkedIn, local directories, cold scouting.",
+    title: "Inspiration URLs & References",
+    description: "Collecting concrete references, what makes a good reference, how engineering uses them.",
     content: {
-      overview: "A consistent pipeline of leads requires proactive prospecting. You cannot rely solely on inbound inquiries. Knowing where and how to find businesses that need web design services is a critical skill. By utilizing a mix of digital tools and strategic research, you can uncover hidden opportunities and identify companies that are primed for a digital upgrade.",
+      overview: "Words like 'clean', 'modern', or 'sleek' mean different things to different people. Collecting specific inspiration URLs grounds abstract aesthetic conversations in reality and gives our design and engineering team a precise benchmark for layouts, animations, and typography.",
       sections: [
         {
-          heading: "Leveraging Google Maps and Local SEO",
-          body: "Google Maps is a goldmine for local business prospecting. Search for specific niches (e.g., 'plumbers near me', 'boutique hotels') and look past the top three results. Businesses ranking on the second or third page often have poor websites or lack basic SEO optimization. If a business has great reviews but a terrible website, they are an ideal prospect for Eight34's services.",
+          heading: "What Makes a Good Inspiration URL",
+          body: "A good reference is a live, working website that features specific elements the client admires—such as an interactive pricing table, navigation style, or hero section animation. Ask the client specifically what they like about each link.",
           bullets: [
-            "Search local niches on Google Maps.",
-            "Target businesses ranking outside the top 3 spots.",
-            "Look for a mismatch between great reviews and a poor website."
+            "Live, polished web experiences.",
+            "Specific features or layouts pointed out by the client.",
+            "Competitor sites that set the industry standard."
           ]
         },
         {
-          heading: "Social Media and LinkedIn Strategies",
-          body: "LinkedIn is essential for finding B2B and SaaS clients. Look for companies posting about recent funding, expansions, or hiring new marketing personnel—these events often trigger a website redesign. On platforms like Instagram, find businesses running paid ads. If they are spending money on ads but directing traffic to a slow or unoptimized landing page, they need our help immediately.",
+          heading: "How Engineering Uses References",
+          body: "Our developers inspect reference sites to evaluate interactive components, animation libraries, and responsiveness patterns. This helps determine technical feasibility and ensures accurate quoting.",
           callout: {
-            type: "info",
-            text: "Use LinkedIn Sales Navigator to track companies experiencing rapid headcount growth."
+            type: "tip",
+            text: "Document exactly what the client likes about each URL in the intake form notes."
           }
-        },
-        {
-          heading: "Directories and Cold Scouting",
-          body: "Industry-specific directories (like Yelp, TripAdvisor, or specialized B2B portals) are excellent lists of potential clients. Cold scouting involves looking at your everyday surroundings. Notice a new restaurant opening? Check their website. Attend local networking events, Chamber of Commerce meetings, or industry conferences to build relationships and identify businesses struggling with their digital presence.",
-          bullets: [
-            "Mine industry-specific directories.",
-            "Scout new businesses opening in your local area.",
-            "Attend networking events to find prospects in person."
-          ]
         }
       ],
       key_takeaways: [
-        "Use Google Maps to find poorly ranking local businesses with bad websites.",
-        "Monitor LinkedIn for funding, growth, or new marketing hires.",
-        "Target businesses running social media ads that point to poor landing pages."
+        "Inspiration URLs eliminate ambiguity in aesthetic discussions.",
+        "Ask clients what specific components they like about each URL.",
+        "Developers use references to estimate technical complexity."
       ]
     }
   },
   {
     module_number: 10,
-    title: "Evaluating Businesses",
-    description: "How to assess if a business is a good prospect: online presence quality, revenue signals, growth indicators, red flags.",
+    title: "Budget & Pricing Conversations",
+    description: "How to discuss budget, why clean numbers are required, anchoring and ranges.",
     content: {
-      overview: "Once you have found a potential business, you must evaluate them before initiating outreach. Not every business with a bad website is a good prospect. You need to determine if they have the budget and mindset to invest in professional services. Evaluating a business pre-outreach saves time and ensures you focus on high-probability targets.",
+      overview: "Discussing money can feel intimidating, but transparent budget conversations are essential for qualifying leads and protecting both your time and the client's. Anchoring discussions with our official regional pricing tiers establishes expectations early.",
       sections: [
         {
-          heading: "Assessing Online Presence",
-          body: "Start by analyzing their current website. Is it not mobile-friendly? Does it load slowly? Are there broken links or outdated copyright dates? These are obvious pain points you can mention in your outreach. Also, check their social media. If they post regularly and have high engagement, it shows they value digital marketing, making them more likely to invest in a better website.",
+          heading: "Anchoring and Price Ranges",
+          body: "Always anchor the conversation using Eight34's official pricing guide. If a client is vague about their budget, provide our standard range for their website type to gauge their reaction before diving deeper.",
           bullets: [
-            "Check for mobile responsiveness and load speeds.",
-            "Look for broken links and outdated content.",
-            "Assess their social media activity and engagement."
+            "Anchor with the standard tier range for their project type.",
+            "Assess whether their budget expectations align with custom engineering.",
+            "Avoid negotiating against yourself before understanding the full scope."
           ]
         },
         {
-          heading: "Identifying Revenue and Growth Signals",
-          body: "A business needs money to pay Eight34. Look for signals of financial health. Are they actively hiring on Indeed or LinkedIn? Have they recently opened a second location? Do they run premium Google Ads? These are strong indicators of a healthy cash flow. For SaaS companies, recent rounds of venture capital funding are the ultimate growth signal.",
+          heading: "Why Clean Numbers Are Required in the ERM",
+          body: "The ERM requires clean numeric values in the budget field. This enables accurate financial reporting, commission calculation, and automated analytics for the company.",
           callout: {
-            type: "tip",
-            text: "A business paying for Google Ads but sending traffic to a bad website is losing money—point this out to them."
+            type: "warning",
+            text: "Never enter text like 'around 2k' in numeric fields; always enter a clean number like 2000."
           }
-        },
-        {
-          heading: "Spotting Red Flags",
-          body: "Be vigilant for red flags that indicate a nightmare client. If their current website looks like it was built cheaply on Fiverr yesterday, they likely have zero budget. If they have terrible reviews online complaining about their business practices, they will probably treat you poorly as well. Avoid businesses that look stagnant, have no social presence, and show no signs of modernizing.",
-          bullets: [
-            "Very recent, extremely cheap-looking websites.",
-            "Consistently terrible customer reviews online.",
-            "Complete lack of any digital footprint or marketing effort."
-          ]
         }
       ],
       key_takeaways: [
-        "Evaluate their website for obvious, fixable pain points (speed, mobile).",
-        "Look for hiring, expansion, or ad spending as budget indicators.",
-        "Avoid businesses with terrible customer reviews or zero marketing effort."
+        "Anchor budget conversations early using official pricing tiers.",
+        "Determine budget readiness before committing engineering resources.",
+        "Always input clean numeric amounts into the ERM budget field."
       ]
     }
   },
   {
     module_number: 11,
-    title: "Scouting Qualified Prospects",
-    description: "Step-by-step prospecting workflow: criteria checklist, initial research, pre-qualification.",
+    title: "Technical Scope & Integrations",
+    description: "Special features, third-party integrations (Stripe, Calendly, CRM), and complexity indicators.",
     content: {
-      overview: "Scouting is the systematic process of turning a raw list of businesses into a refined list of highly qualified prospects. A disciplined workflow prevents you from wasting time on dead ends. By applying a strict criteria checklist and conducting thorough initial research, you ensure that every outreach attempt is highly targeted and relevant.",
+      overview: "A website is frequently more than static pages; it integrates with third-party software to automate bookings, take payments, or sync leads. Identifying these requirements during intake prevents scope creep and ensures the project is priced correctly.",
       sections: [
         {
-          heading: "The Criteria Checklist",
-          body: "Before spending time researching a prospect, they must pass a basic criteria checklist. 1. Do they fit into our target categories (Personal, Business, SaaS)? 2. Do they have a clear need for a new site or redesign? 3. Do they show signs of having a budget? If the answer to any of these is no, discard the prospect and move on. Agility is key in scouting.",
+          heading: "Common Integrations",
+          body: "Standard integrations include payment gateways (Stripe), appointment schedulers (Calendly, Acuity), contact forms synced to CRMs (HubSpot, Salesforce), and analytics tools (Google Analytics, Mixpanel).",
           bullets: [
-            "Fits target category.",
-            "Clear, identifiable digital need.",
-            "Visible signs of budget/growth."
+            "Payment processors (Stripe, PayPal).",
+            "Scheduling and calendar tools (Calendly).",
+            "CRM and email marketing webhooks."
           ]
         },
         {
-          heading: "Conducting Initial Research",
-          body: "Once a prospect passes the checklist, conduct deep research. Find out who the decision-maker is—look for the Owner, Founder, or Marketing Director on LinkedIn. Understand their business model: how do they make money? Identify their main competitors and see how their website compares. This research provides the ammunition you need to craft a compelling, personalized outreach message.",
+          heading: "Complexity & Pricing Impact",
+          body: "Every custom integration adds development and testing time. Multi-step booking funnels or custom API connections place a project in higher pricing tiers.",
           callout: {
             type: "info",
-            text: "Never send an outreach message to 'info@' or 'contact@' if you can find the actual decision-maker's email."
+            text: "Highlight all third-party tool requirements in the Special Features section of the lead form."
           }
-        },
-        {
-          heading: "Pre-Qualification",
-          body: "Pre-qualification happens before you even speak to the prospect. Based on your research, estimate what tier of service they might need. A local bakery might need a standard $3,000 Business site, while a funded SaaS startup will need a $10,000+ custom solution. Document these assumptions in your CRM so you are prepared to guide the pricing conversation when they respond.",
-          bullets: [
-            "Identify the specific decision-maker.",
-            "Understand their business model and competitors.",
-            "Estimate their potential project tier before outreach."
-          ]
         }
       ],
       key_takeaways: [
-        "Use a strict criteria checklist to quickly filter out bad prospects.",
-        "Research the decision-maker and their competitors to personalize outreach.",
-        "Pre-qualify their potential project scope and budget internally."
+        "Identify all third-party integrations during the discovery phase.",
+        "Integrations increase project complexity and affect pricing tiers.",
+        "Document required widgets and webhooks in the intake form."
       ]
     }
   },
   {
     module_number: 12,
-    title: "Reaching Out",
-    description: "Outreach best practices: cold email, LinkedIn messages, in-person, what to say, what NOT to say.",
+    title: "Finding Leads: Prospecting Channels",
+    description: "Google Maps, LinkedIn, Twitter/X, cold outreach, personal networks, job boards.",
     content: {
-      overview: "Outreach is where your research is put to the test. The goal of initial outreach is not to sell a website immediately, but to start a conversation and secure a meeting. Whether through cold email, LinkedIn, or in-person networking, your communication must be professional, highly personalized, and focused entirely on the value Eight34 can provide to their business.",
+      overview: "Consistent lead generation is the secret to a thriving sales pipeline. Top salespeople leverage multiple prospecting channels to identify businesses that need web design improvements.",
       sections: [
         {
-          heading: "Cold Email and LinkedIn Best Practices",
-          body: "Keep written outreach concise. Business owners skim emails. Start with a personalized hook that proves you researched them (e.g., 'Loved your recent post about...'). Immediately state the value proposition: point out a specific issue with their current site and how fixing it will benefit them (e.g., 'I noticed your site isn't mobile optimized, which might be costing you mobile bookings'). End with a low-friction call to action, asking for a brief chat, not a sale.",
+          heading: "Google Maps & Local Search",
+          body: "Search local commercial areas for established businesses with high review counts but outdated, slow, or non-mobile-friendly websites. These businesses have cash flow and an immediate reason to upgrade.",
           bullets: [
-            "Personalize the opening line to prove research.",
-            "Focus on one specific pain point and its business impact.",
-            "Use a low-friction call to action (e.g., 'Open to a brief chat?')."
+            "Target businesses with 50+ positive reviews but poor websites.",
+            "Inspect mobile responsiveness and load speed.",
+            "Prioritize industries where online booking or presentation drives sales."
           ]
         },
         {
-          heading: "In-Person Outreach",
-          body: "When meeting prospects at events or walking into a local business, focus on building rapport first. Don't immediately criticize their website. Ask about their business challenges. If it naturally transitions to marketing, mention that you work for Eight34 and help businesses like theirs improve their digital presence. Leave a card and ask if you can email them some ideas.",
+          heading: "LinkedIn & Social Channels",
+          body: "Monitor LinkedIn for founders announcing recent funding or launching new products. Look on Twitter/X for creators and consultants undergoing rebranding.",
           callout: {
             type: "tip",
-            text: "In-person, always focus on the relationship first. People buy from people they like."
+            text: "Personalize every outreach message by referencing a specific, observable issue on their current site."
           }
-        },
-        {
-          heading: "What NOT to Say",
-          body: "Avoid generic, templated messages—they are instantly recognizable as spam. Do not use overly technical jargon (e.g., 'Your DOM load time is slow'). Never be insulting or overly aggressive about how bad their current website is; they might have built it themselves. Finally, do not mention pricing in the initial outreach; pricing should only be discussed after value has been established.",
-          bullets: [
-            "No generic, copy-paste templates.",
-            "Avoid overly technical jargon.",
-            "Never insult their current website or mention pricing too early."
-          ]
         }
       ],
       key_takeaways: [
-        "Keep written outreach short, personalized, and focused on business value.",
-        "In-person, prioritize building rapport over pitching.",
-        "Avoid jargon, insults to their current work, and early pricing discussions."
+        "Use Google Maps to find established businesses with outdated sites.",
+        "Leverage LinkedIn for funded startups and executive transitions.",
+        "Always personalize outreach by citing specific website improvement opportunities."
       ]
     }
   },
   {
     module_number: 13,
-    title: "Handling Responses",
-    description: "Managing interest, objections, setting expectations, qualifying during conversation.",
+    title: "Outreach & Discovery Calls",
+    description: "Cold email best practices, script structures, handling objections, BANT qualification.",
     content: {
-      overview: "Getting a response is a win, but it's just the beginning. How you handle a prospect's reply determines whether they move to a closed deal or go cold. You must be prepared to manage their interest efficiently, counter their objections gracefully, set realistic expectations about the process, and continue qualifying them during the live conversation.",
+      overview: "Your outreach message gets the conversation started; the discovery call qualifies the opportunity. Approaching both with a structured methodology guarantees higher conversion rates.",
       sections: [
         {
-          heading: "Managing Interest and Setting Expectations",
-          body: "If a prospect expresses interest, respond promptly (within hours, not days). Suggest a brief 15-minute discovery call to learn more. On this call, set the agenda and explain Eight34's process. Let them know that the goal is to understand their needs to see if we are a good fit. Setting professional expectations early demonstrates competence and control.",
+          heading: "Cold Outreach Structure",
+          body: "Keep cold emails concise (under 120 words). State who you are, identify a specific bottleneck on their current website, explain how Eight34 can fix it, and propose a brief 10-minute call.",
           bullets: [
-            "Respond to positive replies rapidly.",
-            "Push for a brief, structured discovery call.",
-            "Explain the Eight34 process to set professional expectations."
+            "Personalized observation of their current site.",
+            "Clear value proposition focused on ROI.",
+            "Low-friction call to action."
           ]
         },
         {
-          heading: "Handling Common Objections",
-          body: "Expect objections. 'We don't have the budget' often means 'I don't see the value yet.' Counter by asking about the cost of their current inefficient site. 'We are too busy right now' can be met with 'Our process is designed to require minimal time from your end.' 'My nephew can do it for free' should be countered by emphasizing the difference between a hobbyist and a strategic business asset that generates ROI.",
+          heading: "Discovery Call & BANT",
+          body: "Qualify prospects using BANT: Budget (Can they afford custom work?), Authority (Are they the decision-maker?), Need (Is there a real business problem?), Timeline (When do they want to launch?).",
           callout: {
-            type: "warning",
-            text: "Never argue with an objection. Acknowledge their concern, then reframe it around value and ROI."
+            type: "tip",
+            text: "Listen 70% of the time on discovery calls; let the client explain their business challenges."
           }
-        },
-        {
-          heading: "Qualifying During the Conversation",
-          body: "The discovery call is your chance to actively qualify. Ask the BANT questions: Budget, Authority, Need, and Timeline. Directly ask, 'Do you have a budget set aside for this project?' Ensure you are speaking to the person who can sign the contract. Confirm their timeline is realistic (e.g., they don't need a massive SaaS site in two weeks). If they fail these checks, politely disqualify them.",
-          bullets: [
-            "Verify Budget directly and early.",
-            "Confirm you are speaking with the Authority (decision-maker).",
-            "Ensure their Timeline is realistic for Eight34's team."
-          ]
         }
       ],
       key_takeaways: [
-        "Respond quickly to interest and move the conversation to a discovery call.",
-        "Reframe objections around ROI rather than arguing.",
-        "Actively qualify using Budget, Authority, Need, and Timeline (BANT)."
+        "Keep initial outreach brief and focused on observable website issues.",
+        "Use discovery calls to listen and uncover business pain points.",
+        "Apply BANT to confirm budget, authority, need, and timeline."
       ]
     }
   },
   {
     module_number: 14,
-    title: "US / Europe Pricing",
-    description: "Eight34's pricing model for US and Western European clients: pricing ranges by website type, how to quote, and how to justify the investment.",
+    title: "US / Europe Pricing Guidelines",
+    description: "Standard pricing ranges for US and Western European clients, how to quote, and justifying investment.",
     content: {
-      overview: "Eight34 uses premium-market pricing for clients in the United States and Western Europe. Pricing reflects the custom design, engineering, integrations, performance, and strategic value delivered rather than simply the number of hours spent building the site. Salespeople should understand the standard ranges while recognizing that final quotes depend on scope, complexity, and client requirements.",
+      overview: "Eight34 uses standard market pricing for clients in the United States and Western Europe. Pricing reflects custom design, responsive engineering, integrations, performance, and measurable business value.",
       sections: [
         {
-          heading: "Standard Pricing by Website Type",
-          body: "For US and Western European clients, Personal websites typically range from $800 to $2,500. Custom Business Landing Pages and Booking Pages generally range from $1,500 to $5,000+, depending on page count, booking functionality, payments, integrations, and content requirements. SaaS Marketing Websites with multiple product pages, pricing tables, custom visuals, and conversion-focused functionality typically range from $3,000 to $8,000+.",
+          heading: "Standard Pricing Tiers",
+          body: "For US/Europe clients, standard ranges are: Personal Portfolio ($50-$150), Business Landing ($100-$400), Business Booking & Appointments ($500-$900), and SaaS Marketing & Product ($500-$1,500). Always refer to the live Pricing Guide modal in the ERM for real-time tier updates.",
           bullets: [
             "Personal Portfolio / CV: $50 - $150.",
             "Business Landing Page: $100 - $400.",
@@ -576,116 +504,280 @@ export const TRAINING_MODULES: TrainingModuleData[] = [
           ]
         },
         {
-          heading: "How to Quote",
-          body: "Do not provide a final quote before understanding the project scope. First establish the website type, required pages, functionality, integrations, content requirements, timeline, and business objectives. Then provide a quote or range appropriate to the complexity of the project. The standard ranges are guidelines, not automatic prices.",
+          heading: "Justifying Value",
+          body: "When clients ask about price, emphasize that Eight34 delivers bespoke code and tailored design—not template-clones. Connect the investment to tangible business outcomes like increased conversion and customer trust.",
           callout: {
             type: "tip",
-            text: "Use the standard range as your starting point, then adjust based on scope and complexity rather than negotiating from an arbitrary number."
+            text: "Use the live Pricing Guide modal inside the new lead intake form to check official benchmarks."
           }
-        },
-        {
-          heading: "Justifying the Investment",
-          body: "When a client questions the price, do not immediately discount. Explain what the investment covers: custom design, professional engineering, responsive implementation, performance optimization, SEO foundations, integrations, and a polished user experience. Connect the website to measurable business outcomes such as more bookings, stronger lead generation, improved credibility, and higher conversion rates.",
-          bullets: [
-            "Emphasize custom design and engineering rather than templates.",
-            "Connect website improvements to measurable business outcomes.",
-            "Explain how scope and complexity determine the final price.",
-            "Do not discount automatically when a client raises a price objection."
-          ]
         }
       ],
       key_takeaways: [
-        "Personal Portfolio / CV: $50 - $150.",
-        "Business Landing Page: $100 - $400.",
-        "Business Booking & Appointments: $500 - $900.",
-        "SaaS Marketing & Product: $500 - $1,500.",
-        "Use the official range for the website type and adjust within that range based on scope."
+        "Standard US/EU ranges are benchmarked by website category.",
+        "Check the Pricing Guide modal in the intake form for real-time rates.",
+        "Justify pricing through custom craftsmanship and business ROI."
       ]
     }
   },
   {
     module_number: 15,
-    title: "Outside US / Europe Pricing",
-    description: "Eight34's pricing model for clients outside the US and Europe, including official global pricing ranges and qualification considerations.",
+    title: "Outside US / Europe Pricing Guidelines",
+    description: "Eight34's global pricing model adjusted for international purchasing power and qualification.",
     content: {
-      overview: "Eight34 serves clients globally with pricing adjusted for international purchasing power. Global pricing is intentionally lower than US / European pricing while maintaining the same professional design and engineering standards. Salespeople should use the official global ranges below when qualifying and discussing project scope.",
+      overview: "Eight34 operates globally with pricing adjusted for international purchasing power. Global pricing maintains the same high engineering and design quality while accommodating international budgets.",
       sections: [
         {
-          heading: "Official Global Pricing",
-          body: "For clients outside the US and Europe, Personal Portfolio / CV Websites range from $10 to $100. Business Landing Pages range from $50 to $150. Business Booking & Appointments Pages range from $100 to $300. SaaS Marketing & Product Websites range from $200 to $700.",
+          heading: "Global Pricing Tiers",
+          body: "For clients outside the US and Europe, standard baseline ranges are: Personal Portfolio ($10-$100), Business Landing ($50-$150), Business Booking ($100-$300), and SaaS Marketing ($200-$700).",
           bullets: [
-            "Personal Portfolio / CV: $10 - $100.",
-            "Business Landing Page: $50 - $150.",
-            "Business Booking & Appointments: $100 - $300.",
-            "SaaS Marketing & Product: $200 - $700."
+            "Global Personal Portfolio: $10 - $100.",
+            "Global Business Landing: $50 - $150.",
+            "Global Business Booking: $100 - $300.",
+            "Global SaaS Marketing: $200 - $700."
           ]
         },
         {
-          heading: "Choosing the Correct Price",
-          body: "Use the official global range for the client's website type and adjust the final quote according to scope and complexity. Simpler projects should fall toward the lower end of the range, while projects requiring additional pages, integrations, custom functionality, or more extensive design work should fall toward the upper end.",
+          heading: "Managing Scope at Global Tiers",
+          body: "Because global tiers operate at adjusted price points, salespeople must maintain disciplined scope boundaries and avoid promising excessive custom functionality without separate quotes.",
           callout: {
-            type: "tip",
-            text: "Always identify the website type first, then quote within its official global pricing range."
+            type: "warning",
+            text: "Do not promise extensive bespoke backends on baseline global landing page budgets."
           }
-        },
-        {
-          heading: "Maintaining Quality and Scope",
-          body: "Lower global pricing does not mean lower-quality work. Eight34 maintains professional design, engineering, responsiveness, and performance standards for international clients. Because these projects operate at lower price points, salespeople must be especially careful about scope and avoid promising functionality that falls outside the quoted project.",
-          bullets: [
-            "Maintain the same professional quality standards.",
-            "Keep the project scope clearly defined.",
-            "Quote additional functionality separately when appropriate.",
-            "Do not accept extreme scope-to-budget mismatches."
-          ]
         }
       ],
       key_takeaways: [
-        "Personal Portfolio / CV: $10 - $100.",
-        "Business Landing Page: $50 - $150.",
-        "Business Booking & Appointments: $100 - $300.",
-        "SaaS Marketing & Product: $200 - $700.",
-        "Use the official range for the website type and adjust within that range based on scope."
+        "Global pricing reflects adjusted purchasing power while preserving design standards.",
+        "Refer to the Outside US/Europe tab in the Pricing Guide modal.",
+        "Keep project scope tightly defined to match the quoted tier."
       ]
     }
   },
   {
     module_number: 16,
     title: "Submitting a High-Quality Lead",
-    description: "How to fill the lead form correctly, what information is critical, common mistakes, review checklist.",
+    description: "Filling the intake form correctly, required fields, common mistakes, and handoff quality.",
     content: {
-      overview: "Your job as a salesperson isn't done when the client says 'yes.' The final, crucial step is handing the qualified lead over to the project management and development team. Submitting a high-quality lead ensures a smooth transition, prevents scope creep, and sets the production team up for success. Poorly submitted leads cause internal friction and result in unhappy clients.",
+      overview: "Submitting a qualified lead into the ERM transitions the prospect to the project management and engineering team. Providing detailed, accurate data prevents scope confusion and ensures rapid delivery.",
       sections: [
         {
-          heading: "Critical Information Required",
-          body: "When submitting a lead into the Eight34 CRM or project management tool, certain information is non-negotiable. You must include the client's full contact details, the finalized budget, the agreed-upon timeline, and a detailed summary of the project scope (number of pages, specific features, integrations). You must also include notes on the client's target audience and preferred design styles discussed.",
+          heading: "Critical Intake Fields",
+          body: "Ensure all core fields are populated: accurate client entity name, classification, verified website type, existing website URL for redesigns, specific target audience profile, aesthetic tags, and reference links.",
           bullets: [
-            "Complete contact info and decision-maker details.",
-            "Finalized budget and agreed-upon timeline.",
-            "Detailed scope, target audience, and style preferences."
+            "Accurate client and entity name.",
+            "Specific target audience description.",
+            "Clean numeric budget and valid inspiration links."
           ]
         },
         {
-          heading: "Common Submission Mistakes",
-          body: "The most common mistake is vagueness. Writing 'Client wants a modern business site' is useless to a designer. Another frequent error is omitting technical requirements discussed on the call, such as a necessary CRM integration. Finally, failing to document client quirks or communication preferences (e.g., 'Client prefers phone calls over email') can lead to immediate friction during the kickoff phase.",
+          heading: "Avoiding Common Submission Errors",
+          body: "Avoid vague notes like 'make it look nice'. Specify typography preferences, desired layout styles, and all discussed integrations to eliminate guesswork.",
           callout: {
-            type: "warning",
-            text: "Never promise a feature to a client and fail to put it in the lead submission notes."
+            type: "tip",
+            text: "Review the submission summary in Step 8 before finalizing your lead into the pipeline."
+          }
+        }
+      ],
+      key_takeaways: [
+        "Complete intake forms with precision and actionable detail.",
+        "Include reference URLs and specify all technical integrations.",
+        "Check Step 8 review summary before final submission."
+      ]
+    }
+  },
+  {
+    module_number: 17,
+    title: "Navigating the Eight34 ERM Platform (CRM 101)",
+    description: "What is an ERM/CRM, understanding your workbench, navigating tabs, and finding your way around.",
+    content: {
+      overview: "Welcome to the Eight34 ERM (Enterprise Relationship Management) system! If you have never used a CRM or ERM before, think of this platform as your digital command center. It tracks every client prospect, monitors deals as they progress from initial inquiry to final delivery, calculates your commission earnings, and houses your sales intelligence.",
+      sections: [
+        {
+          heading: "What is an ERM / CRM?",
+          body: "A CRM (Customer Relationship Management) or ERM system is a centralized database that replaces messy spreadsheets and lost notes. In Eight34 ERM, every prospective client has their own dedicated record containing their requirements, budget, status history, and financial payout tracking.",
+          bullets: [
+            "Single source of truth for all client information and project scope.",
+            "Real-time pipeline tracking so nothing falls through the cracks.",
+            "Automated calculations for sales commission and performance metrics."
+          ]
+        },
+        {
+          heading: "Sidebar Navigation & Core Tabs",
+          body: "On the left sidebar, you will find your primary navigation items: Dashboard (your daily workbench with high-level KPIs), Leads (the master table of all registered opportunities), Lead Drafts (your partially filled intakes), Training (your curriculum and certification assessment), and Analytics (for admins and super admins).",
+          bullets: [
+            "Dashboard: Daily overview of active pipeline value and closed deals.",
+            "Leads: Master searchable pipeline with status and client filters.",
+            "Lead Drafts: In-progress intakes you can resume and submit anytime.",
+            "Training: Modules and assessment required to unlock submission access."
+          ]
+        },
+        {
+          heading: "The Sales Workbench Workflow",
+          body: "Your daily sales routine in the ERM is simple: Check your active leads on the Dashboard, prospect new clients, start an intake or resume a draft, and submit qualified opportunities. Once submitted, admins review and transition your leads through production.",
+          callout: {
+            type: "tip",
+            text: "Bookmark your Dashboard and check it daily to stay updated on project status transitions."
+          }
+        }
+      ],
+      key_takeaways: [
+        "The Eight34 ERM is your digital command center for deals, scope, and earnings.",
+        "Use the sidebar to jump between Dashboard, Leads, Drafts, and Training.",
+        "All client interactions and status updates are tracked in real-time."
+      ]
+    }
+  },
+  {
+    module_number: 18,
+    title: "Working with Lead Drafts & Resuming Intakes",
+    description: "How to save partial forms, resume drafts from the Lead Drafts tab, and prevent lost client notes.",
+    content: {
+      overview: "During a discovery call or prospecting session, you might gather half of a client's information before needing to pause and wait for them to send inspiration links or verify their budget. The Eight34 ERM includes a dedicated Lead Drafts feature that lets you save your progress at any step and resume later without losing a single word.",
+      sections: [
+        {
+          heading: "Saving a Draft at Any Step",
+          body: "While filling out the New Lead form, you will see a 'Save Draft' button in both the header and footer of every single step. Clicking this saves whatever data you have entered so far into our secure database. You do not need to fill out all required fields to save a draft!",
+          bullets: [
+            "Save partial progress anytime during client calls.",
+            "No validation errors blocking you from saving rough notes.",
+            "Instant confirmation toast confirms your draft is safely stored."
+          ]
+        },
+        {
+          heading: "Accessing the Lead Drafts Tab",
+          body: "To view your saved drafts, click 'Lead Drafts' in the sidebar or from the top of the Leads page. Each draft card shows the client name, classification, estimated quote, and the last time you worked on it.",
+          callout: {
+            type: "info",
+            text: "Clicking 'Continue Intake' opens the form with all your previously saved answers pre-filled and ready to edit."
           }
         },
         {
-          heading: "The Review Checklist",
-          body: "Before hitting submit, review your notes against this checklist: Is the budget explicitly stated? Is the website type clearly categorized? Have you listed 3-5 reference websites the client likes? Are all promised integrations documented? Only when you can answer 'yes' to all these questions is the lead ready to be handed off to the Eight34 production team.",
+          heading: "Finalizing & Submitting from a Draft",
+          body: "When you have gathered all remaining details from the client, simply step through to Step 8 (Review) and click 'Submit Lead to Pipeline'. The draft will automatically convert into an active lead with an official #E34 lead number and enter the production pipeline.",
           bullets: [
-            "Budget and timeline explicitly documented.",
-            "Website type categorized and scope defined.",
-            "Reference sites and technical requirements included."
+            "Resume editing from where you left off.",
+            "Complete the remaining steps and validation checks.",
+            "Submitting converts the draft into a live pipeline lead automatically."
           ]
         }
       ],
       key_takeaways: [
-        "A high-quality lead submission is detailed, comprehensive, and clear.",
-        "Avoid vague descriptions; provide specific scope, style, and tech requirements.",
-        "Use a final checklist to ensure no critical details from the sales call are omitted."
+        "Click 'Save Draft' at any step to save partial client details.",
+        "Access and resume all your in-progress work in the 'Lead Drafts' tab.",
+        "Submitting a completed draft promotes it to a live #E34 pipeline lead."
+      ]
+    }
+  },
+  {
+    module_number: 19,
+    title: "Understanding Lead Statuses, History, & Collapsible Menus",
+    description: "The 6 pipeline stages, status transition logs, the trash bin, and reading collapsible timeline menus.",
+    content: {
+      overview: "Once a lead is registered, it progresses through 6 standardized pipeline stages. Understanding what each status means allows you to communicate accurately with clients and know exactly where their website stands in production.",
+      sections: [
+        {
+          heading: "The 6 Pipeline Statuses",
+          body: "Every lead progresses through these stages: 1. NEW (unreviewed lead submitted), 2. STILL_INQUIRING (in sales discovery/negotiation), 3. WEBSITE_IN_PROGRESS (design & development underway), 4. DELIVERY_IN_PROGRESS (review, staging, client revisions), 5. REJECTED (disqualified or lost deal), 6. COMPLETED (website launched and delivered).",
+          bullets: [
+            "NEW & STILL INQUIRING: Initial intake and discovery.",
+            "WEBSITE IN PROGRESS: Active design, UI, and coding by engineering.",
+            "DELIVERY IN PROGRESS: Staging review and final domain handover.",
+            "COMPLETED: Delivered project with commission payout calculations."
+          ]
+        },
+        {
+          heading: "Status History & Collapsible Menus",
+          body: "Every time an admin updates a lead's status, the ERM automatically records who made the change, when it occurred, and any accompanying notes in the Status History timeline. For long histories or detailed project descriptions, the ERM uses 'Show more / Show less' collapsible menus to keep pages clean and organized.",
+          callout: {
+            type: "tip",
+            text: "Click 'Show all status logs' on any lead page to inspect the complete timestamped audit trail of the project."
+          }
+        },
+        {
+          heading: "The Trash Bin & Archiving",
+          body: "If a lead is duplicate, spam, or cancelled, admins can move it to 'Trash'. Trashed leads are hidden from the active pipeline but preserved in a collapsible 'Trash' menu at the bottom of the Leads table, where they can be inspected or restored at any time.",
+          bullets: [
+            "Trash keeps the active pipeline focused on genuine revenue opportunities.",
+            "Admins can restore accidentally trashed leads with a single click."
+          ]
+        }
+      ],
+      key_takeaways: [
+        "The 6 statuses track a website from intake to final completed delivery.",
+        "Status History provides a timestamped audit trail of project progression.",
+        "Collapsible menus keep long text and historical logs easily readable."
+      ]
+    }
+  },
+  {
+    module_number: 20,
+    title: "The Pricing Calculator, Commission Structure, & Payouts",
+    description: "How commission rates work, the completed lead pricing breakdown, production costs, and paid indicators.",
+    content: {
+      overview: "At Eight34, salespeople are compensated based on their commission rate (defaulted to 50% for all sales representatives and customizable per salesperson). When a project is delivered and marked 'Completed', the ERM unlocks a dedicated Pricing Calculator box breaking down the financial math.",
+      sections: [
+        {
+          heading: "Your Commission Rate (Default 50%)",
+          body: "Every salesperson has an assigned commission rate in the ERM. By default, this is set to 50.00%. Admins and Super Admins can adjust individual commission rates based on senior sales performance or special agreements.",
+          bullets: [
+            "Default commission rate is 50% of net project revenue.",
+            "Visible on your profile and on every completed deal you submit.",
+            "Configurable per salesperson in Team Management."
+          ]
+        },
+        {
+          heading: "The Completed Pricing Calculator Breakdown",
+          body: "When a lead is marked 'Completed', admins enter the direct production costs (hosting, domains, specialized assets). The ERM Pricing Calculator then automatically calculates: 1. Total Website Price (Budget), 2. Production Costs, 3. Net Gross Profit (Price minus Costs), 4. Salesperson Profit (Net Profit × Commission Rate), and 5. Company Retained Share.",
+          callout: {
+            type: "info",
+            text: "Example: $1,000 project with $200 production costs leaves $800 net profit. At a 50% rate, the salesperson earns $400 and Eight34 retains $400."
+          }
+        },
+        {
+          heading: "Paid Checkboxes & The Costs Map",
+          body: "At the top of every completed lead page, each financial bucket (Production Costs, Company Portion, and Salesperson Profit) has a 'Mark Paid' checkbox. Once your commission is transferred, checking 'Paid' greys out the category in the costs map, providing an instant visual record of settled transactions.",
+          bullets: [
+            "Instant visual indicator of paid vs. pending commissions.",
+            "Prevents duplicate payouts and keeps accounting transparent.",
+            "Greyed-out categories indicate settled financial transfers."
+          ]
+        }
+      ],
+      key_takeaways: [
+        "Salespeople earn their commission rate (default 50%) on net project profit.",
+        "Production costs are accounted for when the lead is marked Completed.",
+        "The Pricing Calculator and Costs Map display real-time paid/unpaid status."
+      ]
+    }
+  },
+  {
+    module_number: 21,
+    title: "Interpreting Website & Salesman Analytics",
+    description: "How to read analytics charts, track category demand, analyze weekly volume, and measure revenue impact.",
+    content: {
+      overview: "Data-driven selling leads to higher earnings. The Eight34 ERM includes an Analytics tab providing deep operational intelligence across two primary dimensions: Website Analytics and Salesman Analytics.",
+      sections: [
+        {
+          heading: "Website Analytics Overview",
+          body: "Website Analytics shows high-level market demand: which website categories are most frequently ordered, pipeline status distributions, average and maximum pricing across classifications, most requested aesthetic style tags, and month-over-month revenue trends.",
+          bullets: [
+            "Category breakdown: See whether SaaS, Business, or Personal sites dominate.",
+            "Pricing benchmarks: View average realized prices per category.",
+            "Style trends: Discover which design aesthetics clients request most."
+          ]
+        },
+        {
+          heading: "Salesman Analytics & Performance Tracking",
+          body: "Salesman Analytics breaks down performance across the entire sales team and allows drilling down into individual salespeople. You can inspect total clients brought in, cumulative revenue generated for Eight34, total commission earnings, category mix, and weekly activity output.",
+          callout: {
+            type: "tip",
+            text: "Use Salesman Analytics to identify your strongest website categories and track your weekly deal consistency."
+          }
+        }
+      ],
+      key_takeaways: [
+        "Website Analytics highlights market demand, style trends, and price averages.",
+        "Salesman Analytics tracks deals closed, total revenue brought, and earnings.",
+        "Drill down into individual sales profiles to monitor weekly performance."
       ]
     }
   }
