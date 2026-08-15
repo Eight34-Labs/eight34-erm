@@ -532,162 +532,172 @@ export default function LeadDetail({ lead, currentUser }: LeadDetailProps) {
         </section>
       )}
 
-      {/* Main Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', flex: '2 1 600px' }}>
+      {/* Main Multi-Column Layout Grid */}
+      <div className="lead-detail-grid" style={{ display: 'grid', gap: '24px' }}>
+        {/* Left Primary Column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: 0 }}>
           
-          {/* Client Information */}
-          <section className="card" style={{ padding: '20px' }}>
-            <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <User className="text-meta" style={{ width: '20px', height: '20px' }} />
-              Client Information
-            </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px 32px' }}>
-              <div>
-                <div className="metric-label">Client Name</div>
-                <div className="text-body" style={{ fontWeight: 500, wordBreak: 'break-word' }}>{lead.client_name}</div>
-              </div>
-              <div>
-                <div className="metric-label">Client Type</div>
-                <div className="text-body" style={{ textTransform: 'capitalize' }}>{lead.client_type.toLowerCase()}</div>
-              </div>
-              {(lead.business_type || lead.business_type_other) && (
-                <div>
-                  <div className="metric-label">Business Type</div>
-                  <div className="text-body" style={{ wordBreak: 'break-word' }}>
-                    {lead.business_type === 'OTHER' ? lead.business_type_other : lead.business_type}
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
-
-          {/* Website Details */}
-          <section className="card" style={{ padding: '20px' }}>
-            <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Globe className="text-meta" style={{ width: '20px', height: '20px' }} />
-              Website Details
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div>
-                <div className="metric-label">Reason for Website</div>
-                <div className="text-body" style={{ marginTop: '4px' }}>
-                  {lead.reason === 'NEW_WEBSITE' ? 'New Website' : 'Redesign Existing Website'}
-                </div>
-              </div>
-              
-              {lead.reason === 'REDO_WEBSITE' && lead.previous_website_url && (
-                <div>
-                  <div className="metric-label">Current Website URL</div>
-                  <a 
-                    href={lead.previous_website_url.startsWith('http') ? lead.previous_website_url : `https://${lead.previous_website_url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: 'var(--e34-accent)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '4px', wordBreak: 'break-all' }}
-                  >
-                    {lead.previous_website_url}
-                    <LinkIcon style={{ width: '12px', height: '12px', flexShrink: 0 }} />
-                  </a>
-                </div>
-              )}
-
-              <div>
-                <div className="metric-label">Website Type</div>
-                <div className="text-body" style={{ marginTop: '4px', wordBreak: 'break-word' }}>
-                  {lead.website_type === 'OTHER' ? lead.website_type_other : lead.website_type}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Target Audience with Collapsible overflow */}
-          <section className="card" style={{ padding: '20px' }}>
-            <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Target className="text-meta" style={{ width: '20px', height: '20px' }} />
-              Target Audience
-            </h2>
-            <Collapsible maxHeight={120}>
-              <p className="text-body" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'break-word', margin: 0 }}>
-                {lead.target_audience}
-              </p>
-            </Collapsible>
-          </section>
-
-          {/* Design Preferences */}
-          <section className="card" style={{ padding: '20px' }}>
-            <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Palette className="text-meta" style={{ width: '20px', height: '20px' }} />
-              Design Preferences
-            </h2>
-            
-            <div style={{ marginBottom: '24px' }}>
-              <div className="metric-label" style={{ marginBottom: '8px' }}>Selected Styles</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {lead.design_style.map((style) => (
-                  <span key={style} className="badge badge-outline">
-                    {style === 'OTHER' && lead.design_style_other ? lead.design_style_other : style.replace(/_/g, ' ')}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {lead.inspiration_urls && lead.inspiration_urls.length > 0 && (
-              <div>
-                <div className="metric-label" style={{ marginBottom: '8px' }}>Inspiration URLs</div>
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: 0, margin: 0, listStyle: 'none' }}>
-                  {lead.inspiration_urls.map((url, i) => url ? (
-                    <li key={i}>
-                      <a 
-                        href={url.startsWith('http') ? url : `https://${url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'var(--e34-accent)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem', backgroundColor: 'var(--surface)', padding: '8px 12px', borderRadius: '4px', border: '1px solid var(--ink-150)', wordBreak: 'break-all' }}
-                      >
-                        <LinkIcon style={{ width: '14px', height: '14px', flexShrink: 0 }} />
-                        {url}
-                      </a>
-                    </li>
-                  ) : null)}
-                </ul>
-              </div>
-            )}
-          </section>
-
-          {/* Additional Details with Collapsible overflow */}
-          {(lead.special_features || lead.additional_information) && (
+          {/* Top Row: Client Info & Website Details side-by-side */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            {/* Client Information Card */}
             <section className="card" style={{ padding: '20px' }}>
               <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                <MessageSquare className="text-meta" style={{ width: '20px', height: '20px' }} />
-                Additional Details
+                <User className="text-meta" style={{ width: '18px', height: '18px' }} />
+                Client Information
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px 20px' }}>
+                <div>
+                  <div className="metric-label">Client Name</div>
+                  <div className="text-body" style={{ fontWeight: 600, wordBreak: 'break-word', marginTop: '2px' }}>{lead.client_name}</div>
+                </div>
+                <div>
+                  <div className="metric-label">Client Type</div>
+                  <div className="text-body" style={{ textTransform: 'capitalize', marginTop: '2px' }}>{lead.client_type.toLowerCase()}</div>
+                </div>
+                {(lead.business_type || lead.business_type_other) && (
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <div className="metric-label">Business Category</div>
+                    <div className="text-body" style={{ wordBreak: 'break-word', marginTop: '2px' }}>
+                      {lead.business_type === 'OTHER' ? lead.business_type_other : lead.business_type}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Website Details Card */}
+            <section className="card" style={{ padding: '20px' }}>
+              <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                <Globe className="text-meta" style={{ width: '18px', height: '18px' }} />
+                Website Classification
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px 20px' }}>
+                <div>
+                  <div className="metric-label">Website Type</div>
+                  <div className="text-body" style={{ fontWeight: 600, marginTop: '2px', wordBreak: 'break-word' }}>
+                    {lead.website_type === 'OTHER' ? lead.website_type_other : lead.website_type}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="metric-label">Project Scope</div>
+                  <div className="text-body" style={{ marginTop: '2px' }}>
+                    {lead.reason === 'NEW_WEBSITE' ? 'New Website' : 'Website Redesign'}
+                  </div>
+                </div>
+
+                {lead.reason === 'REDO_WEBSITE' && lead.previous_website_url && (
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <div className="metric-label">Existing Website URL</div>
+                    <a 
+                      href={lead.previous_website_url.startsWith('http') ? lead.previous_website_url : `https://${lead.previous_website_url}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--e34-accent)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '3px', wordBreak: 'break-all', fontSize: '0.875rem', fontWeight: 500 }}
+                    >
+                      {lead.previous_website_url}
+                      <LinkIcon style={{ width: '12px', height: '12px', flexShrink: 0 }} />
+                    </a>
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+
+          {/* Middle Row: Target Audience & Design Preferences side-by-side */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            {/* Target Audience Card */}
+            <section className="card" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+              <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                <Target className="text-meta" style={{ width: '18px', height: '18px' }} />
+                Target Audience
+              </h2>
+              <div style={{ flex: 1 }}>
+                <Collapsible maxHeight={120}>
+                  <p className="text-body" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'break-word', margin: 0, fontSize: '0.875rem' }}>
+                    {lead.target_audience}
+                  </p>
+                </Collapsible>
+              </div>
+            </section>
+
+            {/* Design Preferences Card */}
+            <section className="card" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+              <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                <Palette className="text-meta" style={{ width: '18px', height: '18px' }} />
+                Design Aesthetics &amp; Styles
               </h2>
               
-              {lead.special_features && (
-                <div style={{ marginBottom: '20px' }}>
-                  <div className="metric-label" style={{ marginBottom: '8px' }}>Special Features</div>
-                  <Collapsible maxHeight={120}>
-                    <p className="text-body" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'break-word', backgroundColor: 'var(--surface)', padding: '14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--ink-200)', margin: 0 }}>
-                      {lead.special_features}
-                    </p>
-                  </Collapsible>
+              <div style={{ marginBottom: '16px' }}>
+                <div className="metric-label" style={{ marginBottom: '8px' }}>Selected Styles</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {lead.design_style.map((style) => (
+                    <span key={style} className="badge badge-outline" style={{ fontSize: '0.75rem', padding: '3px 8px' }}>
+                      {style === 'OTHER' && lead.design_style_other ? lead.design_style_other : style.replace(/_/g, ' ')}
+                    </span>
+                  ))}
                 </div>
-              )}
+              </div>
 
-              {lead.additional_information && (
+              {lead.inspiration_urls && lead.inspiration_urls.length > 0 && (
                 <div>
-                  <div className="metric-label" style={{ marginBottom: '8px' }}>Other Information</div>
-                  <Collapsible maxHeight={120}>
-                    <p className="text-body" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'break-word', backgroundColor: 'var(--surface)', padding: '14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--ink-200)', margin: 0 }}>
-                      {lead.additional_information}
-                    </p>
-                  </Collapsible>
+                  <div className="metric-label" style={{ marginBottom: '6px' }}>Inspiration URLs</div>
+                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding: 0, margin: 0, listStyle: 'none' }}>
+                    {lead.inspiration_urls.map((url, i) => url ? (
+                      <li key={i}>
+                        <a 
+                          href={url.startsWith('http') ? url : `https://${url}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: 'var(--e34-accent)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.8125rem', backgroundColor: 'var(--paper)', padding: '6px 10px', borderRadius: '4px', border: '1px solid var(--ink-150)', wordBreak: 'break-all' }}
+                        >
+                          <LinkIcon style={{ width: '12px', height: '12px', flexShrink: 0 }} />
+                          {url}
+                        </a>
+                      </li>
+                    ) : null)}
+                  </ul>
                 </div>
               )}
             </section>
+          </div>
+
+          {/* Bottom Row: Special Features & Additional Notes side-by-side */}
+          {(lead.special_features || lead.additional_information) && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+              {lead.special_features && (
+                <section className="card" style={{ padding: '20px' }}>
+                  <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                    <MessageSquare className="text-meta" style={{ width: '18px', height: '18px' }} />
+                    Special Technical Features
+                  </h2>
+                  <Collapsible maxHeight={120}>
+                    <p className="text-body" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'break-word', backgroundColor: 'var(--paper)', padding: '12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--ink-150)', margin: 0, fontSize: '0.875rem' }}>
+                      {lead.special_features}
+                    </p>
+                  </Collapsible>
+                </section>
+              )}
+
+              {lead.additional_information && (
+                <section className="card" style={{ padding: '20px' }}>
+                  <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                    <MessageSquare className="text-meta" style={{ width: '18px', height: '18px' }} />
+                    Additional Internal Notes
+                  </h2>
+                  <Collapsible maxHeight={120}>
+                    <p className="text-body" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'break-word', backgroundColor: 'var(--paper)', padding: '12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--ink-150)', margin: 0, fontSize: '0.875rem' }}>
+                      {lead.additional_information}
+                    </p>
+                  </Collapsible>
+                </section>
+              )}
+            </div>
           )}
         </div>
 
-        {/* Right Sidebar */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', flex: '1 1 300px' }}>
+        {/* Right Sidebar Column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '300px' }}>
           
           {/* Salesperson Card */}
           <section className="card" style={{ padding: '20px' }}>
@@ -872,6 +882,17 @@ export default function LeadDetail({ lead, currentUser }: LeadDetailProps) {
         confirmText="Restore Lead"
         isLoading={isPending}
       />
+
+      <style jsx>{`
+        .lead-detail-grid {
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 960px) {
+          .lead-detail-grid {
+            grid-template-columns: minmax(0, 1fr) 320px;
+          }
+        }
+      `}</style>
     </div>
   )
 }
