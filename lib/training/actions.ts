@@ -8,6 +8,14 @@ import { TRAINING_MODULES } from '@/lib/training/modules'
 import { QUIZ_QUESTION_BANK } from '@/lib/training/quizData'
 
 async function ensureModulesSeeded(supabase: ReturnType<typeof createServiceClient>) {
+  // Fast path: skip seeding if the correct number of modules already exist
+  const { count } = await supabase
+    .from('training_modules')
+    .select('id', { count: 'exact', head: true })
+    .eq('is_published', true)
+
+  if (count === TRAINING_MODULES.length) return
+
   for (const mod of TRAINING_MODULES) {
     await supabase.from('training_modules').upsert(
       {

@@ -25,7 +25,6 @@ export default function ErmSettingsView({
   // Form states
   const [defaultRate, setDefaultRate] = useState(String(initialSettings.default_commission_rate || 50))
   const [autoApprove, setAutoApprove] = useState(Boolean(initialSettings.auto_approve_salespeople))
-  const [slackWorkspaceId, setSlackWorkspaceId] = useState(initialSettings.slack_workspace_id || 'T_EIGHT34_MAIN')
   const [tags, setTags] = useState<string[]>(initialSettings.aesthetic_tag_options || [])
   const [newTagInput, setNewTagInput] = useState('')
 
@@ -63,7 +62,6 @@ export default function ErmSettingsView({
       const res = await updateErmSettings({
         default_commission_rate: rateNum,
         auto_approve_salespeople: autoApprove,
-        slack_workspace_id: slackWorkspaceId.trim(),
         aesthetic_tag_options: tags,
       })
 
@@ -256,19 +254,29 @@ export default function ErmSettingsView({
             </span>
           </div>
 
-          {/* Slack Workspace ID */}
+          {/* Slack Workspace ID — read-only, set via SLACK_TEAM_ID env var */}
           <div style={{ gridColumn: '1 / -1' }}>
             <label className="text-label" style={{ display: 'block', fontSize: '0.8125rem', marginBottom: '6px' }}>
               Eight34 Slack Workspace Team ID
             </label>
-            <input
-              type="text"
-              className="input"
-              style={{ width: '100%', maxWidth: '360px' }}
-              value={slackWorkspaceId}
-              onChange={(e) => setSlackWorkspaceId(e.target.value)}
-              placeholder="e.g. T_EIGHT34_MAIN"
-            />
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 12px',
+              backgroundColor: 'var(--ink-50)',
+              border: '1px solid var(--ink-150)',
+              borderRadius: 'var(--radius)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8125rem',
+              color: 'var(--ink-700)',
+            }}>
+              <Shield style={{ width: '13px', height: '13px', color: 'var(--ink-400)' }} />
+              {initialSettings.slack_workspace_id || 'Set via SLACK_TEAM_ID environment variable'}
+            </div>
+            <span className="text-meta" style={{ display: 'block', fontSize: '0.75rem', marginTop: '4px' }}>
+              Managed via the <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>SLACK_TEAM_ID</code> environment variable. Contact your infrastructure team to change this.
+            </span>
           </div>
         </div>
 

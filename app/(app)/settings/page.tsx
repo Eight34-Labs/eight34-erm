@@ -26,7 +26,7 @@ export default async function ErmSettingsPage() {
     id: 'default',
     default_commission_rate: 50.0,
     auto_approve_salespeople: false,
-    slack_workspace_id: 'T_EIGHT34_MAIN',
+    slack_workspace_id: process.env.SLACK_TEAM_ID || 'T_EIGHT34_MAIN',
     aesthetic_tag_options: [],
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),

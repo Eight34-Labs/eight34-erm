@@ -225,10 +225,10 @@ export default function LoginPage({ error }: LoginPageProps) {
 function E34Logo() {
   return (
     <Image
-      src="/Eight34_Full.svg"
+      src="/Eight34_Full.png"
       alt="Eight34 Labs"
-      width={160}
-      height={44}
+      width={200}
+      height={100}
       style={{ objectFit: 'contain', objectPosition: 'left', filter: 'brightness(0) invert(1)' }}
       priority
     />

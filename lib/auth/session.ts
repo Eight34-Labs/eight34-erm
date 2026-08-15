@@ -1,11 +1,14 @@
 import { cookies } from 'next/headers'
+import { cache } from 'react'
 import { createServiceClient } from '@/lib/supabase/server'
 import type { User } from '@/types'
 
 const SESSION_COOKIE = 'e34_session'
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000 // 7 days
 
-export async function getSession(): Promise<{ user: User; token: string } | null> {
+// Memoize per request — the layout and every page both call getSession(),
+// so without cache() this was 2+ redundant Supabase queries per page load.
+export const getSession = cache(async (): Promise<{ user: User; token: string } | null> => {
   const cookieStore = await cookies()
   const token = cookieStore.get(SESSION_COOKIE)?.value
 
@@ -30,7 +33,7 @@ export async function getSession(): Promise<{ user: User; token: string } | null
   if (!user.is_active || !user.is_approved) return null
 
   return { user, token }
-}
+})
 
 export async function createSession(userId: string): Promise<string> {
   const supabase = createServiceClient()

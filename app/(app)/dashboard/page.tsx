@@ -17,13 +17,12 @@ export default async function DashboardPage() {
   const { user } = session
   const isAdmin = canAccessAdminDashboard(user.role)
 
-  const [metricsResult, leadsResult, trainingResult] = await Promise.all([
+  const [metricsResult, leadsResult, trainingResult, teamResult] = await Promise.all([
     getDashboardMetrics(),
     getLeads({ per_page: 10, sort: 'created_at', order: 'desc' }),
     getTrainingProgress(),
+    isAdmin ? getTeamMembers() : Promise.resolve(null),
   ])
-
-  const teamResult = isAdmin ? await getTeamMembers() : null
 
   return isAdmin ? (
     <AdminDashboard

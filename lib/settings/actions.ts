@@ -48,13 +48,13 @@ export async function getErmSettings(): Promise<ActionResult<ErmSettings>> {
     }
   }
 
-  // Insert default row
+  // Insert default row using env var for slack_workspace_id
   const { data: inserted, error: insertErr } = await supabase
     .from('erm_settings')
     .insert({
       default_commission_rate: 50.0,
       auto_approve_salespeople: false,
-      slack_workspace_id: 'T_EIGHT34_MAIN',
+      slack_workspace_id: process.env.SLACK_TEAM_ID || 'T_EIGHT34_MAIN',
       aesthetic_tag_options: DEFAULT_AESTHETIC_TAGS,
     })
     .select('*')
@@ -67,7 +67,7 @@ export async function getErmSettings(): Promise<ActionResult<ErmSettings>> {
         id: 'default',
         default_commission_rate: 50.0,
         auto_approve_salespeople: false,
-        slack_workspace_id: 'T_EIGHT34_MAIN',
+        slack_workspace_id: process.env.SLACK_TEAM_ID || 'T_EIGHT34_MAIN',
         aesthetic_tag_options: DEFAULT_AESTHETIC_TAGS,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -80,7 +80,7 @@ export async function getErmSettings(): Promise<ActionResult<ErmSettings>> {
 }
 
 export async function updateErmSettings(
-  updates: Partial<Pick<ErmSettings, 'default_commission_rate' | 'auto_approve_salespeople' | 'slack_workspace_id' | 'aesthetic_tag_options'>>
+  updates: Partial<Pick<ErmSettings, 'default_commission_rate' | 'auto_approve_salespeople' | 'aesthetic_tag_options'>>
 ): Promise<ActionResult> {
   const session = await getSession()
   if (!session) return { success: false, error: 'Not authenticated' }

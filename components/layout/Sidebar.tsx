@@ -27,13 +27,13 @@ export default function Sidebar({ user }: SidebarProps) {
       <div className="sidebar-logo">
         <Link href="/dashboard" className="sidebar-logo-link">
           <Image
-            src="/E34_Short.svg"
-            alt="E34"
-            width={26}
-            height={26}
-            className="sidebar-e34-img"
+            src="/Eight34_Full.svg"
+            alt="Eight34 Labs"
+            width={110}
+            height={28}
+            className="sidebar-full-logo"
+            priority
           />
-          <span className="sidebar-brand-name">Eight34</span>
         </Link>
       </div>
 
@@ -178,18 +178,12 @@ export default function Sidebar({ user }: SidebarProps) {
           text-decoration: none;
         }
 
-        .sidebar-e34-img {
-          width: 26px;
+        .sidebar-full-logo {
+          width: auto;
           height: 26px;
           object-fit: contain;
-          flex-shrink: 0;
-        }
-
-        .sidebar-brand-name {
-          font-size: 14px;
-          font-weight: 700;
-          color: var(--ink-900);
-          letter-spacing: -0.025em;
+          object-position: left center;
+          display: block;
         }
 
         .sidebar-nav {
