@@ -532,13 +532,13 @@ export default function LeadDetail({ lead, currentUser }: LeadDetailProps) {
         </section>
       )}
 
-      {/* Main Multi-Column Layout Grid */}
-      <div className="lead-detail-grid" style={{ display: 'grid', gap: '24px' }}>
+      {/* Main Multi-Column Responsive Layout Grid */}
+      <div className="lead-detail-layout">
         {/* Left Primary Column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: 0 }}>
           
           {/* Top Row: Client Info & Website Details side-by-side */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+          <div className="lead-detail-row-2col">
             {/* Client Information Card */}
             <section className="card" style={{ padding: '20px' }}>
               <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
@@ -605,7 +605,7 @@ export default function LeadDetail({ lead, currentUser }: LeadDetailProps) {
           </div>
 
           {/* Middle Row: Target Audience & Design Preferences side-by-side */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+          <div className="lead-detail-row-2col">
             {/* Target Audience Card */}
             <section className="card" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
               <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
@@ -664,7 +664,7 @@ export default function LeadDetail({ lead, currentUser }: LeadDetailProps) {
 
           {/* Bottom Row: Special Features & Additional Notes side-by-side */}
           {(lead.special_features || lead.additional_information) && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            <div className="lead-detail-row-2col">
               {lead.special_features && (
                 <section className="card" style={{ padding: '20px' }}>
                   <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
@@ -760,67 +760,123 @@ export default function LeadDetail({ lead, currentUser }: LeadDetailProps) {
           {/* Status History with Collapsible Menu */}
           <section className="card" style={{ padding: '20px' }}>
             <h2 className="section-title" style={{ marginBottom: '16px' }}>Status History</h2>
+            
             {lead.history && lead.history.length > 0 ? (
-              <Collapsible
-                maxHeight={260}
-                showMoreText={`Show all ${lead.history.length} status logs`}
-                showLessText="Show fewer status logs"
-              >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  {lead.history.map((entry, index) => {
-                    const isLast = index === lead.history.length - 1
-                    const newStatusConf = LEAD_STATUS_CONFIG[entry.new_status]
-                    const oldStatusConf = entry.old_status ? LEAD_STATUS_CONFIG[entry.old_status] : null
-                    
-                    return (
-                      <div key={entry.id} style={{ position: 'relative', paddingLeft: '24px' }}>
-                        {!isLast && (
-                          <div style={{ position: 'absolute', left: '11px', top: '24px', bottom: '-24px', width: '2px', backgroundColor: 'var(--surface)' }} />
+              <div>
+                {/* Recent Status Logs (First 3) */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {lead.history.slice(0, 3).map((item) => (
+                    <div key={item.id} style={{ display: 'flex', gap: '12px', fontSize: '0.875rem' }}>
+                      <div
+                        style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          backgroundColor: 'var(--ink-400)',
+                          marginTop: '6px',
+                          flexShrink: 0,
+                        }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                          <span className={cn('badge', LEAD_STATUS_CONFIG[item.new_status]?.className)} style={{ fontSize: '0.75rem' }}>
+                            {LEAD_STATUS_CONFIG[item.new_status]?.label || item.new_status}
+                          </span>
+                          <span className="text-meta" style={{ fontSize: '0.75rem' }}>
+                            {formatDate(item.created_at)}
+                          </span>
+                        </div>
+                        {item.changer && (
+                          <div className="text-meta" style={{ fontSize: '0.75rem', marginTop: '4px' }}>
+                            by {item.changer.name}
+                          </div>
                         )}
-                        
-                        <div style={{ position: 'absolute', left: 0, top: '6px', width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'var(--paper)', border: '2px solid var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
-                          <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: newStatusConf?.dotClassName ? undefined : 'var(--ink-400)' }} />
-                        </div>
-                        
-                        <div style={{ fontSize: '0.875rem' }}>
-                          <div style={{ fontWeight: 500, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                            {oldStatusConf && (
-                              <>
-                                <span className="text-meta" style={{ textDecoration: 'line-through', opacity: 0.7 }}>{oldStatusConf.label}</span>
-                                <ArrowRight className="text-meta" style={{ width: '12px', height: '12px' }} />
-                              </>
-                            )}
-                            <span className={cn('badge', newStatusConf?.className)}>
-                              {newStatusConf?.label || entry.new_status}
-                            </span>
+                        {item.note && (
+                          <div
+                            style={{
+                              marginTop: '6px',
+                              padding: '8px 10px',
+                              backgroundColor: 'var(--ink-50)',
+                              borderRadius: 'var(--radius-sm)',
+                              fontSize: '0.8125rem',
+                              color: 'var(--ink-700)',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            &ldquo;{item.note}&rdquo;
                           </div>
-                          
-                          <div className="text-meta" style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px', backgroundColor: 'var(--surface)', padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--ink-150)' }}>
-                            <span style={{ fontWeight: 500, color: 'var(--ink-700)' }}>
-                              {entry.changer?.name || 'System'}
-                            </span>
-                            <span>{formatRelativeTime(entry.created_at)}</span>
-                          </div>
-                          
-                          {entry.note && (
-                            <div style={{ marginTop: '8px', fontSize: '0.75rem', color: 'var(--ink-600)', fontStyle: 'italic', borderLeft: '2px solid var(--ink-200)', paddingLeft: '8px', paddingBottom: '4px', paddingTop: '4px', wordBreak: 'break-word' }}>
-                              "{entry.note}"
-                            </div>
-                          )}
-                        </div>
+                        )}
                       </div>
-                    )
-                  })}
+                    </div>
+                  ))}
                 </div>
-              </Collapsible>
+
+                {/* Collapsible Remaining Status Logs */}
+                {lead.history.length > 3 && (
+                  <div style={{ marginTop: '16px' }}>
+                    <Collapsible
+                      maxHeight={0}
+                      showMoreText={`Show all ${lead.history.length} status logs`}
+                      showLessText="Show fewer status logs"
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--ink-100)' }}>
+                        {lead.history.slice(3).map((item) => (
+                          <div key={item.id} style={{ display: 'flex', gap: '12px', fontSize: '0.875rem' }}>
+                            <div
+                              style={{
+                                width: '8px',
+                                height: '8px',
+                                borderRadius: '50%',
+                                backgroundColor: 'var(--ink-400)',
+                                marginTop: '6px',
+                                flexShrink: 0,
+                              }}
+                            />
+                            <div style={{ flex: 1 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                                <span className={cn('badge', LEAD_STATUS_CONFIG[item.new_status]?.className)} style={{ fontSize: '0.75rem' }}>
+                                  {LEAD_STATUS_CONFIG[item.new_status]?.label || item.new_status}
+                                </span>
+                                <span className="text-meta" style={{ fontSize: '0.75rem' }}>
+                                  {formatDate(item.created_at)}
+                                </span>
+                              </div>
+                              {item.changer && (
+                                <div className="text-meta" style={{ fontSize: '0.75rem', marginTop: '4px' }}>
+                                  by {item.changer.name}
+                                </div>
+                              )}
+                              {item.note && (
+                                <div
+                                  style={{
+                                    marginTop: '6px',
+                                    padding: '8px 10px',
+                                    backgroundColor: 'var(--ink-50)',
+                                    borderRadius: 'var(--radius-sm)',
+                                    fontSize: '0.8125rem',
+                                    color: 'var(--ink-700)',
+                                    wordBreak: 'break-word',
+                                  }}
+                                >
+                                  &ldquo;{item.note}&rdquo;
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </Collapsible>
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className="text-meta" style={{ fontSize: '0.875rem', fontStyle: 'italic' }}>No history recorded</div>
+              <div className="text-meta" style={{ fontSize: '0.875rem' }}>No status changes recorded yet.</div>
             )}
           </section>
         </div>
       </div>
 
-      {/* Note Modal for regular status change */}
+      {/* Note Modal for Status Transitions */}
       <NoteModal
         isOpen={isNoteModalOpen}
         onClose={() => {
@@ -882,17 +938,6 @@ export default function LeadDetail({ lead, currentUser }: LeadDetailProps) {
         confirmText="Restore Lead"
         isLoading={isPending}
       />
-
-      <style jsx>{`
-        .lead-detail-grid {
-          grid-template-columns: 1fr;
-        }
-        @media (min-width: 960px) {
-          .lead-detail-grid {
-            grid-template-columns: minmax(0, 1fr) 320px;
-          }
-        }
-      `}</style>
     </div>
   )
 }
