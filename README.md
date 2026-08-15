@@ -122,4 +122,7 @@ The app deploys to **Vercel**. Pushes to `main` deploy to production. Set all [e
 
 ## License
 
-Licensed under the Apache License 2.0 — see [LICENSE](./LICENSE). Note that the license notwithstanding, this is an internal Eight34 Labs project (see [Internal project](#-internal-project)).
+Copyright © 2026 Eight34 Labs. All rights reserved. This repository is
+source-available for viewing only — it is **not** open source. No use,
+copying, modification, distribution, or deployment is permitted without
+written permission. See [LICENSE](./LICENSE).
