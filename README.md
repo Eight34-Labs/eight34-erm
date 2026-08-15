@@ -5,12 +5,8 @@ Internal Enterprise Relationship Manager for the **Eight34 Labs** sales team. A 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-149eca?logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript)](https://www.typescriptlang.org)
-[![Supabase](https://img.shields.io/badge/Supabase-Postgres-3ecf8e?logo=supabase)](https://supabase.com)
-[![Deployed on Vercel](https://img.shields.io/badge/Vercel-deployed-black?logo=vercel)](https://eight34-erm.vercel.app)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](./LICENSE)
 [![Internal](https://img.shields.io/badge/Eight34%20Labs-Internal-orange)](#-internal-project)
-
-🔗 **Production:** [eight34-erm.vercel.app](https://eight34-erm.vercel.app)
 
 ## 🔒 Internal project
 
