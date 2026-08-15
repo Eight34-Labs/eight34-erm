@@ -27,7 +27,7 @@ export default function Sidebar({ user }: SidebarProps) {
       <div className="sidebar-logo">
         <Link href="/dashboard" className="sidebar-logo-link">
           <Image
-            src="/Eight34_Full.svg"
+            src="/Eight34_Full.png"
             alt="Eight34 Labs"
             width={110}
             height={28}
