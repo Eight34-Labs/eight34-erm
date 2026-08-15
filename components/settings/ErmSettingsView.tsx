@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { Settings, Sliders, Shield, Tag, DollarSign, Check, Plus, X, Edit2 } from 'lucide-react'
+import { Settings, Sliders, Tag, DollarSign, Check, Plus, X, Edit2 } from 'lucide-react'
 import type { ErmSettings, PricingConfig, User } from '@/types'
 import { updateErmSettings } from '@/lib/settings/actions'
 import { updatePricingConfig } from '@/lib/pricing/actions'
@@ -254,30 +254,6 @@ export default function ErmSettingsView({
             </span>
           </div>
 
-          {/* Slack Workspace ID — read-only, set via SLACK_TEAM_ID env var */}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <label className="text-label" style={{ display: 'block', fontSize: '0.8125rem', marginBottom: '6px' }}>
-              Eight34 Slack Workspace Team ID
-            </label>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 12px',
-              backgroundColor: 'var(--ink-50)',
-              border: '1px solid var(--ink-150)',
-              borderRadius: 'var(--radius)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.8125rem',
-              color: 'var(--ink-700)',
-            }}>
-              <Shield style={{ width: '13px', height: '13px', color: 'var(--ink-400)' }} />
-              {initialSettings.slack_workspace_id || 'Set via SLACK_TEAM_ID environment variable'}
-            </div>
-            <span className="text-meta" style={{ display: 'block', fontSize: '0.75rem', marginTop: '4px' }}>
-              Managed via the <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>SLACK_TEAM_ID</code> environment variable. Contact your infrastructure team to change this.
-            </span>
-          </div>
         </div>
 
         {/* Section 2: Aesthetic Tag Options */}
