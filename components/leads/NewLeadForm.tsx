@@ -332,7 +332,7 @@ export default function NewLeadForm({
             </Link>
             <span className="text-meta" style={{ color: 'var(--ink-300)' }}>/</span>
             <span className="text-meta" style={{ color: 'var(--ink-700)', fontWeight: 500 }}>
-              {draftId ? 'Draft Intake' : 'New Lead'}
+              {draftId ? `Draft Intake (#DRAFT-${draftId.slice(0, 8).toUpperCase()})` : 'New Lead'}
             </span>
           </div>
           <h1 className="text-heading-xl" style={{ margin: 0 }}>

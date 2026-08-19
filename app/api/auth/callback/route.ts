@@ -76,44 +76,79 @@ export async function GET(request: Request) {
     const email = profile.email || null
     const avatarUrl = profile.image_512 || profile.image_192 || null
 
-    // Check if a SUPER_ADMIN exists already
     const supabase = createServiceClient()
+
+    // Check if user already exists
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id, is_approved, is_active, role, commission_rate')
+      .eq('slack_user_id', slackUserId)
+      .maybeSingle()
+
+    // Check if a SUPER_ADMIN exists already
     const { data: existingSuperAdmin } = await supabase
       .from('users')
       .select('id')
       .eq('role', 'SUPER_ADMIN')
       .eq('is_active', true)
       .limit(1)
-      .single()
+      .maybeSingle()
 
-    const isFirstUser = !existingSuperAdmin
+    // Fetch ERM settings for auto-approval & default commission
+    const { data: ermSettings } = await supabase
+      .from('erm_settings')
+      .select('auto_approve_salespeople, default_commission_rate')
+      .limit(1)
+      .maybeSingle()
 
-    // Upsert the user
-    const { data: user, error: upsertError } = await supabase
-      .from('users')
-      .upsert(
-        {
+    const isFirstUser = !existingSuperAdmin && !existingUser
+    const shouldAutoApprove = isFirstUser || Boolean(ermSettings?.auto_approve_salespeople)
+    const defaultCommission = ermSettings?.default_commission_rate !== undefined ? Number(ermSettings.default_commission_rate) : 50.00
+
+    let user: any = null
+
+    if (existingUser) {
+      // Update profile info for existing user
+      const { data: updated, error: updateError } = await supabase
+        .from('users')
+        .update({
+          name,
+          email,
+          avatar_url: avatarUrl,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existingUser.id)
+        .select()
+        .single()
+
+      if (updateError || !updated) {
+        console.error('User update failed:', updateError)
+        return NextResponse.redirect(`${baseUrl}/login?error=user_update`)
+      }
+      user = updated
+    } else {
+      // Create brand new user
+      const { data: created, error: createError } = await supabase
+        .from('users')
+        .insert({
           slack_user_id: slackUserId,
           slack_team_id: teamId,
           name,
           email,
           avatar_url: avatarUrl,
-          // First user gets SUPER_ADMIN and auto-approved
-          ...(isFirstUser
-            ? { role: 'SUPER_ADMIN', is_approved: true, is_active: true }
-            : {}),
-        },
-        {
-          onConflict: 'slack_user_id',
-          ignoreDuplicates: false,
-        }
-      )
-      .select()
-      .single()
+          role: isFirstUser ? 'SUPER_ADMIN' : 'SALES',
+          is_approved: shouldAutoApprove,
+          is_active: true,
+          commission_rate: defaultCommission,
+        })
+        .select()
+        .single()
 
-    if (upsertError || !user) {
-      console.error('User upsert failed:', upsertError)
-      return NextResponse.redirect(`${baseUrl}/login?error=user_creation`)
+      if (createError || !created) {
+        console.error('User creation failed:', createError)
+        return NextResponse.redirect(`${baseUrl}/login?error=user_creation`)
+      }
+      user = created
     }
 
     // Reject unapproved or inactive users

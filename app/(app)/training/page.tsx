@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { ShieldCheck, Sparkles, ArrowRight, Check } from 'lucide-react'
 import { getSession } from '@/lib/auth/session'
 import { getTrainingProgress } from '@/lib/training/actions'
 import { TRAINING_MODULES } from '@/lib/training/modules'
 
-export const metadata: Metadata = { title: 'Training' }
+export const metadata: Metadata = { title: 'Training & Verification' }
 
 export default async function TrainingPage() {
   const session = await getSession()
@@ -29,26 +30,25 @@ export default async function TrainingPage() {
       <div className="page-header" style={{ paddingBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h1 className="text-heading-xl" style={{ marginBottom: 4 }}>Sales Training Curriculum</h1>
+            <h1 className="text-heading-xl" style={{ marginBottom: 4 }}>Sales Training &amp; Verification</h1>
             <p className="text-body-sm" style={{ margin: 0 }}>
-              Complete all {totalCount} qualification modules to unlock lead submission.
+              Read through the {totalCount} platform guides, then complete your guided Verification Task to unlock lead creation.
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {user.training_completed ? (
-              <span className="badge badge-status-completed" style={{ padding: '6px 12px', fontSize: 13, fontWeight: 600 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                Certified Sales Rep
+              <span className="badge badge-status-completed" style={{ padding: '6px 12px', fontSize: 13, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <ShieldCheck style={{ width: 15, height: 15 }} />
+                Verified Salesperson
               </span>
             ) : allComplete ? (
-              <Link href="/training/quiz" className="btn btn-solid btn-md" style={{ background: '#166534' }}>
-                Take Certification Assessment &rarr;
+              <Link href="/training/verify" className="btn btn-solid btn-md" style={{ background: '#166534', color: 'white', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <Sparkles style={{ width: 15, height: 15 }} />
+                Start Verification Task &rarr;
               </Link>
             ) : (
               <span className="text-meta">
-                {progress?.completionPercent || 0}% complete
+                {progress?.completionPercent || 0}% completed
               </span>
             )}
           </div>
@@ -59,7 +59,7 @@ export default async function TrainingPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
             <span className="text-label">Curriculum Progress</span>
             <span className="text-meta tabular-nums">
-              {completedCount} / {totalCount} modules
+              {completedCount} / {totalCount} modules read
             </span>
           </div>
           <div className="progress-bar">
@@ -72,34 +72,8 @@ export default async function TrainingPage() {
       </div>
 
       <div className="page-content">
-        {/* Failed quiz notice */}
-        {!user.training_completed && user.quiz_score !== null && user.quiz_score !== undefined && (
-          <div style={{
-            padding: '14px 18px',
-            background: '#fef2f2',
-            border: '1px solid #fecaca',
-            borderRadius: 'var(--radius)',
-            color: '#991b1b',
-            fontSize: 13.5,
-            marginBottom: 24,
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 12,
-          }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginTop: 1, flexShrink: 0 }}>
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <div>
-              <strong>Assessment not passed.</strong> You scored {user.quiz_score}/20 ({Math.round((user.quiz_score / 20) * 100)}%).
-              The passing score is 16/20 (80%). Your training progress has been reset — please review the modules and retake the assessment.
-            </div>
-          </div>
-        )}
-
         {/* Module list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {modules.map((moduleItem, idx: number) => {
             const isCompleted = completedIds.has(String(moduleItem.module_number))
             const isNext = !isCompleted && idx === completedCount
@@ -112,18 +86,18 @@ export default async function TrainingPage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: 14,
-                  padding: '14px 16px',
+                  padding: '16px 18px',
                   borderRadius: 'var(--radius)',
                   background: isNext ? 'var(--ink-50)' : 'var(--surface)',
-                  border: `1px solid ${isNext ? 'var(--ink-200)' : 'var(--ink-100)'}`,
+                  border: `1px solid ${isNext ? 'var(--ink-300)' : 'var(--ink-100)'}`,
                   textDecoration: 'none',
                   transition: 'background var(--transition), border-color var(--transition)',
                 }}
               >
                 {/* Module number / status */}
                 <div style={{
-                  width: 32,
-                  height: 32,
+                  width: 34,
+                  height: 34,
                   borderRadius: 'var(--radius-sm)',
                   background: isCompleted ? 'var(--status-completed-bg)' : isNext ? 'var(--e34-accent)' : 'var(--ink-100)',
                   border: `1px solid ${isCompleted ? 'var(--status-completed-border)' : 'transparent'}`,
@@ -136,9 +110,7 @@ export default async function TrainingPage() {
                   fontWeight: 700,
                 }}>
                   {isCompleted ? (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
+                    <Check style={{ width: 16, height: 16 }} />
                   ) : (
                     String(moduleItem.module_number).padStart(2, '0')
                   )}
@@ -146,8 +118,8 @@ export default async function TrainingPage() {
 
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
-                    fontSize: 14,
-                    fontWeight: 600,
+                    fontSize: 14.5,
+                    fontWeight: 650,
                     color: isCompleted ? 'var(--ink-600)' : 'var(--ink-900)',
                     letterSpacing: '-0.01em',
                     marginBottom: 2,
@@ -155,7 +127,7 @@ export default async function TrainingPage() {
                     {moduleItem.title}
                   </div>
                   {moduleItem.description && (
-                    <div className="text-meta" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div className="text-meta" style={{ fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {moduleItem.description}
                     </div>
                   )}
@@ -163,9 +135,9 @@ export default async function TrainingPage() {
 
                 <div style={{ flexShrink: 0 }}>
                   {isCompleted ? (
-                    <span className="badge badge-status-completed" style={{ fontSize: 11 }}>Complete</span>
+                    <span className="badge badge-status-completed" style={{ fontSize: 11 }}>Read</span>
                   ) : isNext ? (
-                    <span className="btn btn-sm btn-solid" style={{ fontSize: 12 }}>Start Module</span>
+                    <span className="btn btn-sm btn-solid" style={{ fontSize: 12 }}>Read Module</span>
                   ) : (
                     <span className="text-meta" style={{ fontSize: 12 }}>View &rarr;</span>
                   )}
@@ -175,33 +147,38 @@ export default async function TrainingPage() {
           })}
         </div>
 
-        {/* Assessment CTA Banner */}
+        {/* Verification Task CTA Banner */}
         {allComplete && !user.training_completed && (
           <div style={{
             marginTop: 32,
             padding: '24px 28px',
-            background: 'var(--e34-accent)',
-            borderRadius: 'var(--radius-md)',
+            background: 'linear-gradient(135deg, #166534 0%, #15803d 100%)',
+            borderRadius: 'var(--radius-lg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 16,
+            boxShadow: 'var(--shadow-md)',
+            color: 'white',
           }}>
             <div>
               <div style={{ fontWeight: 700, color: 'white', marginBottom: 4, fontSize: 16 }}>
-                All 16 curriculum modules completed
+                All 5 Curriculum Modules Completed!
               </div>
-              <div style={{ fontSize: 13.5, color: 'rgb(255 255 255 / 0.75)' }}>
-                Take the 20-question certification assessment (80% passing standard) to unlock lead submission.
+              <div style={{ fontSize: 13.5, color: 'rgba(255, 255, 255, 0.9)' }}>
+                Complete your interactive guided test lead simulation to unlock lead creation access.
               </div>
             </div>
-            <Link href="/training/quiz" className="btn btn-md" style={{
+            <Link href="/training/verify" className="btn btn-md" style={{
               background: 'white',
-              color: 'var(--e34-accent)',
-              fontWeight: 600,
+              color: '#166534',
+              fontWeight: 700,
               flexShrink: 0,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
             }}>
-              Start Assessment &rarr;
+              Launch Verification Task <ArrowRight style={{ width: 14, height: 14 }} />
             </Link>
           </div>
         )}
@@ -209,3 +186,4 @@ export default async function TrainingPage() {
     </div>
   )
 }
+

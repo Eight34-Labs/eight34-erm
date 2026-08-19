@@ -166,11 +166,11 @@ export default function ModuleViewer({
 
         <div className="training-sidebar-footer">
           <Link
-            href="/training/quiz"
+            href="/training/verify"
             className={`btn btn-sm ${progressPct >= 100 ? 'btn-solid' : 'btn-outline'}`}
             style={{ width: '100%', justifyContent: 'center' }}
           >
-            {isCertified ? 'View Certification' : 'Take Quiz Assessment'}
+            {isCertified ? 'View Verification Status' : 'Start Verification Task'}
           </Link>
         </div>
       </aside>
@@ -304,8 +304,8 @@ export default function ModuleViewer({
                   </svg>
                 </Link>
               ) : (
-                <Link href="/training/quiz" className="btn btn-solid btn-md" style={{ background: '#166534' }}>
-                  Proceed to Assessment
+                <Link href="/training/verify" className="btn btn-solid btn-md" style={{ background: '#166534', color: 'white' }}>
+                  Start Verification Task
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>

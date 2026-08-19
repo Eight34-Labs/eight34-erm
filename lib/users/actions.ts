@@ -178,6 +178,39 @@ export async function toggleUserActive(
   return { success: true }
 }
 
+export async function toggleUserVerification(
+  targetUserId: string,
+  isVerified: boolean
+): Promise<ActionResult> {
+  const session = await getSession()
+  if (!session) return { success: false, error: 'Not authenticated' }
+
+  if (!canManageUsers(session.user.role)) {
+    return { success: false, error: 'Only Admins and Super Admins can verify users' }
+  }
+
+  const supabase = createServiceClient()
+  const { error } = await supabase
+    .from('users')
+    .update({
+      training_completed: isVerified,
+      training_version: isVerified ? 2 : null,
+      training_completed_at: isVerified ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', targetUserId)
+
+  if (error) {
+    console.error('Failed to update verification status:', error)
+    return { success: false, error: 'Failed to update verification status' }
+  }
+
+  revalidatePath('/dashboard')
+  revalidatePath('/training')
+  revalidatePath('/leads/new')
+  return { success: true }
+}
+
 export async function removeUser(targetUserId: string): Promise<ActionResult> {
   const session = await getSession()
   if (!session) return { success: false, error: 'Not authenticated' }
@@ -210,14 +243,31 @@ export async function removeUser(targetUserId: string): Promise<ActionResult> {
     }
   }
 
-  // Soft delete — just disable
+  // 1. Delete user sessions
+  await supabase.from('sessions').delete().eq('user_id', targetUserId)
+
+  // 2. Delete training progress & quiz attempts
+  await supabase.from('training_progress').delete().eq('user_id', targetUserId)
+  await supabase.from('quiz_attempts').delete().eq('user_id', targetUserId)
+
+  // 3. Reassign any existing leads created by this user to the performing Super Admin so foreign keys don't fail
+  await supabase
+    .from('leads')
+    .update({ created_by: session.user.id })
+    .eq('created_by', targetUserId)
+
+  // 4. Delete user record completely
   const { error } = await supabase
     .from('users')
-    .update({ is_active: false, is_approved: false })
+    .delete()
     .eq('id', targetUserId)
 
-  if (error) return { success: false, error: 'Failed to remove user' }
+  if (error) {
+    console.error('Failed to delete user:', error)
+    return { success: false, error: 'Failed to completely remove user from database' }
+  }
 
   revalidatePath('/dashboard')
   return { success: true }
 }
+

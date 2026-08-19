@@ -83,21 +83,25 @@ const DEFAULT_PRICING_CONFIGS: Omit<PricingConfig, 'id' | 'created_at' | 'update
   },
 ]
 
+let isPricingSeededInMemory = false
+
 export async function getPricingConfigs(): Promise<ActionResult<PricingConfig[]>> {
   const session = await getSession()
   if (!session) return { success: false, error: 'Not authenticated' }
 
   const supabase = createServiceClient()
 
-  // Ensure default configs seeded if empty
-  const { count } = await supabase
-    .from('pricing_config')
-    .select('*', { count: 'exact', head: true })
+  if (!isPricingSeededInMemory) {
+    const { count } = await supabase
+      .from('pricing_config')
+      .select('*', { count: 'exact', head: true })
 
-  if (!count || count === 0) {
-    for (const conf of DEFAULT_PRICING_CONFIGS) {
-      await supabase.from('pricing_config').insert(conf)
+    if (!count || count === 0) {
+      for (const conf of DEFAULT_PRICING_CONFIGS) {
+        await supabase.from('pricing_config').insert(conf)
+      }
     }
+    isPricingSeededInMemory = true
   }
 
   const { data: configs, error } = await supabase

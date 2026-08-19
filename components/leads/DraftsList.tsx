@@ -69,9 +69,14 @@ export default function DraftsList({ initialDrafts }: DraftsListProps) {
             >
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span className="badge badge-status-inquiring" style={{ fontSize: '0.75rem' }}>
-                    Draft
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="badge badge-status-inquiring" style={{ fontSize: '0.75rem' }}>
+                      Draft
+                    </span>
+                    <span className="text-meta" style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                      #DRAFT-{draft.id.slice(0, 8).toUpperCase()}
+                    </span>
+                  </div>
                   <span className="text-meta" style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <Clock style={{ width: '12px', height: '12px' }} />
                     {formatRelativeTime(draft.updated_at)}

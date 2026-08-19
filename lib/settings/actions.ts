@@ -91,12 +91,20 @@ export async function updateErmSettings(
 
   const supabase = createServiceClient()
 
+  const safeUpdates = { ...updates }
+  if (Array.isArray(safeUpdates.aesthetic_tag_options)) {
+    const hasOther = safeUpdates.aesthetic_tag_options.some((t) => t.toLowerCase() === 'other')
+    if (!hasOther) {
+      safeUpdates.aesthetic_tag_options.push('Other')
+    }
+  }
+
   // Get current row id
   const { data: current } = await supabase.from('erm_settings').select('id').limit(1).maybeSingle()
 
   if (!current) {
     const { error } = await supabase.from('erm_settings').insert({
-      ...updates,
+      ...safeUpdates,
       updated_by: session.user.id,
       updated_at: new Date().toISOString(),
     })
@@ -105,7 +113,7 @@ export async function updateErmSettings(
     const { error } = await supabase
       .from('erm_settings')
       .update({
-        ...updates,
+        ...safeUpdates,
         updated_by: session.user.id,
         updated_at: new Date().toISOString(),
       })

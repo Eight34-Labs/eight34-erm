@@ -88,6 +88,10 @@ export default function ErmSettingsView({
   }
 
   const handleRemoveTag = (tagToRemove: string) => {
+    if (tagToRemove.toLowerCase() === 'other') {
+      showError('"Other" is a mandatory system aesthetic tag for custom fill-in specifications and cannot be removed.')
+      return
+    }
     setTags(tags.filter((t) => t !== tagToRemove))
   }
 
@@ -269,37 +273,43 @@ export default function ErmSettingsView({
           </p>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '14px' }}>
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="badge badge-outline"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '5px 10px',
-                  fontSize: '0.8125rem',
-                }}
-              >
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveTag(tag)}
+            {tags.map((tag) => {
+              const isOther = tag.toLowerCase() === 'other'
+
+              return (
+                <span
+                  key={tag}
+                  className={`badge ${isOther ? 'badge-role-admin' : 'badge-outline'}`}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: 0,
-                    cursor: 'pointer',
-                    color: 'var(--ink-400)',
-                    display: 'flex',
+                    display: 'inline-flex',
                     alignItems: 'center',
+                    gap: '6px',
+                    padding: '5px 10px',
+                    fontSize: '0.8125rem',
                   }}
-                  title={`Remove ${tag}`}
                 >
-                  <X style={{ width: '12px', height: '12px' }} />
-                </button>
-              </span>
-            ))}
+                  {tag} {isOther && <span style={{ fontSize: '11px', opacity: 0.8 }}>(Custom Input Required)</span>}
+                  {!isOther && (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTag(tag)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        cursor: 'pointer',
+                        color: 'var(--ink-400)',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                      title={`Remove ${tag}`}
+                    >
+                      <X style={{ width: '12px', height: '12px' }} />
+                    </button>
+                  )}
+                </span>
+              )
+            })}
           </div>
 
           {/* Add Tag Row */}
