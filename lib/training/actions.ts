@@ -13,16 +13,6 @@ async function ensureModulesSeeded(supabase: ReturnType<typeof createServiceClie
   if (isSeededInMemory) return
 
   try {
-    const { count } = await supabase
-      .from('training_modules')
-      .select('id', { count: 'exact', head: true })
-      .eq('is_published', true)
-
-    if (count === TRAINING_MODULES.length) {
-      isSeededInMemory = true
-      return
-    }
-
     // Clean up old modules > 5
     await supabase.from('training_modules').delete().gt('module_number', TRAINING_MODULES.length)
 
@@ -33,7 +23,7 @@ async function ensureModulesSeeded(supabase: ReturnType<typeof createServiceClie
           title: mod.title,
           description: mod.description,
           content: mod.content as any,
-          version: 2,
+          version: 3,
           is_published: true,
         },
         { onConflict: 'module_number' }

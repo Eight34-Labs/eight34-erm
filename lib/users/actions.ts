@@ -189,7 +189,24 @@ export async function toggleUserVerification(
     return { success: false, error: 'Only Admins and Super Admins can verify users' }
   }
 
+  // Prevent users from unverifying themselves
+  if (targetUserId === session.user.id && !isVerified) {
+    return { success: false, error: 'You cannot unverify your own account' }
+  }
+
   const supabase = createServiceClient()
+
+  // Prevent unverifying Super Admins or Admins
+  const { data: targetUser } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', targetUserId)
+    .single()
+
+  if ((targetUser?.role === 'SUPER_ADMIN' || targetUser?.role === 'ADMIN') && !isVerified) {
+    return { success: false, error: 'Admins and Super Admins are automatically verified and cannot be unverified' }
+  }
+
   const { error } = await supabase
     .from('users')
     .update({

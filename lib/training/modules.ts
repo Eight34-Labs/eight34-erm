@@ -25,216 +25,222 @@ export interface TrainingModuleData {
 export const TRAINING_MODULES: TrainingModuleData[] = [
   {
     module_number: 1,
-    title: "ERM Platform Overview & Sales Workbench",
-    description: "How to navigate the ERM, use the sales workbench, understand lead statuses, and monitor your daily pipeline.",
+    title: "Mastering the Dashboard & Live Pipeline (/dashboard)",
+    description: "How to use your daily dashboard, read key sales metrics, track active deals, and monitor your commission earnings.",
     content: {
-      overview: "Welcome to the Eight34 ERM (Enterprise Relationship Management) system! This platform is your central sales hub. It manages client discovery, records project scope and aesthetic requirements, tracks deals across 6 standardized production statuses, and calculates your 50% sales commission.",
+      overview: "The Dashboard (/dashboard) is your daily sales command center. Whenever you log in, this page gives you an instant snapshot of your active pipeline, deal statuses, revenue volume, and your earned commission. Here is how to use every element on this screen.",
       sections: [
         {
-          heading: "1. Navigation & The Sales Workbench",
-          body: "Your sidebar is organized into clean functional areas: Dashboard (your daily KPIs, recent leads, and pipeline value), Leads (the searchable master pipeline), Lead Drafts (your in-progress client intakes), and Training (this curriculum and verification sandbox).",
+          heading: "1. The Top Metric Summary Cards",
+          body: "At the top of your dashboard, you will see four real-time KPI cards that summarize your performance:",
           bullets: [
-            "Dashboard: Inspect daily pipeline value, active deals, and completed revenue.",
-            "Leads: Search, filter by category or status, and view status history logs.",
-            "Lead Drafts: Save partial notes on calls and resume anytime.",
-            "Training: Complete the 5 modules and the interactive Verification Task to get certified."
+            "Total Pipeline Volume ($): The total gross value of all active website projects you have brought in.",
+            "Deals in Progress: Number of client projects currently being designed, coded, or staged by our engineering team.",
+            "Closed & Completed Deals: Total successful website launches you have closed.",
+            "Your Commission Payout ($): Your calculated earnings based on your assigned commission rate (e.g., 50%)."
           ],
           callout: {
             type: "tip",
-            text: "Salespeople can submit new leads as soon as they complete the 5 modules and pass the guided Verification Task."
+            text: "Use these numbers during your weekly sales review to monitor which deals are moving toward completion and payout."
           }
         },
         {
-          heading: "2. The 6 Pipeline Statuses Explained",
-          body: "Every lead submitted moves through six standardized pipeline stages as our design and engineering teams build the project:",
+          heading: "2. The Recent Deals Table & Status Indicators",
+          body: "Directly below the metrics is your Recent Deals Table. Each deal displays the client name, website type, budget, and live status badge. The 5 key statuses you will see are:",
           bullets: [
-            "NEW: Unreviewed lead freshly submitted into the pipeline.",
-            "STILL INQUIRING: Discovery calls and scope refinement underway with the prospect.",
-            "WEBSITE IN PROGRESS: Active UI design, bespoke styling, and Next.js engineering in production.",
-            "DELIVERY IN PROGRESS: Staging review, client feedback revisions, and DNS setup.",
-            "COMPLETED: Website launched! Production costs recorded and commission payouts unlocked.",
-            "REJECTED: Disqualified deal (e.g., budget mismatch or cancelled inquiry)."
+            "NEW / INQUIRING: You or a teammate submitted the lead; project managers are conducting initial intake review.",
+            "IN PROGRESS (Design & Code): Our engineering team is actively building wireframes, custom styling, and features.",
+            "DELIVERY & REVISIONS: The site is on a live preview URL for client sign-off and final touch-ups.",
+            "COMPLETED: Website is live on the client's custom domain and paid in full. Your commission is finalized!",
+            "REJECTED: Deal was marked disqualified or cancelled."
           ]
         },
         {
-          heading: "3. Status History & Collapsible Menus",
-          body: "Every status transition is permanently recorded in the lead's Status History audit trail, including timestamps and admin notes. Use the collapsible menus ('Show more / Show less') throughout the interface to inspect full notes without cluttering your screen.",
-          callout: {
-            type: "info",
-            text: "Admins can also trash invalid leads into a collapsible Trash bin at the bottom of the Leads table, which can be restored at any time."
-          }
+          heading: "3. Top Action Buttons: Quick Navigation",
+          body: "In the top right corner of the dashboard header, you have two primary buttons you will use constantly:",
+          bullets: [
+            "'+ New Lead' (Dark Button): Jumps straight to the 8-step lead intake wizard (/leads/new).",
+            "'View Drafts' (Outline Button): Takes you to your saved incomplete leads so you can resume work anytime."
+          ]
         }
       ],
       key_takeaways: [
-        "Use the sidebar to navigate between Dashboard, Leads, Lead Drafts, and Training.",
-        "Leads progress through 6 statuses from NEW to COMPLETED.",
-        "Status changes are tracked in a transparent, timestamped history log."
+        "Check your Dashboard daily to see live progress on your client websites.",
+        "Commission is automatically computed and displayed as soon as projects complete.",
+        "Use '+ New Lead' to start submitting a prospect or 'View Drafts' to resume paused client intakes."
       ]
     }
   },
   {
     module_number: 2,
-    title: "Client Types, Scopes & Redesign Requirements",
-    description: "Categorizing clients into Personal, Business, or SaaS, and mastering the difference between New Builds and Redesigns.",
+    title: "The Leads Hub & Lead Detail View (/leads & /leads/[id])",
+    description: "How to search and filter opportunities, inspect client project briefs, view team notes, and track real-time activity timelines.",
     content: {
-      overview: "Every project begins by identifying the client vertical and project scope. Choosing the right client classification in Step 1 and Step 2 dynamically configures the required fields and website options throughout the intake form.",
+      overview: "The Leads Hub (/leads) is where all your company's sales opportunities live. Whether you want to check an existing client's details, search for a past deal, or see technical notes from the developers, this page has all the tools you need.",
       sections: [
         {
-          heading: "1. The Three Client Categories",
-          body: "Eight34 classifies all projects into three core verticals:",
+          heading: "1. Search Bar & Status Filters",
+          body: "At the top of the Leads page, you have powerful filtering tools:",
           bullets: [
-            "PERSONAL: Portfolios, digital resumes/CVs, and event landing pages for individuals (e.g. photographers, consultants, executives).",
-            "BUSINESS: Local & regional commercial businesses (e.g. restaurants, barber shops, dental clinics, agencies) requiring lead capture or appointment booking.",
-            "SAAS: Software-as-a-Service and tech startups needing high-converting marketing sites, interactive pricing tables, or product tour landing pages."
+            "Instant Search Input: Type any client name, business name, or lead number (e.g. #E34-1042) to find a record instantly.",
+            "Status Filter Tabs: Filter the list with one click to see only 'All', 'Inquiring', 'In Progress', or 'Completed' leads.",
+            "Sorting: Sort leads chronologically to see the newest prospects at the top."
           ]
         },
         {
-          heading: "2. New Website vs. Redesign (Crucial Rule)",
-          body: "In Step 4, you must specify whether the client needs a brand new website or a redesign of an existing one. If selecting 'Redo / Redesign Existing Website', the platform strictly requires the client's current website URL so engineering can audit legacy assets.",
-          callout: {
-            type: "warning",
-            text: "Rule: When 'Redesign' is selected, you MUST provide the current website URL with http:// or https:// (e.g. https://acmecompany.com)."
-          },
-          exampleBox: {
-            title: "Redesign Qualification Example",
-            good: "Reason: Redo Website | URL: https://acme-barbershop.com | Audience: Local men aged 20-50 looking for luxury grooming in Austin, TX.",
-            bad: "Reason: Redo Website | URL: [Empty] | Audience: People wanting haircuts.",
-            notes: "Engineering needs the existing URL to analyze current SEO rankings, mobile flaws, and copy before writing the custom code."
-          }
+          heading: "2. Opening the Lead Detail Screen (/leads/[id])",
+          body: "Clicking on any lead row opens its full detail view. This screen contains everything about the deal:",
+          bullets: [
+            "Lead Number & Header: Displays the permanent tracking identifier (e.g. #E34-0012) and current status badge.",
+            "Client Brief Card: Displays the Client Entity, Business Category, Functional Website Type, and Redesign status.",
+            "Scope & Target Audience: Contains the customer persona and requirements you entered during intake.",
+            "Aesthetic Styles & Inspiration Links: Shows the design vibe tags and clickable preview links for the designers.",
+            "Commercial Details: Displays the estimated budget, quoted price, and assigned salesperson."
+          ]
+        },
+        {
+          heading: "3. The Activity & Status History Timeline",
+          body: "On the right side of the Lead Detail screen is the Activity Timeline. Every time a status changes, a note is logged, or a milestone is reached, a timestamped record is added. Use this to give your clients accurate status updates without having to message developers manually."
         }
       ],
       key_takeaways: [
-        "Personal = Portfolios/CVs; Business = Commercial & Booking; SaaS = Tech marketing hubs.",
-        "Redesign projects require the current live URL without exception.",
-        "Proper classification ensures accurate baseline pricing."
+        "Search by client name or lead ID (#E34-XXXX) to find any past or active lead.",
+        "The Lead Detail page shows the full client brief and development history.",
+        "Review the Activity Timeline to keep clients updated on project milestones."
       ]
     }
   },
   {
     module_number: 3,
-    title: "Intake Form Mastery & High-Quality Submissions",
-    description: "Detailed walkthrough of all 8 intake steps: target audiences, aesthetic tags, the 'Other' fill-in field, and reference URLs.",
+    title: "Step-by-Step Lead Intake Masterclass (/leads/new)",
+    description: "A complete walkthrough of the 8-step intake wizard: client entities, categories, redesign URL rules, target audience, aesthetics, and pricing.",
     content: {
-      overview: "Submitting a high-quality lead ensures our engineering team can immediately start building without delays. The Eight34 intake wizard guides you through 8 logical steps.",
+      overview: "Registering a new lead (/leads/new) is the most important workflow for a salesperson. An accurate intake ensures developers build exactly what the client wants with zero misunderstandings. Here is how to complete each of the 8 steps like an expert.",
       sections: [
         {
-          heading: "1. Step-by-Step Form Breakdown",
-          body: "Here is what each step in the New Lead form requires:",
-          bullets: [
-            "Step 1 (Client Entity): Full client name and category (Personal / Business / SaaS).",
-            "Step 2 (Category / Business Type): For Business clients, pick the specific industry (Restaurant, Salon, etc.) or 'Other' with a custom name.",
-            "Step 3 (Classification): Choose the functional website model (Landing Page, Booking System, etc.).",
-            "Step 4 (Scope): New Build vs. Redesign (with URL if Redesign).",
-            "Step 5 (Audience): Detailed target demographic profile (minimum 20 characters).",
-            "Step 6 (Aesthetics): Select design tags (Minimal, Modern, Bold, Luxury...) and use 'Other' if a custom style is needed.",
-            "Step 7 (Commercials): Clean numeric budget and up to 5 inspiration URLs.",
-            "Step 8 (Review): Complete summary review before pushing to the live pipeline."
-          ]
-        },
-        {
-          heading: "2. The 'Other' Tag is a Special Fill-In Field",
-          body: "In Step 6 (Aesthetics), the 'Other' tag is a special system field. When you check 'Other', an inline text box appears allowing you to type custom aesthetic notes (e.g. 'Cyberpunk with neon purple accents'). Admins cannot remove this tag in ERM settings because it enables bespoke styling notes.",
+          heading: "Step 1: Client Entity (Personal, Business, SaaS)",
+          body: "Choose who the client is. Personal is for portfolios, resumes, and individual creators. Business is for local commercial firms, restaurants, shops, and services. SaaS is for software companies and app landing hubs.",
           callout: {
             type: "info",
-            text: "Always provide specific visual details in the 'Other' text field whenever selected."
+            text: "Selecting 'Business' will smoothly unlock Step 2 (Business Categories) in the wizard."
           }
         },
         {
-          heading: "3. Target Audience & Inspiration URLs Quality Standard",
-          body: "Generic descriptions like 'everyone' or 'clients' will be rejected. Include who the audience is, their location, and what brings them to the site. Additionally, provide 1 to 3 live inspiration URLs that showcase designs the client likes.",
-          exampleBox: {
-            title: "Audience & Inspiration Benchmark",
-            good: "Target Audience: B2B operations managers and founders in North America seeking automated inventory software. Inspiration: https://stripe.com, https://linear.app",
-            bad: "Target Audience: Anyone who likes apps. Inspiration: [None]",
-            notes: "Specific audiences allow our copywriters and UI designers to tailor typography, color palettes, and conversion funnels."
+          heading: "Step 2 & 3: Industry Category & Functional Model",
+          body: "Select the vertical (e.g. Restaurant, Barbershop, Education) or select 'Other' to type in a custom business category. Next, choose the functional website model: simple Landing Page, complex Booking & Appointments system, or SaaS Marketing site."
+        },
+        {
+          heading: "Step 4: Project Scope & The Strict Redesign Rule",
+          body: "Choose whether this is a Brand New Website or a Redo / Redesign of an existing site.",
+          callout: {
+            type: "warning",
+            text: "STRICT RULE: If you choose 'Redo Website', the existing website URL is 100% mandatory. Our engineers must inspect the existing site to audit content and preserve SEO."
           }
+        },
+        {
+          heading: "Step 5: Target Audience Profile (Minimum 20 Characters)",
+          body: "Write a clear description of the client's end customer (age, location, needs, pain points). Generic inputs like 'everyone' or 'anyone' are rejected.",
+          exampleBox: {
+            title: "Audience Description Standards",
+            good: "Urban professionals aged 25-45 in Seattle seeking high-end boutique fitness classes and flexible online booking.",
+            bad: "People looking for fitness.",
+            notes: "Must be at least 20 characters long with descriptive demographic context."
+          }
+        },
+        {
+          heading: "Step 6: Aesthetic Style Tags & The 'Other' Field",
+          body: "Pick one or more aesthetic style tags (Minimal, Modern, Bold, Luxury, Dark, Clean). If the client has a specialized visual request not covered by standard tags, select 'Other' — this opens a custom text field where you can describe their bespoke visual direction."
+        },
+        {
+          heading: "Step 7 & 8: Budget, Live Inspiration Links & Review",
+          body: "Enter the budget amount (plain numbers only, e.g. 750). Provide 1-3 valid inspiration URLs starting with https:// for design benchmarks. Finally, review all 8 sections and click 'Submit Lead'!"
         }
       ],
       key_takeaways: [
-        "Step through all 8 steps with complete, accurate information.",
-        "Selecting 'Other' for aesthetics unlocks a custom fill-in field.",
-        "Always provide 1-3 live inspiration links for design benchmarks."
+        "Redesign projects strictly require the existing website URL.",
+        "Target audience descriptions must have at least 20 characters of detail.",
+        "Selecting 'Other' for aesthetic tags unlocks an inline custom specification field.",
+        "Always provide valid http:// or https:// inspiration links."
       ]
     }
   },
   {
     module_number: 4,
-    title: "Dynamic Pricing Guides, Commission & Financials",
-    description: "Regional pricing benchmarks, your 50% commission rate, the Completed Lead Pricing Calculator, and payment checkboxes.",
+    title: "Drafts System & Real-Time Auto-Save (/leads/drafts)",
+    description: "How auto-save protects your notes on live calls, how draft IDs work, and how drafts automatically promote into official live leads.",
     content: {
-      overview: "Eight34 provides clear, transparent pricing tiers for salespeople. Understanding how to quote projects and how your 50% commission is calculated ensures transparent conversations with clients and prompt payouts.",
+      overview: "When you are on a discovery call with a prospect, you often need to pause, look up details, or step away. The Eight34 ERM features an automatic Drafts System so you never lose a single keystroke.",
       sections: [
         {
-          heading: "1. US/Europe vs. Global Pricing Benchmarks",
-          body: "Inside the New Lead form, you can click 'View Pricing Guide' anytime to inspect official live pricing tiers:",
+          heading: "1. Real-Time Auto-Save in Action",
+          body: "As soon as you enter a client name or select options in the lead wizard, the platform automatically saves your progress to the cloud:",
           bullets: [
-            "Personal Portfolio: US/Europe ($50 - $150) | Global ($10 - $100)",
-            "Business Landing: US/Europe ($100 - $400) | Global ($50 - $150)",
-            "Business Booking & Schedulers: US/Europe ($500 - $900) | Global ($100 - $300)",
-            "SaaS Marketing & Product: US/Europe ($500 - $1,500) | Global ($200 - $700)"
+            "Watch the Top Right Header: You will see a cloud indicator change to 'Saving...' and then 'Auto-saved' in green.",
+            "Zero Progress Loss: You can close your browser tab or navigate away anytime, and your draft will be waiting for you.",
+            "Fast & Responsive: Auto-save runs smoothly in the background without freezing your inputs."
           ]
         },
         {
-          heading: "2. Your 50% Commission Structure",
-          body: "Salespeople earn a default 50.00% commission on net project profit. When a website is completed, admins input any third-party production costs (e.g. specialized domain/hosting fees). The ERM automatically calculates:",
-          bullets: [
-            "1. Total Website Budget (e.g. $1,000)",
-            "2. Production Costs (e.g. $100)",
-            "3. Net Project Profit ($1,000 - $100 = $900)",
-            "4. Salesperson Share (50% of $900 = $450)",
-            "5. Eight34 Retained Share ($450)"
-          ],
-          callout: {
-            type: "tip",
-            text: "Check the Costs Map on completed leads: checking 'Mark Paid' provides an instant audit record of settled bank transfers."
-          }
+          heading: "2. Unique Draft IDs (#DRAFT-XXXXXXXX)",
+          body: "Every saved draft receives a unique tracking identifier (e.g. #DRAFT-3A7F9B12). You can see this badge at the top of the intake wizard and on the Drafts page."
+        },
+        {
+          heading: "3. The Drafts Hub (/leads/drafts)",
+          body: "Navigate to '/leads/drafts' from the sidebar to view all your in-progress drafts. Each card displays the Draft ID, client name, website type, and last updated time. Click 'Resume Intake' to pick up right where you left off."
+        },
+        {
+          heading: "4. Instant Promotion to Live Lead",
+          body: "When you finish your draft and click 'Submit Lead' on Step 8, the platform instantly converts the draft into an official live lead (assigning a permanent #E34 lead number) and routes it directly to the engineering team. The draft is removed from your drafts list automatically."
         }
       ],
       key_takeaways: [
-        "Reference the Pricing Guide modal inside the intake form for real-time tier ranges.",
-        "Salespeople receive 50% of net project profit after production costs.",
-        "The Completed Pricing Calculator automates all financial math."
+        "Intake auto-saves in real-time — look for the green 'Auto-saved' indicator.",
+        "Resume any paused intake from '/leads/drafts' using its #DRAFT-XXXXXXXX ID.",
+        "Submitting a draft immediately turns it into a live #E34 lead."
       ]
     }
   },
   {
     module_number: 5,
-    title: "Lead Drafts, Promotion Lifecycle & Verification",
-    description: "How auto-saving drafts works, promoting drafts into live #E34 leads, and launching your Verification Task.",
+    title: "Sales Best Practices & The Verification Task (/training/verify)",
+    description: "Turnaround standards, pricing benchmarks, commission payouts, and how to complete your interactive test lead verification task.",
     content: {
-      overview: "You don't need to finish a client intake all in one sitting. The Eight34 ERM includes auto-saving drafts with unique draft IDs so you never lose discovery notes during client calls.",
+      overview: "Congratulations on completing the core walkthrough! This final module covers pricing expectations, client communication standards, and prepares you to complete your hands-on Verification Task.",
       sections: [
         {
-          heading: "1. Working with Lead Drafts",
-          body: "As you type in the New Lead form, the platform auto-saves your progress as a draft with its own unique identifier. You can also click 'Save Draft' at any step. All saved drafts are neatly listed under the 'Lead Drafts' tab in the sidebar.",
+          heading: "1. Project Turnaround & Client Expectations",
+          body: "When speaking with prospects, set realistic timelines based on project classification:",
           bullets: [
-            "Drafts are private to you while in progress.",
-            "Each draft displays client name, classification, and last updated time.",
-            "Click 'Continue Intake' to resume editing right where you left off."
+            "Single Page / Landing Pages: Typically delivered within 7 to 10 business days.",
+            "Booking & Commercial Websites: Typically delivered within 2 to 3 weeks.",
+            "Full SaaS Marketing Hubs: Typically delivered within 3 to 4 weeks.",
+            "Revisions: Standard package includes 2 rounds of design revisions upon delivery of the staging link."
           ]
         },
         {
-          heading: "2. Automatic Promotion to Live Lead",
-          body: "When you finish your intake and click 'Submit Lead to Pipeline' in Step 8, the draft is automatically promoted to an active pipeline lead with an official #E34 identifier (e.g. #E34-00105). It is immediately removed from Drafts and appears on the master Leads table for admin review.",
-          callout: {
-            type: "info",
-            text: "Published leads are never drafts. Submitting immediately promotes them into the live production pipeline."
-          }
+          heading: "2. Pricing Benchmarks & Commission Payouts",
+          body: "Our platform offers standardized pricing tiers based on client type and scope (e.g., $500–$1,200 for standard business sites). When the client pays the final invoice and the deal moves to 'COMPLETED', your commission (e.g., 50%) is locked for payout."
         },
         {
-          heading: "3. Your Final Step: The Verification Task",
-          body: "Now that you understand the platform, your final qualification step is the **Verification Task**. In this interactive sandbox, you will build your very own test lead with guided walkthrough prompts. It is purely client-side (no database clutter), and once submitted, you are officially verified to create real client leads!",
+          heading: "3. What is the Verification Task?",
+          body: "To ensure every salesperson is fully confident using the intake wizard, the final step to unlock your account is the interactive Verification Task at '/training/verify':",
+          bullets: [
+            "Safe Simulation Sandbox: You will create a guided test lead with interactive tips and validators on your screen.",
+            "Purely Client-Side: This test lead will NOT be saved to the live database or sent to developers.",
+            "Instant Verification: Completing all 8 guided steps instantly verifies your account and unlocks real lead submission across the ERM!"
+          ],
           callout: {
             type: "tip",
-            text: "Click 'Start Verification Task' below once you finish reading to complete your certification!"
+            text: "Click 'Start Verification Task' below or visit /training/verify to launch your test lead simulation."
           }
         }
       ],
       key_takeaways: [
-        "Drafts auto-save with unique IDs and can be resumed from the Lead Drafts tab.",
-        "Submitting a draft immediately promotes it into an active #E34 pipeline lead.",
-        "Complete the interactive Verification Task to get certified for real lead submission."
+        "Set clear delivery expectations (1 to 3 weeks depending on complexity).",
+        "Your commission is locked and credited as soon as deals are marked Completed.",
+        "Complete the interactive Verification Task at '/training/verify' to unlock lead creation!"
       ]
     }
   }
 ];
+

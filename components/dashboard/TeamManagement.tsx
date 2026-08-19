@@ -271,7 +271,14 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
 
                 <td>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                    {member.training_completed ? (
+                    {member.role === 'ADMIN' || member.role === 'SUPER_ADMIN' ? (
+                      <span style={{ color: '#166534', display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 500, fontSize: 13 }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Verified
+                      </span>
+                    ) : member.training_completed ? (
                       <span style={{ color: '#166534', display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 500, fontSize: 13 }}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                           <polyline points="20 6 9 17 4 12" />
@@ -284,14 +291,14 @@ export default function TeamManagement({ team, currentUser }: TeamManagementProp
                       </span>
                     )}
 
-                    {isAdmin && !isSelf && (
+                    {isAdmin && !isSelf && member.role === 'SALES' && (
                       <button
                         type="button"
                         onClick={() => handleToggleVerification(member.id, Boolean(member.training_completed))}
                         disabled={isLoading}
                         className="btn btn-sm btn-outline"
                         style={{ padding: '1px 6px', fontSize: '11px' }}
-                        title={member.training_completed ? 'Manually unverify user' : 'Manually verify user'}
+                        title={member.training_completed ? 'Manually unverify salesperson' : 'Manually verify salesperson'}
                       >
                         {member.training_completed ? 'Unverify' : 'Verify'}
                       </button>
